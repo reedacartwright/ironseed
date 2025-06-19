@@ -61,9 +61,7 @@ get_random_seed <- function() {
 fill_random_seed <- function(x, quiet = FALSE) {
   stopifnot(is_ironseed(x))
   if(isFALSE(quiet)) {
-    msg <- sprintf(paste0(
-      "** Ironseed: Initialized RNG state with\n",
-      "** Ironseed: %s"), str(x))
+    msg <- sprintf("** Ironseed : Seed %s", str(x))
     message(msg)    
   }
   # save oldseed
