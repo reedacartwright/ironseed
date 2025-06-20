@@ -195,13 +195,11 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
   // thread id
   update_ironseed_hash_ll(p, tid_entropy());
 
-#ifndef __APPLE__
   // readcyclecounter
   update_ironseed_hash_ll(p, readcycle_entropy());
 
   // os entropy
   update_ironseed_hash_ll(p, system_entropy());
-#endif
 }
 
 static void create_seedseq(const ironseed_t *p, unsigned int *u, size_t len) {
