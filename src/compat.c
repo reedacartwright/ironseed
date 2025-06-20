@@ -9,6 +9,10 @@
 #include <time.h>
 #include <unistd.h>
 
+#ifndef __STDC_NO_THREADS__
+#include <threads.h>
+#endif
+
 #include "config.h"
 
 static uint64_t timespec_to_u64(const struct timespec *ts) {
@@ -46,6 +50,14 @@ uint64_t clock_entropy(void) {
 
 uint64_t pid_entropy(void) { return (uint64_t)getpid(); }
 
+uint64_t tid_entropy(void) {
+#ifndef __STDC_NO_THREADS__
+  return (uint64_t)thrd_current();
+#else
+  return 0;
+#endif
+}
+
 uint64_t readcycle_entropy(void) {
   uint64_t u = 0;
 #if defined(__has_builtin) && __has_builtin(__builtin_readcyclecounter)
@@ -57,8 +69,8 @@ uint64_t readcycle_entropy(void) {
 static uint64_t system_entropy_once() {
   uint64_t u, ret = 0;
 #ifdef _WIN32
-  ret = rand_s();
-  u = rand_s();
+  rand_s(&ret);
+  rand_s(&u);
   ret |= (u << 32);
 #elif defined(HAVE_ARC4RANDOM)
   ret = arc4random();
