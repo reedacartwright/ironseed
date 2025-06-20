@@ -169,19 +169,17 @@ uint64_t system_entropy(void);
 static void autofill_ironseed_hash(ironseed_hash_t *p) {
   assert(p != NULL);
 
+#ifndef __APPLE__
   // string that changes every time this file is compiled
   const char compile_stamp[] = __DATE__ __TIME__ __FILE__;
   update_ironseed_hash_s(p, compile_stamp);
 
   // heap and stack randomness
-
-#ifndef __APPLE__
   void *malloc_addr = malloc(sizeof(int));
   void *stack_addr = &malloc_addr;
   update_ironseed_hash_p(p, malloc_addr);
   update_ironseed_hash_p(p, stack_addr);
   free(malloc_addr);
-#endif
 
   // addresses of a few functions
   update_ironseed_hash_f(p, (DL_FUNC)&clock);
@@ -203,6 +201,8 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
 
   // os entropy
   update_ironseed_hash_ll(p, system_entropy());
+
+#endif
 }
 
 static void create_seedseq(const ironseed_t *p, unsigned int *u, size_t len) {
