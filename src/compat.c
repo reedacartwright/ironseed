@@ -15,12 +15,11 @@
 #include <unistd.h>
 
 #if __has_builtin(__builtin_readcyclecounter)
-#elif defined _WIN32
+#elif defined(_WIN32)
 #include <intrin.h>
-#elif defined __i386__ || defined __x86_64__
+#elif defined(__i386__) || defined(__x86_64__)
 #include <x86intrin.h>
-#elif defined(__INTEL_COMPILER) && defined(__ia64__) && \
-  defined(HAVE_IA64INTRIN_H)
+#elif defined(__INTEL_COMPILER) && defined(__ia64__)
 #include <ia64intrin.h>
 #endif
 
@@ -101,10 +100,10 @@ uint64_t system_entropy(void) {
 uint64_t readcycle_entropy(void) {
 #if __has_builtin(__builtin_readcyclecounter) && !defined(__aarch64__)
   return __builtin_readcyclecounter();
-#elif defined _M_IX86 || defined _M_X64 || defined __i386__ || \
-  defined __x86_64__
+#elif defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || \
+  defined(__x86_64__)
   return __rdtsc();
-#elif defined _M_ARM64
+#elif defined(_M_ARM64)
   return _ReadStatusReg(ARM64_CNTVCT);
 #elif defined(__GNUC__) && defined(__aarch64__)
   uint64_t u;
