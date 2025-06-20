@@ -169,7 +169,6 @@ uint64_t system_entropy(void);
 static void autofill_ironseed_hash(ironseed_hash_t *p) {
   assert(p != NULL);
 
-#ifndef __APPLE__
   // string that changes every time this file is compiled
   const char compile_stamp[] = __DATE__ __TIME__ __FILE__;
   update_ironseed_hash_s(p, compile_stamp);
@@ -187,6 +186,7 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
   update_ironseed_hash_f(p, (DL_FUNC)&autofill_ironseed_hash);
   update_ironseed_hash_f(p, (DL_FUNC)&Rf_allocVector);
 
+#ifndef __APPLE__
   // time randomness
   update_ironseed_hash_ll(p, clock_entropy());
 
@@ -201,7 +201,6 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
 
   // os entropy
   update_ironseed_hash_ll(p, system_entropy());
-
 #endif
 }
 
