@@ -4,6 +4,10 @@
 # Ironseed
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/reedacartwright/ironseed/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/reedacartwright/ironseed/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/reedacartwright/ironseed/graph/badge.svg)](https://app.codecov.io/gh/reedacartwright/ironseed)
 <!-- badges: end -->
 
 ## Overview
@@ -92,16 +96,16 @@ occurs if no data is passed to `ironseed()`.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
-#> ** Ironseed : Seed rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1
+#> ** Ironseed : Seed vQCroxuohDS-8i3DkUfqgYQ-d9j6E7RsfsN-7bQzhjAueCM
 runif(10)
-#>  [1] 0.266626496 0.997138924 0.896200017 0.556133664 0.345863001 0.332021272
-#>  [7] 0.073088789 0.007127022 0.551793726 0.154238633
+#>  [1] 0.47795014 0.02721549 0.39524330 0.44262723 0.40121319 0.81276541
+#>  [7] 0.57097420 0.73416579 0.41208366 0.55728840
 
 # Since RNG initializing has occurred, the next call
 # will simply return the ironseed used in seeding.
 fe <- ironseed::ironseed()
 fe
-#> Ironseed: rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1
+#> Ironseed: vQCroxuohDS-8i3DkUfqgYQ-d9j6E7RsfsN-7bQzhjAueCM
 ```
 
 Or achieving the same thing with one call. Note that the automatically
@@ -110,12 +114,12 @@ generated seed is different from the previous run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 fe <- ironseed::ironseed()
-#> ** Ironseed : Seed Bvq15de8FBb-S6LxXkq481R-FZUx57311qE-nsnR6MEwse4
+#> ** Ironseed : Seed gKmhyjU4Y41-SEduBsV5GxX-DNAng7xtT2L-HeXBjUQif68
 runif(10)
-#>  [1] 0.03488255 0.70873314 0.37735958 0.06470876 0.93708972 0.81523412
-#>  [7] 0.46787636 0.59156232 0.87425935 0.70449845
+#>  [1] 0.14771730 0.28929581 0.32984660 0.76063549 0.85383069 0.01915642
+#>  [7] 0.92973580 0.66183855 0.68517873 0.18682271
 fe
-#> Ironseed: Bvq15de8FBb-S6LxXkq481R-FZUx57311qE-nsnR6MEwse4
+#> Ironseed: gKmhyjU4Y41-SEduBsV5GxX-DNAng7xtT2L-HeXBjUQif68
 ```
 
 ## Examples: Reproducible Code

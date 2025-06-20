@@ -1,0 +1,9 @@
+---
+BasedOnStyle:  Google
+ColumnLimit:     80
+IndentCaseLabels: false
+SpaceBeforeParens: Never
+IndentWidth:     2
+ContinuationIndentWidth: 2
+AlignAfterOpenBracket: BlockIndent
+...

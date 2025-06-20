@@ -27,11 +27,11 @@
 #include <R_ext/Visibility.h>
 
 static const R_CallMethodDef callMethods[] = {
-  {"R_create_ironseed", (DL_FUNC) &R_create_ironseed, 1},
-  {"R_auto_ironseed", (DL_FUNC) &R_auto_ironseed, 0},
-  {"R_create_seedseq", (DL_FUNC) &R_create_seedseq, 2},
-  {"R_base58_encode64", (DL_FUNC) &R_base58_encode64, 1},
-  {"R_base58_decode64", (DL_FUNC) &R_base58_decode64, 1},
+  {"R_create_ironseed", (DL_FUNC)&R_create_ironseed, 1},
+  {"R_auto_ironseed", (DL_FUNC)&R_auto_ironseed, 0},
+  {"R_create_seedseq", (DL_FUNC)&R_create_seedseq, 2},
+  {"R_base58_encode64", (DL_FUNC)&R_base58_encode64, 1},
+  {"R_base58_decode64", (DL_FUNC)&R_base58_decode64, 1},
   {NULL, NULL, 0}
 };
 
@@ -41,6 +41,4 @@ void attribute_visible R_init_ironseed(DllInfo *info) {
   R_forceSymbols(info, TRUE);
 }
 
-void attribute_visible R_unload_ironseed(DllInfo *info) {
-
-}
+void attribute_visible R_unload_ironseed(DllInfo *info) {}

@@ -3,13 +3,13 @@
 #define _CRT_RAND_S
 #define _CRT_NONSTDC_NO_DEPRECATE
 
-#include "config.h"
-
+#include <fcntl.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
+
+#include "config.h"
 
 static uint64_t timespec_to_u64(const struct timespec *ts) {
   uint64_t u = ts->tv_sec;
@@ -44,9 +44,7 @@ uint64_t clock_entropy(void) {
   return (uint64_t)time(NULL);
 }
 
-uint64_t pid_entropy(void) {
-  return (uint64_t)getpid();
-}
+uint64_t pid_entropy(void) { return (uint64_t)getpid(); }
 
 uint64_t readcycle_entropy(void) {
   uint64_t u = 0;

@@ -17,3 +17,6 @@
 ^docs$
 ^pkgdown$
 ^README\.Rmd$
+^[\.]?air\.toml$
+^\.vscode$
+^compile_flags.txt$

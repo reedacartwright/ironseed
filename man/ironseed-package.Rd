@@ -2,9 +2,8 @@
 % Please edit documentation in R/ironseed-package.R
 \docType{package}
 \name{ironseed-package}
-\alias{ironseed}
 \alias{ironseed-package}
-\title{ironseed: Improved Random Number Generator Seeding}
+\title{Ironseed: Improved Random Number Generator Seeding}
 \description{
 A procedure for seeding R's built in random number generators using a variable-length sequence of values. Accumulates input entropy into a 256-bit hash (ironseed) and is able to generate a variable-length sequence of output seeds from an ironseed.
 }

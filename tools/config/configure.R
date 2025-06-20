@@ -11,16 +11,16 @@ define(
 
 check_compile <- function(tmpl, name) {
   message(sprintf("*** Looking for %s...", name))
-  verbose <- if(configure_verbose()) "" else FALSE
-  f <- tempfile(fileext=".c")
+  verbose <- if (configure_verbose()) "" else FALSE
+  f <- tempfile(fileext = ".c")
   writeLines(tmpl, f)
   ret <- tools::Rcmd(c("COMPILE", f), stdout = verbose, stderr = verbose)
-  message(sprintf("**** %s: %s", if(ret == 0) "Found" else "Not found", name))
+  message(sprintf("**** %s: %s", if (ret == 0) "Found" else "Not found", name))
   ret == 0
 }
 
 # Check for rand_s
-if(.Platform$OS.type == "windows") {
+if (.Platform$OS.type == "windows") {
   tmpl <- "
 #define _CRT_RAND_S
 #include <stdlib.h>
@@ -29,12 +29,12 @@ int f() {
   return rand_s(&u);
 }
 "
-  if(check_compile(tmpl, "rand_s()")) {
+  if (check_compile(tmpl, "rand_s()")) {
     define(DEFINE_HAVE_RAND_S = "#define HAVE_RAND_S")
   }
 } else {
   # Check for arc4random
-  tmpl <-"
+  tmpl <- "
 #define _POSIX_C_SOURCE 200809L
 #define _GNU_SOURCE
 #include <stdlib.h>
@@ -42,7 +42,7 @@ int f() {
   return arc4random();
 }
 "
-  if(check_compile(tmpl, "arc4random()")) {
+  if (check_compile(tmpl, "arc4random()")) {
     define(DEFINE_HAVE_ARC4RANDOM = "#define HAVE_ARC4RANDOM")
   }
 
@@ -56,7 +56,7 @@ int f() {
   return getentropy(&u, sizeof(u));
 }
 "
-  if(check_compile(tmpl, "getentropy()")) {
+  if (check_compile(tmpl, "getentropy()")) {
     define(DEFINE_HAVE_GETENTROPY = "#define HAVE_GETENTROPY")
   }
 }
