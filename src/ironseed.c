@@ -186,7 +186,6 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
   update_ironseed_hash_f(p, (DL_FUNC)&autofill_ironseed_hash);
   update_ironseed_hash_f(p, (DL_FUNC)&Rf_allocVector);
 
-#ifndef __APPLE__
   // time randomness
   update_ironseed_hash_ll(p, clock_entropy());
 
@@ -196,6 +195,7 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
   // thread id
   update_ironseed_hash_ll(p, tid_entropy());
 
+#ifndef __APPLE__
   // readcyclecounter
   update_ironseed_hash_ll(p, readcycle_entropy());
 
