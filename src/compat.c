@@ -61,20 +61,21 @@ uint64_t readcycle_entropy(void) {
 }
 
 static uint64_t system_entropy_once() {
-  uint64_t u, ret = 0;
 #ifdef _WIN32
-  rand_s(&ret);
+  unsigned int u = 0;
+  uint64_t ret = 0;
   rand_s(&u);
-  ret |= (u << 32);
+  ret = (uint64_t)u;
+  rand_s(&u);
+  ret = (ret << 32) | (uint64_t)u;
 #elif defined(HAVE_ARC4RANDOM)
-  ret = arc4random();
-  u = arc4random();
-  ret |= (u << 32);
+  uint64_t ret = arc4random();
+  ret = (ret << 32) | (uint64_t)arc4random();
 #elif defined(HAVE_GETENTROPY)
-  (void)u;
+  uint64_t ret = 0;
   getentropy(&ret, sizeof(ret));
 #else
-  (void)u;
+  uint64_t ret = 0;
   int f = open("/dev/urandom", O_RDONLY);
   if(f >= 0) {
     read(f, &ret, sizeof(ret));
