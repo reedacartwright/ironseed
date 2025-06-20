@@ -63,8 +63,7 @@ runif(10)
 ```
 
 ```{r, include = FALSE}
-# reset .Random.seed
-rm(.Random.seed, envir = globalenv(), inherits=FALSE)
+ironseed:::rm_random_seed()
 ```
 
 If your script is intended to be called multiple times as part of a large study,
@@ -78,8 +77,7 @@ runif(10)
 ```
 
 ```{r, include = FALSE}
-# reset .Random.seed
-rm(.Random.seed, envir = globalenv(), inherits=FALSE)
+ironseed:::rm_random_seed()
 ```
 
 Specific command line arguments can also be used. For large, nested studies, it
@@ -94,8 +92,7 @@ runif(10)
 ```
 
 ```{r, include = FALSE}
-# reset .Random.seed
-rm(.Random.seed, envir = globalenv(), inherits=FALSE)
+ironseed:::rm_random_seed()
 ```
 
 ## Examples: Automatic Seeding
@@ -109,15 +106,14 @@ is passed to `ironseed()`.
 ironseed::ironseed()
 runif(10)
 
-# Since RNG initializing has occurred, the next call
-# will simply return the ironseed used in seeding.
+# Since RNG initializing has occurred, the next call will simply
+# return the ironseed used in previous seeding.
 fe <- ironseed::ironseed()
 fe
 ```
 
 ```{r, include = FALSE}
-# reset .Random.seed
-rm(.Random.seed, envir = globalenv(), inherits=FALSE)
+ironseed:::rm_random_seed()
 ```
 
 Or achieving the same thing with one call. Note that the automatically generated
@@ -131,8 +127,7 @@ fe
 ```
 
 ```{r, include = FALSE}
-# reset .Random.seed
-rm(.Random.seed, envir = globalenv(), inherits=FALSE)
+ironseed:::rm_random_seed()
 ```
 
 ## Examples: Reproducible Code
@@ -148,6 +143,5 @@ runif(10)
 ```
 
 ```{r, include = FALSE}
-# reset .Random.seed
-rm(.Random.seed, envir = globalenv(), inherits=FALSE)
+ironseed:::rm_random_seed()
 ```

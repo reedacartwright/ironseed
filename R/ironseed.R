@@ -153,6 +153,12 @@ get_random_seed <- function() {
   )
 }
 
+rm_random_seed <- function() {
+  oldseed <- get_random_seed()
+  rm(.Random.seed, envir = globalenv(), inherits = FALSE)
+  invisible(oldseed)
+}
+
 #' Initialize .Random.seed
 #'
 #' @param x an ironseed.

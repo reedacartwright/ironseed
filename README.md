@@ -96,16 +96,16 @@ occurs if no data is passed to `ironseed()`.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
-#> ** Ironseed : Seed vQCroxuohDS-8i3DkUfqgYQ-d9j6E7RsfsN-7bQzhjAueCM
+#> ** Ironseed : Seed y536mcg57xb-VUu3qxWqSe3-RMSHXxunJAE-MEyWDxJkAgQ
 runif(10)
-#>  [1] 0.47795014 0.02721549 0.39524330 0.44262723 0.40121319 0.81276541
-#>  [7] 0.57097420 0.73416579 0.41208366 0.55728840
+#>  [1] 0.72359529 0.64615947 0.93509880 0.14422580 0.02305852 0.50508359
+#>  [7] 0.95219053 0.82291140 0.82383709 0.61386743
 
-# Since RNG initializing has occurred, the next call
-# will simply return the ironseed used in seeding.
+# Since RNG initializing has occurred, the next call will simply
+# return the ironseed used in previous seeding.
 fe <- ironseed::ironseed()
 fe
-#> Ironseed: vQCroxuohDS-8i3DkUfqgYQ-d9j6E7RsfsN-7bQzhjAueCM
+#> Ironseed: y536mcg57xb-VUu3qxWqSe3-RMSHXxunJAE-MEyWDxJkAgQ
 ```
 
 Or achieving the same thing with one call. Note that the automatically
@@ -114,12 +114,12 @@ generated seed is different from the previous run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 fe <- ironseed::ironseed()
-#> ** Ironseed : Seed gKmhyjU4Y41-SEduBsV5GxX-DNAng7xtT2L-HeXBjUQif68
+#> ** Ironseed : Seed ZjpmzFtrFdV-mKmQdQtSwu7-fYCrRKTE92V-s89V4UTppJ7
 runif(10)
-#>  [1] 0.14771730 0.28929581 0.32984660 0.76063549 0.85383069 0.01915642
-#>  [7] 0.92973580 0.66183855 0.68517873 0.18682271
+#>  [1] 0.84899617 0.06003381 0.51552124 0.90506294 0.54663063 0.77531334
+#>  [7] 0.73463606 0.70044596 0.93788588 0.27377696
 fe
-#> Ironseed: gKmhyjU4Y41-SEduBsV5GxX-DNAng7xtT2L-HeXBjUQif68
+#> Ironseed: ZjpmzFtrFdV-mKmQdQtSwu7-fYCrRKTE92V-s89V4UTppJ7
 ```
 
 ## Examples: Reproducible Code
