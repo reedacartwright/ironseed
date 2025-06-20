@@ -9,9 +9,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#ifndef __STDC_NO_THREADS__
-#include <threads.h>
-#endif
+#include <pthread.h>
 
 #include "config.h"
 
@@ -51,11 +49,7 @@ uint64_t clock_entropy(void) {
 uint64_t pid_entropy(void) { return (uint64_t)getpid(); }
 
 uint64_t tid_entropy(void) {
-#ifndef __STDC_NO_THREADS__
-  return (uint64_t)thrd_current();
-#else
-  return 0;
-#endif
+  return (uint64_t)pthread_self();
 }
 
 uint64_t readcycle_entropy(void) {
