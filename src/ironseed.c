@@ -174,11 +174,14 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
   update_ironseed_hash_s(p, compile_stamp);
 
   // heap and stack randomness
+
+#ifndef __APPLE__
   void *malloc_addr = malloc(sizeof(int));
   void *stack_addr = &malloc_addr;
   update_ironseed_hash_p(p, malloc_addr);
   update_ironseed_hash_p(p, stack_addr);
   free(malloc_addr);
+#endif
 
   // addresses of a few functions
   update_ironseed_hash_f(p, (DL_FUNC)&clock);
