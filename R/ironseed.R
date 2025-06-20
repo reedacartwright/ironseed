@@ -98,6 +98,8 @@ the <- new.env(parent = emptyenv())
 #' @seealso [.Random.seed]
 #'
 #' @references
+#' - O’Neill (2015) Developing a seed_seq Alternative.
+#'   <https://www.pcg-random.org/posts/developing-a-seed_seq-alternative.html>
 #' - O’Neill (2015) Simple Portable C++ Seed Entropy.
 #'   <https://www.pcg-random.org/posts/simple-portable-cpp-seed-entropy.html>
 #' - O’Neill (2015) Random-Number Utilities.
@@ -251,7 +253,7 @@ as_ironseed <- function(x) {
     x <- parse_ironseed_str(x)
     structure(x, class = "ironseed_ironseed")
   } else if (is.numeric(x) && length(x) == 8L) {
-    x <- is.integer(x)
+    x <- as.integer(x)
     structure(x, class = "ironseed_ironseed")
   } else {
     stop("unable to convert `x` to ironseed")
@@ -283,19 +285,8 @@ print.ironseed_ironseed <- function(x, ...) {
 parse_ironseed_str <- function(x) {
   stopifnot(is_ironseed_str(x))
   x <- strsplit(x, "-")[[1]]
-  x <- base58_decode64(x)
+  x <- .Call(R_base58_decode64, x)
   x <- numToInts(x)
   x
 }
 
-# encodes 64-bit doubles into base58 format
-base58_encode64 <- function(x) {
-  x <- as.numeric(x)
-  .Call(R_base58_encode64, x)
-}
-
-# reverse of base58_encode64
-base58_decode64 <- function(x) {
-  x <- as.character(x)
-  .Call(R_base58_decode64, x)
-}

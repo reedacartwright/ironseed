@@ -103,6 +103,8 @@ ironseed::ironseed(set_seed = TRUE)
 }
 \references{
 \itemize{
+\item O’Neill (2015) Developing a seed_seq Alternative.
+\url{https://www.pcg-random.org/posts/developing-a-seed_seq-alternative.html}
 \item O’Neill (2015) Simple Portable C++ Seed Entropy.
 \url{https://www.pcg-random.org/posts/simple-portable-cpp-seed-entropy.html}
 \item O’Neill (2015) Random-Number Utilities.

@@ -105,3 +105,21 @@ expect_silent(ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1",
 
 expect_message(expect_false(
   all(ironseed(NULL, set_seed = TRUE) == ironseed(NULL, set_seed = TRUE))))
+
+
+#### Miscellaneous #############################################################
+
+expect_stdout(
+  print(as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")))
+
+expect_equal(as_ironseed(1:8), structure(1:8, class="ironseed_ironseed"))
+expect_equal(as_ironseed(1:8 * 1.0), structure(1:8, class="ironseed_ironseed"))
+
+expect_error(as_ironseed("a"))
+expect_error(as_ironseed(1:4))
+
+expect_equal(ironseed:::create_ironseed(1:4),
+  ironseed:::create_ironseed(list(1:4)))
+
+expect_error(ironseed:::create_ironseed(quote(c(x))))
+
