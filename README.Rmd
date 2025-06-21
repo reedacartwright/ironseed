@@ -50,7 +50,9 @@ You can install the development version of ironseed from [GitHub](https://github
 pak::pak("reedacartwright/ironseed")
 ```
 
-## Examples: User Seeding
+## Examples
+
+### User Seeding
 
 Ironseed can be used at the top of a script to robustly initialize R's builtin
 random number generator. The resulting ironseed is returned invisibly, and a
@@ -96,7 +98,7 @@ runif(10)
 ironseed:::rm_random_seed()
 ```
 
-## Examples: Automatic Seeding
+### Automatic Seeding
 
 Ironseed can also automatically initialize the random number generator using an
 ironseed constructed from multiple sources of entropy. This occurs if no data
@@ -131,7 +133,7 @@ fe
 ironseed:::rm_random_seed()
 ```
 
-## Examples: Reproducible Code
+### Reproducible Code
 
 An ironseed can also be used directly to reproduce a previous initialization.
 This is most useful when automatic seeding has been used, and the previously
@@ -147,4 +149,58 @@ runif(10)
 ironseed:::rm_random_seed()
 ```
 
-## Avalanche
+## Analysis 
+
+### Avalanche
+
+A good hash function has good avalanche properties. If we change one
+bit of information in the input, our goal is to change 50% of the bits
+in the output. To test this we, will first build a function to
+construct a random pair of ironseeds that differ by a single input
+bit.
+
+```{r}
+rand_fe_pair <- function(w) {
+  x <- sample(0:1, w, replace=TRUE)
+  n <- sample(seq_along(x), 1)
+  y <- x
+  y[n] <- if(y[n] == 1) 0L else 1L
+  x <- packBits(x, "integer")
+  y <- packBits(y, "integer")
+  x <- ironseed::ironseed(x, set_seed = FALSE)
+  y <- ironseed::ironseed(y, set_seed = FALSE)
+  list(x = x, y = y)
+}
+```
+
+Next we will generate 100,000 pairs using 32-bit inputs. We will use
+R's built-in seeding algorithm so that the results are independent of
+Ironseed's seeding algorithm. We will also measure how many hash bits
+were flipped by flipping one input bit.
+
+```{r}
+set.seed(20251220)
+z <- replicate(100000, rand_fe_pair(32), simplify = FALSE)
+dat <- sapply(z, \(a) sum(intToBits(a$x) != intToBits(a$y)))
+```
+
+```{r analysis_32}
+mean(dat) # expectation: 128
+sd(dat) # expectation: 8
+hist(dat, breaks = 86:170, main = NULL)
+```
+
+We will repeat the same analysis for 256-bit inputs.
+
+```{r analysis_256}
+set.seed(20251221)
+z <- replicate(100000, rand_fe_pair(256), simplify = FALSE)
+dat <- sapply(z, \(a) sum(intToBits(a$x) != intToBits(a$y)))
+mean(dat) # expectation: 128
+sd(dat) # expectation: 8
+hist(dat, breaks = 86:170, main = NULL)
+```
+
+As one can see, the avalanche behavior of the input hash is pretty
+good.
+

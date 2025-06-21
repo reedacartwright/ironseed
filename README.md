@@ -44,7 +44,9 @@ You can install the development version of ironseed from
 pak::pak("reedacartwright/ironseed")
 ```
 
-## Examples: User Seeding
+## Examples
+
+### User Seeding
 
 Ironseed can be used at the top of a script to robustly initialize R’s
 builtin random number generator. The resulting ironseed is returned
@@ -88,7 +90,7 @@ runif(10)
 #>  [8] 0.6980262 0.3485765 0.3413197
 ```
 
-## Examples: Automatic Seeding
+### Automatic Seeding
 
 Ironseed can also automatically initialize the random number generator
 using an ironseed constructed from multiple sources of entropy. This
@@ -97,16 +99,16 @@ occurs if no data is passed to `ironseed()`.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
-#> ** Ironseed : Seed 5S3DvW8L1nX-sz7qN27cmcf-WDNikzWg1e4-JnSLDWVxmUC
+#> ** Ironseed : Seed DtbrdrotuMS-Ttf4aeoXkcV-QkujxKoAbsY-ekywt7ooR8c
 runif(10)
-#>  [1] 0.4278751 0.5351015 0.9225589 0.6062266 0.9801569 0.7143188 0.4776666
-#>  [8] 0.6977889 0.9597816 0.2462645
+#>  [1] 0.9748343 0.2914455 0.6487710 0.5234303 0.5688722 0.8346885 0.6328274
+#>  [8] 0.6888870 0.3184848 0.3099098
 
 # Since RNG initializing has occurred, the next call will simply
 # return the ironseed used in previous seeding.
 fe <- ironseed::ironseed()
 fe
-#> Ironseed: 5S3DvW8L1nX-sz7qN27cmcf-WDNikzWg1e4-JnSLDWVxmUC
+#> Ironseed: DtbrdrotuMS-Ttf4aeoXkcV-QkujxKoAbsY-ekywt7ooR8c
 ```
 
 Or achieving the same thing with one call. Note that the automatically
@@ -115,15 +117,15 @@ generated seed is different from the previous run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 fe <- ironseed::ironseed()
-#> ** Ironseed : Seed rqsaiAGbXs1-KunNWvPJwr9-nxhAJgX1MrH-G2dx5SfikqR
+#> ** Ironseed : Seed V9VwkDFjqmj-cAzPdQsfFsG-ixoBDU4pBnY-QGyhAtgkbs5
 runif(10)
-#>  [1] 0.08974331 0.80650651 0.66467989 0.40732731 0.38475076 0.80770674
-#>  [7] 0.69596259 0.63086515 0.89836570 0.29803324
+#>  [1] 0.80523682 0.98858094 0.14015560 0.65239866 0.99692107 0.09247972
+#>  [7] 0.73068611 0.89441681 0.87310406 0.25398704
 fe
-#> Ironseed: rqsaiAGbXs1-KunNWvPJwr9-nxhAJgX1MrH-G2dx5SfikqR
+#> Ironseed: V9VwkDFjqmj-cAzPdQsfFsG-ixoBDU4pBnY-QGyhAtgkbs5
 ```
 
-## Examples: Reproducible Code
+### Reproducible Code
 
 An ironseed can also be used directly to reproduce a previous
 initialization. This is most useful when automatic seeding has been
@@ -138,4 +140,63 @@ runif(10)
 #>  [7] 0.44661582 0.75930377 0.77047433 0.90614352
 ```
 
-## Avalanche
+## Analysis
+
+### Avalanche
+
+A good hash function has good avalanche properties. If we change one bit
+of information in the input, our goal is to change 50% of the bits in
+the output. To test this we, will first build a function to construct a
+random pair of ironseeds that differ by a single input bit.
+
+``` r
+rand_fe_pair <- function(w) {
+  x <- sample(0:1, w, replace=TRUE)
+  n <- sample(seq_along(x), 1)
+  y <- x
+  y[n] <- if(y[n] == 1) 0L else 1L
+  x <- packBits(x, "integer")
+  y <- packBits(y, "integer")
+  x <- ironseed::ironseed(x, set_seed = FALSE)
+  y <- ironseed::ironseed(y, set_seed = FALSE)
+  list(x = x, y = y)
+}
+```
+
+Next we will generate 100,000 pairs using 32-bit inputs. We will use R’s
+built-in seeding algorithm so that the results are independent of
+Ironseed’s seeding algorithm. We will also measure how many hash bits
+were flipped by flipping one input bit.
+
+``` r
+set.seed(20251220)
+z <- replicate(100000, rand_fe_pair(32), simplify = FALSE)
+dat <- sapply(z, \(a) sum(intToBits(a$x) != intToBits(a$y)))
+```
+
+``` r
+mean(dat) # expectation: 128
+#> [1] 129.0988
+sd(dat) # expectation: 8
+#> [1] 6.73154
+hist(dat, breaks = 86:170, main = NULL)
+```
+
+<img src="man/figures/README-analysis_32-1.png" width="100%" />
+
+We will repeat the same analysis for 256-bit inputs.
+
+``` r
+set.seed(20251221)
+z <- replicate(100000, rand_fe_pair(256), simplify = FALSE)
+dat <- sapply(z, \(a) sum(intToBits(a$x) != intToBits(a$y)))
+mean(dat) # expectation: 128
+#> [1] 128.1829
+sd(dat) # expectation: 8
+#> [1] 8.308218
+hist(dat, breaks = 86:170, main = NULL)
+```
+
+<img src="man/figures/README-analysis_256-1.png" width="100%" />
+
+As one can see, the avalanche behavior of the input hash is pretty good.
