@@ -210,8 +210,8 @@ static void create_seedseq(const ironseed_t *p, unsigned int *u, size_t len) {
 
   for(size_t i = 0; i < len; ++i) {
     uint64_t h = hash4o_coef(&m);
-    for(int i = 0; i < 8; ++i) {
-      h += hash4o_coef(&m) * p->seed[i];
+    for(int j = 0; j < 8; ++j) {
+      h += hash4o_coef(&m) * p->seed[j];
     }
     u[i] = (uint32_t)(h >> 32);
   }
