@@ -5,8 +5,11 @@ invisible(runif(1))
 expect_equal(ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1"),
   as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1"))
 
-# str() works
-expect_equal(str(ironseed(1L)),
+# as.character() and format() work
+expect_equal(as.character(ironseed(1L)),
+  "DRNq18FUqhE-BCecATDkKsN-9yuPKnB2p2X-8kBBU7AJJCf")
+
+expect_equal(format(ironseed(1L)),
   "DRNq18FUqhE-BCecATDkKsN-9yuPKnB2p2X-8kBBU7AJJCf")
 
 #### Validation ################################################################
@@ -111,6 +114,9 @@ expect_message(expect_false(
 
 expect_stdout(
   print(as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")))
+
+expect_stdout(
+  str(as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")))
 
 expect_equal(as_ironseed(1:8), structure(1:8, class="ironseed_ironseed"))
 expect_equal(as_ironseed(1:8 * 1.0), structure(1:8, class="ironseed_ironseed"))

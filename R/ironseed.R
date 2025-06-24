@@ -174,7 +174,7 @@ rm_random_seed <- function() {
 fill_random_seed <- function(x, quiet = FALSE) {
   stopifnot(is_ironseed(x))
   if (isFALSE(quiet)) {
-    msg <- sprintf("** Ironseed : Seed %s", str(x))
+    msg <- sprintf("** Ironseed : Seed %s", format(x))
     message(msg)
   }
   # save oldseed
@@ -260,11 +260,9 @@ as_ironseed <- function(x) {
   }
 }
 
-#' @export
-#' @importFrom utils str
-str.ironseed_ironseed <- function(object, ...) {
-  stopifnot(length(object) == 8)
-  x <- as.integer(object)
+str_ironseed <- function(x) {
+  stopifnot(length(x) == 8)
+  x <- as.integer(x)
 
   # pack into 4 doubles
   x <- packBits(intToBits(x), "double")
@@ -275,9 +273,28 @@ str.ironseed_ironseed <- function(object, ...) {
 }
 
 #' @export
+as.character.ironseed_ironseed <- function(x, ...) {
+  str_ironseed(x)
+}
+
+#' @export
+format.ironseed_ironseed <- function(x, ...) {
+  str_ironseed(x)
+}
+
+#' @export
+#' @importFrom utils str
+str.ironseed_ironseed <- function(object, ...) {
+  cat(" ironseed ")
+  str(format(object), give.head = FALSE)
+}
+
+#' @export
 print.ironseed_ironseed <- function(x, ...) {
+  s <- format(x, ...)
   cat("Ironseed: ")
-  cat(str(x), sep = "\n")
+  cat(s, sep = "\n")
+  invisible(x)
 }
 
 #' @export
