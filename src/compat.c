@@ -75,7 +75,7 @@ static uint64_t system_entropy_once(void) {
   ret = (ret << 32) | (uint64_t)arc4random();
 #elif defined(HAVE_GETENTROPY)
   uint64_t ret = 0;
-  getentropy(&ret, sizeof(ret));
+  (void)getentropy(&ret, sizeof(ret));
 #else
   uint64_t ret = 0;
   int f = open("/dev/urandom", O_RDONLY);
