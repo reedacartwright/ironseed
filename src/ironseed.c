@@ -71,11 +71,11 @@ static const uint64_t PRIME_D = 0x7aa8bb10afef725bull;
 // m = buffer of 64-bit unsigned random values
 // u = 32-bit input values that are being hashed
 
-static inline uint64_t init_hash4i_coef() { return PRIME_A; }
+static inline uint64_t init_hash4i_coef(void) { return PRIME_A; }
 
 static inline uint64_t hash4i_coef(uint64_t *m) { return *m += PRIME_B; }
 
-static inline uint64_t init_hash4o_coef() { return PRIME_C; }
+static inline uint64_t init_hash4o_coef(void) { return PRIME_C; }
 
 static inline uint64_t hash4o_coef(uint64_t *m) { return *m += PRIME_D; }
 
@@ -270,7 +270,7 @@ SEXP R_create_ironseed(SEXP x) {
   return ret;
 }
 
-SEXP R_auto_ironseed() {
+SEXP R_auto_ironseed(void) {
   ironseed_hash_t hash;
   init_ironseed_hash(&hash);
   autofill_ironseed_hash(&hash);

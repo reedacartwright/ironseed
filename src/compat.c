@@ -62,7 +62,7 @@ uint64_t pid_entropy(void) { return (uint64_t)getpid(); }
 
 uint64_t tid_entropy(void) { return (uint64_t)pthread_self(); }
 
-static uint64_t system_entropy_once() {
+static uint64_t system_entropy_once(void) {
 #ifdef _WIN32
   unsigned int u = 0;
   uint64_t ret = 0;
