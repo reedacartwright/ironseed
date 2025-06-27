@@ -25,6 +25,7 @@ check_compile <- function(tmpl, name) {
 if (.Platform$OS.type != "windows") {
   # Check for arc4random
   tmpl <- "
+#pragma GCC diagnostic error \"-Wimplicit-function-declaration\"
 #define _POSIX_C_SOURCE 200809L
 #define _GNU_SOURCE
 #include <stdlib.h>
@@ -38,6 +39,7 @@ int f() {
 
   # Check for getentropy
   tmpl <- "
+#pragma GCC diagnostic error \"-Wimplicit-function-declaration\"
 #define _POSIX_C_SOURCE 200809L
 #define _GNU_SOURCE
 #include <unistd.h>
