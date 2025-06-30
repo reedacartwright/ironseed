@@ -1,6 +1,6 @@
 Package: ironseed
 Title: Improved Random Number Generator Seeding
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Reed", "Cartwright",
            role = c("aut", "cre"),
@@ -8,8 +8,8 @@ Authors@R:
            comment = c(ORCID = "0000-0002-0837-9380"))
 Description: A procedure for seeding R's built in random number
     generators using a variable-length sequence of values.
-    Accumulates input entropy into a 256-bit hash (ironseed) and
-    is able to generate a variable-length sequence of output seeds
+    Accumulates input entropy into a 256-bit hash digest or "ironseed"
+    and is able to generate a variable-length sequence of output seeds
     from an ironseed.
 License: MIT + file LICENSE
 Language: en-US
