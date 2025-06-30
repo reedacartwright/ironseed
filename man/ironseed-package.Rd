@@ -5,7 +5,7 @@
 \alias{ironseed-package}
 \title{Ironseed: Improved Random Number Generator Seeding}
 \description{
-A procedure for seeding R's built in random number generators using a variable-length sequence of values. Accumulates input entropy into a 256-bit hash (ironseed) and is able to generate a variable-length sequence of output seeds from an ironseed.
+A procedure for seeding R's built in random number generators using a variable-length sequence of values. Accumulates input entropy into a 256-bit hash digest or "ironseed" and is able to generate a variable-length sequence of output seeds from an ironseed.
 }
 \seealso{
 Useful links:

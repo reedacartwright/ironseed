@@ -20,3 +20,4 @@
 ^[\.]?air\.toml$
 ^\.vscode$
 ^compile_flags.txt$
+^cran-comments\.md$

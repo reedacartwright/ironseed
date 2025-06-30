@@ -1,3 +1,3 @@
-## ironseed (0.1.0)
+## ironseed 0.1.0
 
 * Initial CRAN submission.
