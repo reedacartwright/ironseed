@@ -81,7 +81,8 @@ static uint64_t system_entropy_once(void) {
   uint64_t ret = 0;
   int f = open("/dev/urandom", O_RDONLY);
   if(f >= 0) {
-    read(f, &ret, sizeof(ret));
+    int res = read(f, &ret, sizeof(ret));
+    (void)res;
     close(f);
   }
 #endif
