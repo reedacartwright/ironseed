@@ -110,12 +110,19 @@ the <- new.env(parent = emptyenv())
 #' @export
 #' @examples
 #'
+#' \dontshow{
+#' oldseed <- ironseed::get_random_seed()
+#' }
+#'
 #' # Generate an ironseed with user supplied data
 #' ironseed::ironseed("Experiment", 20251031, 1)
 #'
 #' # Generate an ironseed automatically and initialize `.Random.seed` with it
 #' ironseed::ironseed(set_seed = TRUE)
 #'
+#' \dontshow{
+#' ironseed::set_random_seed(oldseed)
+#' }
 #'
 ironseed <- function(..., set_seed = !has_random_seed(), quiet = FALSE) {
   x <- list(...)
@@ -140,32 +147,14 @@ ironseed <- function(..., set_seed = !has_random_seed(), quiet = FALSE) {
   invisible(fe)
 }
 
-has_random_seed <- function() {
-  exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE)
-}
-
-get_random_seed <- function() {
-  get0(
-    ".Random.seed",
-    globalenv(),
-    mode = "integer",
-    inherits = FALSE,
-    ifnotfound = NULL
-  )
-}
-
-rm_random_seed <- function() {
-  oldseed <- get_random_seed()
-  rm(.Random.seed, envir = globalenv(), inherits = FALSE)
-  invisible(oldseed)
-}
-
 #' Initialize .Random.seed
 #'
 #' @param x an ironseed.
+#' @param seed a previous `.Random.seed`
 #' @param quiet a logical indicating whether to silence messages.
 #'
-#' @returns the previous of `.Random.seed` or `NULL`.
+#' @returns `fill_random_seed()` returns the previous value of `.Random.seed` or
+#' `NULL`.
 #'
 #' @export
 #' @keywords internal
@@ -195,6 +184,39 @@ fill_random_seed <- function(x, quiet = FALSE) {
   # draw one value to trigger seed fixup
   runif(1)
   # return old seed
+  invisible(oldseed)
+}
+
+#' @export
+#' @keywords internal
+#' @rdname fill_random_seed
+has_random_seed <- function() {
+  exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE)
+}
+
+#' @export
+#' @keywords internal
+#' @rdname fill_random_seed
+get_random_seed <- function() {
+  get0(
+    ".Random.seed",
+    globalenv(),
+    mode = "integer",
+    inherits = FALSE,
+    ifnotfound = NULL
+  )
+}
+
+#' @export
+#' @keywords internal
+#' @rdname fill_random_seed
+set_random_seed <- function(seed) {
+  assign(".Random.seed", seed, globalenv())
+}
+
+rm_random_seed <- function() {
+  oldseed <- get_random_seed()
+  rm(".Random.seed", envir = globalenv(), inherits = FALSE)
   invisible(oldseed)
 }
 
@@ -305,4 +327,3 @@ parse_ironseed_str <- function(x) {
   x <- numToInts(x)
   x
 }
-

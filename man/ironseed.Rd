@@ -93,12 +93,19 @@ Weyl sequence.
 }
 \examples{
 
+\dontshow{
+oldseed <- ironseed::get_random_seed()
+}
+
 # Generate an ironseed with user supplied data
 ironseed::ironseed("Experiment", 20251031, 1)
 
 # Generate an ironseed automatically and initialize `.Random.seed` with it
 ironseed::ironseed(set_seed = TRUE)
 
+\dontshow{
+ironseed::set_random_seed(oldseed)
+}
 
 }
 \references{

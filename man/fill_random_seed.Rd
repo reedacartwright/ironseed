@@ -2,17 +2,29 @@
 % Please edit documentation in R/ironseed.R
 \name{fill_random_seed}
 \alias{fill_random_seed}
+\alias{has_random_seed}
+\alias{get_random_seed}
+\alias{set_random_seed}
 \title{Initialize .Random.seed}
 \usage{
 fill_random_seed(x, quiet = FALSE)
+
+has_random_seed()
+
+get_random_seed()
+
+set_random_seed(seed)
 }
 \arguments{
 \item{x}{an ironseed.}
 
 \item{quiet}{a logical indicating whether to silence messages.}
+
+\item{seed}{a previous \code{.Random.seed}}
 }
 \value{
-the previous of \code{.Random.seed} or \code{NULL}.
+\code{fill_random_seed()} returns the previous value of \code{.Random.seed} or
+\code{NULL}.
 }
 \description{
 Initialize .Random.seed
