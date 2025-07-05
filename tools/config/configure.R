@@ -15,10 +15,14 @@ define(
 check_compile <- function(tmpl, name) {
   message(sprintf("*** Looking for %s...", name))
   verbose <- if (configure_verbose()) "" else FALSE
-  f <- tempfile(fileext = ".c")
-  writeLines(tmpl, f)
-  ret <- Rcmd(c("COMPILE", f), stdout = verbose, stderr = verbose)
+
+  f <- tempfile()
+  ensure_directory(f)
+  cfile <- file.path(f, "test.c")
+  writeLines(tmpl, cfile)
+  ret <- Rcmd(c("COMPILE", cfile), stdout = verbose, stderr = verbose)
   message(sprintf("**** %s: %s", if (ret == 0) "Found" else "Not found", name))
+  remove_file(f)
   ret == 0
 }
 
