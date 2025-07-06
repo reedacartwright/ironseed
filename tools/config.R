@@ -131,7 +131,7 @@ configure_file <- function(
 #' @family configure
 #'
 configure_directory <- function(
-  path = ".",
+  path,
   config = configure_database(),
   verbose = configure_verbose()
 ) {
