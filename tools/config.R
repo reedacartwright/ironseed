@@ -26,19 +26,16 @@
 #' `db` is a helper alias for the database
 #' returned by `configure_database()`.
 #'
-#' @export
 configure_database <- local({
   database <- new.env(parent = emptyenv())
   class(database) <- "configure_database"
   function() database
 })
 
-#' @export
 print.configure_database <- function(x, ...) {
   str.configure_database(x, ...)
 }
 
-#' @export
 str.configure_database <- function(object, ...) {
   writeLines("<configure database>")
   objects <- mget(ls(envir = object, all.names = TRUE), object)
@@ -56,18 +53,15 @@ str.configure_database <- function(object, ...) {
 #'
 #' @param ... A set of named arguments, mapping configuration names to values.
 #'
-#' @export
 configure_define <- function(...) {
   envir <- configure_database()
   list2env(list(...), envir = envir)
 }
 
 #' @rdname configure_define
-#' @export
 define <- configure_define
 
 #' @rdname configure_database
-#' @export
 db <- configure_database()
 
 
@@ -88,7 +82,6 @@ db <- configure_database()
 #'
 #' @family configure
 #'
-#' @export
 configure_file <- function(
   source,
   target = sub("[.]in$", "", source),
@@ -137,7 +130,6 @@ configure_file <- function(
 #'
 #' @family configure
 #'
-#' @export
 configure_directory <- function(
   path = ".",
   config = configure_database(),
@@ -221,7 +213,6 @@ configure_platform <- function(type) {
 #' @param simplify Boolean; simplify in the case where a single value was
 #'   requested?
 #'
-#' @export
 r_cmd_config <- function(..., simplify = TRUE) {
   R <- file.path(R.home("bin"), "R")
 
@@ -269,7 +260,6 @@ r_cmd_config <- function(..., simplify = TRUE) {
 #'   requested values.
 #' @param verbose Boolean; notify the user as \R configuration is read?
 #'
-#' @export
 read_r_config <- function(
   ...,
   package = Sys.getenv("R_PACKAGE_DIR", unset = "."),
@@ -344,7 +334,6 @@ read_r_config <- function(
 #' @param postamble Text to be included at the end of the document.
 #' @param verbose Boolean; inform the user when the requested file is created?
 #'
-#' @export
 concatenate_files <- function(
   sources,
   target,
@@ -375,87 +364,6 @@ concatenate_files <- function(
   }
 
   TRUE
-}
-
-#' Add Configure Infrastructure to an R Package
-#'
-#' Add the infrastructure needed to configure an R package.
-#'
-#' @param package The path to the top-level directory of an \R package.
-#' @export
-use_configure <- function(package = ".") {
-  # preserve working directory
-  owd <- getwd()
-  on.exit(setwd(owd), add = TRUE)
-
-  # find resources
-  package <- normalizePath(package, winslash = "/")
-  resources <- system.file("resources", package = "configure")
-
-  # copy into temporary directory
-  dir <- tempfile("configure-")
-  on.exit(unlink(dir, recursive = TRUE), add = TRUE)
-
-  dir.create(dir)
-  file.copy(resources, dir, recursive = TRUE)
-
-  # rename resources directory
-  setwd(dir)
-  file.rename(basename(resources), basename(package))
-
-  # now, copy these files back into the target directory
-  file.copy(basename(package), dirname(package), recursive = TRUE)
-
-  # ensure DESCRIPTION contains 'Biarch: TRUE' for Windows
-  setwd(package)
-  DESCRIPTION <- read_file("DESCRIPTION")
-  if (!grepl("(?:^|\n)Biarch:", DESCRIPTION)) {
-    DESCRIPTION <- paste(DESCRIPTION, "Biarch: TRUE", sep = "\n")
-    DESCRIPTION <- gsub("\n{2,}", "\n", DESCRIPTION)
-    cat(DESCRIPTION, file = "DESCRIPTION", sep = "\n")
-  }
-
-  # write placeholders for 'configure.R', 'cleanup.R' if none exist
-  ensure_directory("tools/config")
-  configure <- "tools/config/configure.R"
-  if (!file.exists("tools/config/configure.R")) {
-    text <- c(
-      "# Prepare your package for installation here.",
-      "# Use 'define()' to define configuration variables.",
-      "# Use 'configure_file()' to substitute configuration values.",
-      "",
-      ""
-    )
-    writeLines(text, con = configure)
-  }
-
-  cleanup <- "tools/config/cleanup.R"
-  if (!file.exists("tools/config/cleanup.R")) {
-    text <- c(
-      "# Clean up files generated during configuration here.",
-      "# Use 'remove_file()' to remove files generated during configuration.",
-      "",
-      ""
-    )
-    writeLines(text, con = cleanup)
-  }
-
-  # notify the user what we did
-  message("* Copied 'configure{.win}' and 'cleanup{.win}'.")
-  message("* Updated 'tools/config.R'.")
-
-  # open 'configure.R', 'cleanup.R' for editing if in RStudio
-  rstudio <-
-    !is.na(Sys.getenv("RSTUDIO", unset = NA)) &&
-    requireNamespace("rstudioapi", quietly = TRUE)
-
-  if (rstudio) {
-    rstudioapi::navigateToFile("tools/config/configure.R", 5, 1)
-    rstudioapi::navigateToFile("tools/config/cleanup.R", 4, 1)
-  } else {
-    message("* Use 'tools/config/configure.R' for package configuration.")
-    message("* Use 'tools/config/cleanup.R' for package cleanup.")
-  }
 }
 
 ensure_directory <- function(dir) {
