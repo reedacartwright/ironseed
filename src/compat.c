@@ -1,5 +1,9 @@
 #define _POSIX_C_SOURCE 200809L
+#ifdef __APPLE__
+#define _DARWIN_C_SOURCE
+#else
 #define _GNU_SOURCE
+#endif
 #define _CRT_RAND_S
 #define _CRT_NONSTDC_NO_DEPRECATE
 

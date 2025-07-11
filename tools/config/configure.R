@@ -31,7 +31,11 @@ if (.Platform$OS.type != "windows") {
   tmpl <- "
 #pragma GCC diagnostic error \"-Wimplicit-function-declaration\"
 #define _POSIX_C_SOURCE 200809L
+#ifdef __APPLE__
+#define _DARWIN_C_SOURCE
+#else
 #define _GNU_SOURCE
+#endif
 #include <stdlib.h>
 int f() {
   return arc4random();
@@ -45,7 +49,11 @@ int f() {
   tmpl <- "
 #pragma GCC diagnostic error \"-Wimplicit-function-declaration\"
 #define _POSIX_C_SOURCE 200809L
+#ifdef __APPLE__
+#define _DARWIN_C_SOURCE
+#else
 #define _GNU_SOURCE
+#endif
 #include <unistd.h>
 int f() {
   unsigned int u;
