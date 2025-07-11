@@ -111,6 +111,8 @@ uint64_t readcycle_entropy(void) {
   uint64_t u;
   __asm __volatile("mrs %0, CNTVCT_EL0" : "=&r"(u));
   return u;
+#elif defined(__GNUC__) && (defined(__POWERPC__) || defined(__powerpc__))
+  return __builtin_ppc_get_timebase();
 #else
   return 0;
 #endif
