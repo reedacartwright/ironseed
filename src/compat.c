@@ -60,7 +60,12 @@ uint64_t clock_entropy(void) {
 
 uint64_t pid_entropy(void) { return (uint64_t)getpid(); }
 
-uint64_t tid_entropy(void) { return (uint64_t)pthread_self(); }
+uint64_t tid_entropy(void) { 
+  // TODO: If a system defines pthread_t to not be an arithmetic type,
+  // this will fail.
+  pthread_t id = pthread_self();
+  return (uint64_t)((uintptr_t)id);
+}
 
 static uint64_t system_entropy_once(void) {
 #ifdef _WIN32

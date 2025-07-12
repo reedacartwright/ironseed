@@ -111,11 +111,11 @@ static void update_ironseed_hash_d(ironseed_hash_t *p, double value) {
 }
 
 static void update_ironseed_hash_p(ironseed_hash_t *p, void *value) {
-  update_ironseed_hash_ll(p, (uint64_t)value);
+  update_ironseed_hash_ll(p, (uint64_t)((uintptr_t)value));
 }
 
 static void update_ironseed_hash_f(ironseed_hash_t *p, DL_FUNC value) {
-  update_ironseed_hash_ll(p, (uint64_t)value);
+  update_ironseed_hash_ll(p, (uint64_t)((uintptr_t)value));
 }
 
 static void update_ironseed_hash_v(
