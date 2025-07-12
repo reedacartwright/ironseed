@@ -5,30 +5,25 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'FreeBSD release'
+        description: 'OpenBSD release'
         required: true
         type: choice
         options:
-        - '15.0'
-        - '14.2-pre'
-        - '14.1'
-        - '14.0'
-        - '13.4'
-        - '13.3'
-        - '13.2'
-        - '12.4'
-        default: '14.1'
+        - '7.6'
+        - '7.5'
+        - '7.4'
+        default: '7.6'
 
-name: freebsd.yaml
+name: openbsd.yaml
 
 jobs:
-  freebsd:
+  openbsd:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: r-hub/actions/setup-r-freebsd@v1
+      - uses: r-hub/actions/setup-r-openbsd@v1
         with:
-          release: ${{ github.event.inputs.release || '14.1' }}
+          release: ${{ github.event.inputs.release || '7.6' }}
       - uses: r-hub/actions/platform-info@v1
 
       - uses: r-lib/actions/setup-r-dependencies@v2
