@@ -8,6 +8,8 @@
 [![R-CMD-check](https://github.com/reedacartwright/ironseed/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/reedacartwright/ironseed/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/reedacartwright/ironseed/graph/badge.svg)](https://app.codecov.io/gh/reedacartwright/ironseed)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ironseed)](https://CRAN.R-project.org/package=ironseed)
 <!-- badges: end -->
 
 ## Overview
@@ -99,16 +101,16 @@ occurs if no data is passed to `ironseed()`.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
-#> ** Ironseed : Seed 928CyRH6XXD-uEQ6w3WqNaN-eTgztfiaEdX-gpnRQQwK6gg
+#> ** Ironseed : Seed R9zL9c3XXSM-c2Yn8Y6HvCi-fZFV3waqn9L-aJyPVkdbBvg
 runif(10)
-#>  [1] 0.03782435 0.27610622 0.41233694 0.43693405 0.82218224 0.63145860
-#>  [7] 0.75371461 0.33906601 0.47384924 0.36541864
+#>  [1] 0.98235005 0.98752571 0.39794299 0.75993334 0.76389572 0.28458419
+#>  [7] 0.17692787 0.08258271 0.01626946 0.48473655
 
 # Since RNG initializing has occurred, the next call will simply
 # return the ironseed used in previous seeding.
 fe <- ironseed::ironseed()
 fe
-#> Ironseed: 928CyRH6XXD-uEQ6w3WqNaN-eTgztfiaEdX-gpnRQQwK6gg
+#> Ironseed: R9zL9c3XXSM-c2Yn8Y6HvCi-fZFV3waqn9L-aJyPVkdbBvg
 ```
 
 Or achieving the same thing with one call. Note that the automatically
@@ -117,12 +119,12 @@ generated seed is different from the previous run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 fe <- ironseed::ironseed()
-#> ** Ironseed : Seed Q5Pwk5c4sw4-ePw3AT2W6Y7-thVAZpSwK8A-824HxBsNZiC
+#> ** Ironseed : Seed 1AqQiujzbTb-fsPjKX7YfrY-Kbx3w8V5jFW-yJXNYkrcneT
 runif(10)
-#>  [1] 0.14606941 0.96711023 0.91209357 0.75068459 0.72345636 0.56250730
-#>  [7] 0.67059829 0.07456731 0.63140638 0.90687755
+#>  [1] 0.277089652 0.169386587 0.438258989 0.306374501 0.134378114 0.003869305
+#>  [7] 0.941126635 0.824412950 0.484881233 0.314912243
 fe
-#> Ironseed: Q5Pwk5c4sw4-ePw3AT2W6Y7-thVAZpSwK8A-824HxBsNZiC
+#> Ironseed: 1AqQiujzbTb-fsPjKX7YfrY-Kbx3w8V5jFW-yJXNYkrcneT
 ```
 
 ### Reproducible Code
