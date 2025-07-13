@@ -47,10 +47,11 @@ sequence.
 
 ## Installation
 
-You can install the development version of ironseed from
-[GitHub](https://github.com/) with:
-
 ``` r
+# Install the released version of the package from CRAN as usual:
+install.packages("ironseed")
+
+# Or the development version from GitHub:
 # install.packages("pak")
 pak::pak("reedacartwright/ironseed")
 ```

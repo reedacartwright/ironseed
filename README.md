@@ -38,10 +38,11 @@ by a second Weyl sequence.
 
 ## Installation
 
-You can install the development version of ironseed from
-[GitHub](https://github.com/) with:
-
 ``` r
+# Install the released version of the package from CRAN as usual:
+install.packages("ironseed")
+
+# Or the development version from GitHub:
 # install.packages("pak")
 pak::pak("reedacartwright/ironseed")
 ```
@@ -101,16 +102,16 @@ occurs if no data is passed to `ironseed()`.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
-#> ** Ironseed : Seed R9zL9c3XXSM-c2Yn8Y6HvCi-fZFV3waqn9L-aJyPVkdbBvg
+#> ** Ironseed : Seed dqxUP6MhxAW-JAh8pJoiZjH-EdFKndFkAJ5-baUmNcGyHgb
 runif(10)
-#>  [1] 0.98235005 0.98752571 0.39794299 0.75993334 0.76389572 0.28458419
-#>  [7] 0.17692787 0.08258271 0.01626946 0.48473655
+#>  [1] 0.5735454 0.9395409 0.1732484 0.6917507 0.8476523 0.3668362 0.6353248
+#>  [8] 0.2128797 0.7308257 0.5135310
 
 # Since RNG initializing has occurred, the next call will simply
 # return the ironseed used in previous seeding.
 fe <- ironseed::ironseed()
 fe
-#> Ironseed: R9zL9c3XXSM-c2Yn8Y6HvCi-fZFV3waqn9L-aJyPVkdbBvg
+#> Ironseed: dqxUP6MhxAW-JAh8pJoiZjH-EdFKndFkAJ5-baUmNcGyHgb
 ```
 
 Or achieving the same thing with one call. Note that the automatically
@@ -119,12 +120,12 @@ generated seed is different from the previous run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 fe <- ironseed::ironseed()
-#> ** Ironseed : Seed 1AqQiujzbTb-fsPjKX7YfrY-Kbx3w8V5jFW-yJXNYkrcneT
+#> ** Ironseed : Seed bxwE1MUJnei-HbBGkestLRM-rRRV2PqgR1j-Y4fWmgEHzmM
 runif(10)
-#>  [1] 0.277089652 0.169386587 0.438258989 0.306374501 0.134378114 0.003869305
-#>  [7] 0.941126635 0.824412950 0.484881233 0.314912243
+#>  [1] 0.43113563 0.37293063 0.02126794 0.22267259 0.45363405 0.53949902
+#>  [7] 0.29469384 0.03040180 0.28013271 0.22806716
 fe
-#> Ironseed: 1AqQiujzbTb-fsPjKX7YfrY-Kbx3w8V5jFW-yJXNYkrcneT
+#> Ironseed: bxwE1MUJnei-HbBGkestLRM-rRRV2PqgR1j-Y4fWmgEHzmM
 ```
 
 ### Reproducible Code
