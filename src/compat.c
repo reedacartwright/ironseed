@@ -68,30 +68,28 @@ uint64_t tid_entropy(void) {
 }
 
 static uint64_t system_entropy_once(void) {
+  union {
+    uint64_t u;
+    uint32_t h[2];
+  } ret = {0};
 #ifdef _WIN32
-  unsigned int u = 0;
-  uint64_t ret = 0;
-  rand_s(&u);
-  ret = (uint64_t)u;
-  rand_s(&u);
-  ret = (ret << 32) | (uint64_t)u;
+  rand_s((unsigned int*)&h[0]);
+  rand_s((unsigned int*)&h[1]);
 #elif defined(HAVE_ARC4RANDOM)
-  uint64_t ret = arc4random();
-  ret = (ret << 32) | (uint64_t)arc4random();
+  ret.h[0] = arc4random();
+  ret.h[1] = arc4random();
 #elif defined(HAVE_GETENTROPY)
-  uint64_t ret = 0;
-  int res = getentropy(&ret, sizeof(ret));
+  int res = getentropy(&ret.u, sizeof(ret.u));
   (void)res;
 #else
-  uint64_t ret = 0;
   int f = open("/dev/urandom", O_RDONLY);
   if(f >= 0) {
-    int res = read(f, &ret, sizeof(ret));
+    int res = read(f, &ret.u, sizeof(ret.u));
     (void)res;
     close(f);
   }
 #endif
-  return ret;
+  return ret.u;
 }
 
 uint64_t system_entropy(void) {
