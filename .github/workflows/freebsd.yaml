@@ -44,4 +44,4 @@ jobs:
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
           upload-snapshots: true
           upload-results: true
-          artifact-name: "freebsd-{arch}-r{rversion}-{id}-result"
+          artifact-name: ${{ format('{0}-{1}-r{2}-{3}-results', 'freebsd', runner.arch, matrix.config.r, matrix.config.id || strategy.job-index ) }}
