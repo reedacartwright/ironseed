@@ -1,6 +1,9 @@
 #define _POSIX_C_SOURCE 200809L
 #ifdef __APPLE__
 #define _DARWIN_C_SOURCE
+#elif defined(__FreeBSD__) || defined(__OpenBSD__) || \
+      defined(__NetBSD__) || defined(__DragonFly__)
+#define __BSD_VISIBLE 1
 #else
 #define _GNU_SOURCE
 #endif
