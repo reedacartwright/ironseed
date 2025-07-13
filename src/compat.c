@@ -60,7 +60,7 @@ uint64_t clock_entropy(void) {
 
 uint64_t pid_entropy(void) { return (uint64_t)getpid(); }
 
-uint64_t tid_entropy(void) { 
+uint64_t tid_entropy(void) {
   // TODO: If a system defines pthread_t to not be an arithmetic type,
   // this will fail.
   pthread_t id = pthread_self();
