@@ -180,7 +180,7 @@ fill_random_seed <- function(x, quiet = FALSE) {
     seed[2] <- 624L
   }
   # update .Random.seed with our own state
-  assign(".Random.seed", seed, globalenv())
+  assign(".Random.seed", seed, globalenv(), inherits = FALSE)
   # draw one value to trigger seed fixup
   runif(1)
   # return old seed
@@ -211,7 +211,13 @@ get_random_seed <- function() {
 #' @keywords internal
 #' @rdname fill_random_seed
 set_random_seed <- function(seed) {
-  assign(".Random.seed", seed, globalenv())
+  oldseed <- get_random_seed()
+  if (!is.null(seed)) {
+    assign(".Random.seed", seed, globalenv(), inherits = FALSE)
+  } else if (!is.null(oldseed)) {
+    rm_random_seed()
+  }
+  invisible(oldseed)
 }
 
 rm_random_seed <- function() {
