@@ -73,8 +73,8 @@ static uint64_t system_entropy_once(void) {
     uint32_t h[2];
   } ret = {0};
 #ifdef _WIN32
-  rand_s((unsigned int*)&ret.h[0]);
-  rand_s((unsigned int*)&ret.h[1]);
+  rand_s((unsigned int *)&ret.h[0]);
+  rand_s((unsigned int *)&ret.h[1]);
 #elif defined(HAVE_ARC4RANDOM)
   ret.h[0] = arc4random();
   ret.h[1] = arc4random();
