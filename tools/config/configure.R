@@ -2,27 +2,31 @@
 # Use 'define()' to define configuration variables.
 # Use 'configure_file()' to substitute configuration values.
 
-Rcmd <- function(args, ...) {
-  system2(file.path(R.home("bin"), "R"), c("CMD", args), ...)
-}
-
 # defaults
 define(
   DEFINE_HAVE_ARC4RANDOM = "//#define HAVE_ARC4RANDOM",
   DEFINE_HAVE_GETENTROPY = "//#define HAVE_GETENTROPY"
 )
 
+CC <- r_cmd_config("CC")
+CPPFLAGS <- r_cmd_config("CPPFLAGS")
+CPICFLAGS <- r_cmd_config("CPICFLAGS")
+CFLAGS <- r_cmd_config("CFLAGS")
+CCMD <- paste(CC, CPPFLAGS, CPICFLAGS, CFLAGS)
+
 check_compile <- function(tmpl, name) {
   message(sprintf("*** Looking for %s...", name))
-  verbose <- if (configure_verbose()) "" else FALSE
-
-  f <- tempfile()
-  ensure_directory(f)
-  cfile <- file.path(f, "test.c")
+  cfile <- tempfile("conftest-", fileext=".c")
+  ofile <- sub(".c$", ".o", cfile)
   writeLines(tmpl, cfile)
-  ret <- Rcmd(c("COMPILE", cfile), stdout = verbose, stderr = verbose)
+  cmd <- paste(CCMD, "-c", shQuote(cfile), "-o", shQuote(ofile))
+  if (configure_verbose()) {
+    message(cmd)
+  }
+  ret <- system(cmd)
   message(sprintf("**** %s: %s", if (ret == 0) "Found" else "Not found", name))
-  remove_file(f)
+  remove_file(cfile, verbose = FALSE)
+  remove_file(ofile, verbose = FALSE)
   ret == 0
 }
 
