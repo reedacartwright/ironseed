@@ -35,7 +35,7 @@ if (.Platform$OS.type != "windows") {
   tmpl <- "
 #pragma GCC diagnostic error \"-Wimplicit-function-declaration\"
 #include <stdlib.h>
-int f() {
+int f(void) {
   return arc4random();
 }
 "
@@ -47,7 +47,7 @@ int f() {
   tmpl <- "
 #pragma GCC diagnostic error \"-Wimplicit-function-declaration\"
 #include <unistd.h>
-int f() {
+int f(void) {
   unsigned int u;
   return getentropy(&u, sizeof(u));
 }
