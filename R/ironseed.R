@@ -30,9 +30,10 @@ the <- new.env(parent = emptyenv())
 #' input sequence and can be used to generate a variable-length output sequence
 #' of seeds, including initializing R's built-in random number generator.
 #'
-#' - `ironseed()` creates an ironseed from user supplied objects or
-#'  automatically from multiple sources of entropy on the local system. It also
-#'  initializes R's built-in random number generator from an ironseed.
+#' - `ironseed()` creates an ironseed from user supplied objects, from external
+#'  arguments, or automatically from multiple sources of entropy on the local
+#'  system. It also initializes R's built-in random number generator from an
+#'  ironseed.
 #'
 #' - `create_seqseq()` uses an ironseed to generate a sequence of 32-bit seeds.
 #'
@@ -45,6 +46,7 @@ the <- new.env(parent = emptyenv())
 #' @param ... objects
 #' @param set_seed a logical indicating whether to initialize `.Random.seed`.
 #' @param quiet a logical indicating whether to silence messages.
+#' @param methods a character vector.
 #' @param fe an ironseed
 #' @param n a scalar integer specifying the number of seeds to generate
 #' @param x a string, ironseed, or other object
@@ -62,19 +64,39 @@ the <- new.env(parent = emptyenv())
 #' exist and `FALSE` otherwise.
 #'
 #' Ironseed behaves differently depending on the number of arguments passed as
-#' `...`.
+#' `...` and the value of `methods`. If `...` has a length of zero **and**
+#' initialization is disabled, then `ironseed()` returns the last ironseed used
+#' to initialize `.Random.seed`. Otherwise, it generates an ironseed from an
+#' input sequence according to the methods included in `methods`.
 #'
-#' - 0 arguments: If initialization is enabled, `ironseed()` generates an
-#'   automatic ironseed. Otherwise, `ironseed()` returns the last ironseed used
-#'   to initialize `.Random.seed`.
+#' When generating an ironseed, `ironseed()` tries the listed methods starting
+#' from the first value and continuing until it can generate an ironseed. If no
+#' method works, an error will be raised.
 #'
-#' - 1 argument: `ironseed(NULL)` generates an automatic ironseed. For
-#'   `ironseed(x)`, if `x` is an ironseed object, it is used as is. If `x`, is
-#'   a scalar character that matches an ironseed string, it is parsed to an
-#'   ironseed. Otherwise, `x` hashed to create an ironseed.
+#' - dots: Use the values passed as `...` to construct an ironseed. Most atomic
+#' types and lists of atomic types can be used. `ironseed()` and
+#' `ironseed(NULL)` are considered empty inputs and the next method will be
+#' tried.
 #'
-#' - 2+ arguments: `ironseed(x,y,...)` hashes the arguments to create an
-#'   ironseed.
+#' - args: Use command line arguments to construct an ironseed. Any arguments
+#' that begins with `--seed=` or `-seed=` will be used as strings, after the
+#' argument names are trimmed. If no matching arguments are found, the next
+#' method will be tried.
+#'
+#' - env: Use the value of the environmental variable "IRONSEED" as a scalar
+#' character to construct an ironseed. If this variable doesn't exist or is set
+#' to an empty string, the next method will be tried.
+#'
+#' - auto: Use multiple sources of entropy from the system to generate an
+#' ironseed. This method always constructs an ironseed.
+#'
+#' - null: Generate a "default" ironseed using no input. This method always
+#' constructs an ironseed.
+#'
+#' If the input sequence has one value and it is an ironseed object, it is used
+#' as is. If the input sequence is a scalar character that matches an ironseed
+#' string, it is parsed to an ironseed. Otherwise, the input sequence is hashed
+#' to create an ironseed.
 #'
 #' @details
 #'
@@ -124,27 +146,68 @@ the <- new.env(parent = emptyenv())
 #' ironseed::set_random_seed(oldseed)
 #' }
 #'
-ironseed <- function(..., set_seed = !has_random_seed(), quiet = FALSE) {
+ironseed <- function(..., set_seed = !has_random_seed(), quiet = FALSE,
+                     methods = c("dots", "args", "env", "auto", "null")) {
   x <- list(...)
   n <- length(x)
 
-  # construct ironseed object based on arguments
+  # return the previous ironseed object
   if (n == 0L && !isTRUE(set_seed)) {
-    fe <- the$ironseed
-  } else if (n == 0L || (n == 1L && is.null(x[[1]]))) {
-    fe <- auto_ironseed()
-  } else if (n == 1L && is_ironseed2(x[[1]])) {
-    fe <- as_ironseed(x[[1]])
-  } else {
-    fe <- create_ironseed(x)
+    return(the$ironseed)
+  }
+  fe <- NULL
+  for (method in methods) {
+    fe <- switch(method,
+      dots = dots_ironseed(x),
+      args = args_ironseed(),
+      env = env_ironseed(),
+      auto = auto_ironseed(),
+      null = create_ironseed(NULL),
+      stop("Invalid ironseed input method.", call. = FALSE) )
+    if (!is.null(fe)) {
+      break
+    }
+  }
+  if (is.null(fe)) {
+    stop("Unable to construct an ironseed.", call. = FALSE)
   }
 
-  if (!isTRUE(set_seed)) {
-    return(fe)
-  }
   fill_random_seed(fe, quiet = quiet)
   the$ironseed <- fe
   invisible(fe)
+}
+
+dots_ironseed <- function(x) {
+  n <- length(x)
+  if (n == 0L || (n == 1L && is.null(x[[1]]))) {
+    NULL
+  } else if (n == 1L && is_ironseed2(x[[1]])) {
+    as_ironseed(x[[1]])
+  } else {
+    create_ironseed(x)
+  }
+}
+
+# wrapper to return NULL if x is an empty string or NA string
+dots_ironseed2 <- function(x) {
+  if (is.character(x) && length(x) == 1L && (is.na(x) || nchar(x) == 0L)) {
+    NULL
+  } else {
+    dots_ironseed(x)
+  }
+}
+
+# Extract ironseed inputs from command line arguments
+args_ironseed <- function() {
+  x <- commandArgs(trailingOnly = TRUE)
+  x <- x[grepl("^--?seed=", x)]
+  x <- sub("^[^=]*=", "", x)
+  dots_ironseed(x)
+}
+
+# Extract ironseed input from environment
+env_ironseed <- function() {
+  dots_ironseed2(Sys.getenv("IRONSEED"))
 }
 
 #' Initialize .Random.seed
