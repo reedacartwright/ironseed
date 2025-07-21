@@ -146,8 +146,12 @@ the <- new.env(parent = emptyenv())
 #' ironseed::set_random_seed(oldseed)
 #' }
 #'
-ironseed <- function(..., set_seed = !has_random_seed(), quiet = FALSE,
-                     methods = c("dots", "args", "env", "auto", "null")) {
+ironseed <- function(
+  ...,
+  set_seed = !has_random_seed(),
+  quiet = FALSE,
+  methods = c("dots", "args", "env", "auto", "null")
+) {
   x <- list(...)
   n <- length(x)
 
@@ -157,13 +161,15 @@ ironseed <- function(..., set_seed = !has_random_seed(), quiet = FALSE,
   }
   fe <- NULL
   for (method in methods) {
-    fe <- switch(method,
+    fe <- switch(
+      method,
       dots = dots_ironseed(x),
       args = args_ironseed(),
       env = env_ironseed(),
       auto = auto_ironseed(),
       null = create_ironseed(NULL),
-      stop("Invalid ironseed input method.", call. = FALSE) )
+      stop("Invalid ironseed input method.", call. = FALSE)
+    )
     if (!is.null(fe)) {
       break
     }

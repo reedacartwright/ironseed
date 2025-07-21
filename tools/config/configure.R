@@ -16,7 +16,7 @@ CCMD <- paste(CC, CPPFLAGS, CPICFLAGS, CFLAGS)
 
 check_compile <- function(tmpl, name) {
   message(sprintf("*** Looking for %s...", name))
-  cfile <- tempfile("conftest-", fileext=".c")
+  cfile <- tempfile("conftest-", fileext = ".c")
   ofile <- sub(".c$", ".o", cfile)
   writeLines(tmpl, cfile)
   cmd <- paste(CCMD, "-c", shQuote(cfile), "-o", shQuote(ofile))
