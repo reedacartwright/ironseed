@@ -4,6 +4,9 @@ oldseed <- get_random_seed()
 # Initialize .Random.seed if needed
 invisible(runif(1))
 
+# this should be quiet since .Random.seed is initialized
+expect_silent(ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1"))
+
 # A properly formatted string is passed through.
 expect_equal(
   ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1"),
@@ -91,6 +94,11 @@ expect_equal(
 )
 
 expect_equal(
+  ironseed(c(1.0, 0.0)),
+  as_ironseed("W7mVcD5ByXY-Pp5bJ6gm36D-g15xccqZeTc-ZiP3KVSAj1H")
+)
+
+expect_equal(
   ironseed(1:10, 1.0),
   as_ironseed("QECWkLLKuiC-1nfMyK4N2VE-cK9DCKnQ9FG-Csc4RJWTG1J")
 )
@@ -115,6 +123,12 @@ expect_equal(
 expect_equal(
   ironseed(1L, 0L),
   as_ironseed("q7QYDEYq9bR-ptfKNZW7ekZ-nfw6XtUP8vh-LxYc3atT6G7")
+)
+
+# Complex values are the same as pairs of doubles
+expect_equal(
+  ironseed(1 + 0i),
+  as_ironseed("W7mVcD5ByXY-Pp5bJ6gm36D-g15xccqZeTc-ZiP3KVSAj1H")
 )
 
 # Two auto-ironseeds are different

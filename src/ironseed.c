@@ -177,6 +177,8 @@ uint64_t system_entropy(void);
 // Inspired by ideas from M.E. O'Neill
 // - https://www.pcg-random.org/posts/simple-portable-cpp-seed-entropy.html
 // - https://gist.github.com/imneme/540829265469e673d045
+//
+// TODO: extract entropy from cluster environmental variables like JOB_ID
 static void autofill_ironseed_hash(ironseed_hash_t *p) {
   assert(p != NULL);
 
@@ -247,6 +249,12 @@ SEXP R_create_ironseed(SEXP x) {
         update_ironseed_hash_d(&hash, REAL(y)[j]);
       }
       break;
+    case CPLXSXP:
+      for(R_xlen_t j = 0; j < XLENGTH(y); ++j) {
+        update_ironseed_hash_d(&hash, COMPLEX(y)[j].r);
+        update_ironseed_hash_d(&hash, COMPLEX(y)[j].i);
+      }
+      break;
     case LGLSXP:
       for(R_xlen_t j = 0; j < XLENGTH(y); ++j) {
         update_ironseed_hash(&hash, LOGICAL(y)[j]);
@@ -263,7 +271,8 @@ SEXP R_create_ironseed(SEXP x) {
     case NILSXP:
       break;
     default:
-      Rf_error("Ironseed hash: unsupported type `%d`", TYPEOF(y));
+      Rf_error("Ironseed hash: unsupported type `%s`",
+        CHAR(Rf_type2str_nowarn(TYPEOF(y))));
     }
   }
 
