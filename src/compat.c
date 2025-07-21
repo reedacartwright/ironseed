@@ -7,6 +7,11 @@
 #define __has_builtin(x) 0  // Compatibility with non-clang compilers.
 #endif
 
+#define R_NO_REMAP
+
+#include <R.h>
+#include <R_ext/Visibility.h>
+#include <Rinternals.h>
 #include <fcntl.h>
 #include <pthread.h>
 #include <stdint.h>
@@ -61,8 +66,7 @@ uint64_t clock_entropy(void) {
 uint64_t pid_entropy(void) { return (uint64_t)getpid(); }
 
 uint64_t tid_entropy(void) {
-  // TODO: If a system defines pthread_t to not be an arithmetic type,
-  // this will fail.
+  // NOTE: Will fail if pthread_t is not an arithmetic type.
   pthread_t id = pthread_self();
   return (uint64_t)((uintptr_t)id);
 }
@@ -72,13 +76,13 @@ static uint64_t system_entropy_once(void) {
     uint64_t u;
     uint32_t h[2];
   } ret = {0};
-#ifdef _WIN32
+#if defined(_WIN32)
   rand_s((unsigned int *)&ret.h[0]);
   rand_s((unsigned int *)&ret.h[1]);
-#elif defined(HAVE_ARC4RANDOM)
+#elif defined(HAS_ARC4RANDOM)
   ret.h[0] = arc4random();
   ret.h[1] = arc4random();
-#elif defined(HAVE_GETENTROPY)
+#elif defined(HAS_GETENTROPY)
   int res = getentropy(&ret.u, sizeof(ret.u));
   (void)res;
 #else
@@ -119,4 +123,66 @@ uint64_t readcycle_entropy(void) {
 #else
   return 0;
 #endif
+}
+
+SEXP R_ironseed_config(void) {
+  const char *names[] = {
+    "HAS_ARC4RANDOM",
+    "HAS_GETENTROPY",
+    "HAS_RAND_S",
+    "HAS_CLOCK_MONOTONIC_RAW",
+    "HAS_CLOCK_MONOTONIC",
+    "HAS_TIME_MONOTONIC",
+    "HAS_TIME_UTC",
+    "HAS_READCYCLE",
+    ""
+  };
+  SEXP ret = PROTECT(Rf_mkNamed(LGLSXP, names));
+
+#ifdef HAS_ARC4RANDOM
+  LOGICAL(ret)[0] = true;
+#else
+  LOGICAL(ret)[0] = false;
+#endif
+
+#ifdef HAS_GETENTROPY
+  LOGICAL(ret)[1] = true;
+#else
+  LOGICAL(ret)[1] = false;
+#endif
+
+#ifdef _WIN32
+  LOGICAL(ret)[2] = true;
+#else
+  LOGICAL(ret)[2] = false;
+#endif
+
+#ifdef CLOCK_MONOTONIC_RAW
+  LOGICAL(ret)[3] = true;
+#else
+  LOGICAL(ret)[3] = false;
+#endif
+
+#ifdef CLOCK_MONOTONIC
+  LOGICAL(ret)[4] = true;
+#else
+  LOGICAL(ret)[4] = false;
+#endif
+
+#ifdef TIME_MONOTONIC
+  LOGICAL(ret)[5] = true;
+#else
+  LOGICAL(ret)[5] = false;
+#endif
+
+#ifdef TIME_UTC
+  LOGICAL(ret)[6] = true;
+#else
+  LOGICAL(ret)[6] = false;
+#endif
+
+  LOGICAL(ret)[7] = (readcycle_entropy() != 0);
+
+  UNPROTECT(1);
+  return ret;
 }

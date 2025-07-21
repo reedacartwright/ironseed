@@ -4,8 +4,8 @@
 
 # defaults
 define(
-  DEFINE_HAVE_ARC4RANDOM = "//#define HAVE_ARC4RANDOM",
-  DEFINE_HAVE_GETENTROPY = "//#define HAVE_GETENTROPY"
+  DEFINE_HAS_ARC4RANDOM = "//#define HAS_ARC4RANDOM",
+  DEFINE_HAS_GETENTROPY = "//#define HAS_GETENTROPY"
 )
 
 CC <- r_cmd_config("CC")
@@ -40,7 +40,7 @@ int f(void) {
 }
 "
   if (check_compile(tmpl, "arc4random()")) {
-    define(DEFINE_HAVE_ARC4RANDOM = "#define HAVE_ARC4RANDOM")
+    define(DEFINE_HAS_ARC4RANDOM = "#define HAS_ARC4RANDOM")
   }
 
   # Check for getentropy
@@ -53,6 +53,6 @@ int f(void) {
 }
 "
   if (check_compile(tmpl, "getentropy()")) {
-    define(DEFINE_HAVE_GETENTROPY = "#define HAVE_GETENTROPY")
+    define(DEFINE_HAS_GETENTROPY = "#define HAS_GETENTROPY")
   }
 }

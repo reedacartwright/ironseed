@@ -271,8 +271,10 @@ SEXP R_create_ironseed(SEXP x) {
     case NILSXP:
       break;
     default:
-      Rf_error("Ironseed hash: unsupported type `%s`",
-        CHAR(Rf_type2str_nowarn(TYPEOF(y))));
+      Rf_error(
+        "Ironseed hash: unsupported type `%s`",
+        CHAR(Rf_type2str_nowarn(TYPEOF(y)))
+      );
     }
   }
 
