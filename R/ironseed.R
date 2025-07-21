@@ -172,6 +172,10 @@ ironseed <- function(..., set_seed = !has_random_seed(), quiet = FALSE,
     stop("Unable to construct an ironseed.", call. = FALSE)
   }
 
+  if (!isTRUE(set_seed)) {
+    return(fe)
+  }
+
   fill_random_seed(fe, quiet = quiet)
   the$ironseed <- fe
   invisible(fe)
