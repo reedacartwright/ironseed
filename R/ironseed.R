@@ -157,9 +157,9 @@ ironseed <- function(
 
   if (!is.null(names(x))) {
     stop(
-      "Arguments in `...` must be passed by position, not name. ",
+      "Ironseed arguments in `...` must be passed by position, not name. ",
       "Did you misspell an argument name?",
-      call. = TRUE
+      call. = FALSE
     )
   }
 
