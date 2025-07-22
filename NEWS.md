@@ -1,5 +1,6 @@
 ## ironseed (development)
 
+* Require `...` arguments to be unnammed in `ironseed()`.
 * Expand `ironseed()` to support multiple methods out of the box for collecting
   seeds.
   - "args" method extracts one or more seeds from the command line.

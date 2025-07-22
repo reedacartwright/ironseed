@@ -45,6 +45,8 @@ uint64_t clock_entropy(void) {
     return timespec_to_u64(&ts);
   }
 #endif
+
+// #nocov start
 #if defined(CLOCK_MONOTONIC)
   if(clock_gettime(CLOCK_MONOTONIC, &ts) == 0) {
     return timespec_to_u64(&ts);
@@ -62,6 +64,7 @@ uint64_t clock_entropy(void) {
 #endif
 
   return (uint64_t)time(NULL);
+  // #nocov end
 }
 
 uint64_t pid_entropy(void) { return (uint64_t)getpid(); }
@@ -126,6 +129,7 @@ uint64_t readcycle_entropy(void) {
 #endif
 }
 
+// #nocov start
 SEXP R_ironseed_config(void) {
   const char *names[] = {
     "HAS_ARC4RANDOM",
@@ -187,3 +191,4 @@ SEXP R_ironseed_config(void) {
   UNPROTECT(1);
   return ret;
 }
+// #nocov end

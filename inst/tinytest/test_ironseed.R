@@ -192,6 +192,24 @@ expect_silent(set_random_seed(NULL))
 expect_false(has_random_seed())
 expect_silent(runif(1))
 
+#### Environmental Variable ####################################################
+
+Sys.setenv(IRONSEED = "rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
+expect_equal(
+  ironseed(NULL),
+  as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
+)
+Sys.setenv(IRONSEED = "ironseed")
+expect_equal(
+  ironseed(NULL),
+  as_ironseed("vTdcksGotp1-fhwfs3rJMSR-ZjFXTorcHE6-JyZaayR8kqV")
+)
+Sys.unsetenv("IRONSEED")
+expect_equal(
+  ironseed(NULL, methods = c("env", "null")),
+  as_ironseed("A2cwaFmU65i-5PTX4ArTEh4-PEyNAiVet8A-h5VEGG9qYaF")
+)
+
 #### Miscellaneous #############################################################
 
 expect_stdout(
@@ -218,6 +236,9 @@ expect_equal(
 
 expect_error(ironseed:::create_ironseed(quote(c(x))))
 
+expect_error(ironseed(NULL, methods = "error"))
+expect_error(ironseed(NULL, methods = character(0L)))
+expect_error(ironseed(a = NULL))
 
 # restore random seed
 set_random_seed(oldseed)

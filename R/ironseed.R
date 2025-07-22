@@ -155,6 +155,14 @@ ironseed <- function(
   x <- list(...)
   n <- length(x)
 
+  if (!is.null(names(x))) {
+    stop(
+      "Arguments in `...` must be passed by position, not name. ",
+      "Did you misspell an argument name?",
+      call. = TRUE
+    )
+  }
+
   # return the previous ironseed object
   if (n == 0L && !isTRUE(set_seed)) {
     return(the$ironseed)
