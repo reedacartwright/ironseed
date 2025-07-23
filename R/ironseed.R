@@ -342,18 +342,16 @@ ironseed_stream <- function(
   ...,
   methods = c("dots", "args", "env", "auto", "null")
 ) {
-  local({
-    fe <- ironseed(..., set_seed = NA, quiet = TRUE, methods = methods)
-    k <- NULL
-    function(n) {
-      if (missing(n)) {
-        return(fe)
-      }
-      z <- create_seedseq0(fe, n, k)
-      k <<- z[1:2]
-      z[-(1:2)]
+  fe <- ironseed(..., set_seed = NA, quiet = TRUE, methods = methods)
+  k <- NULL
+  function(n) {
+    if (missing(n)) {
+      return(fe)
     }
-  })
+    z <- create_seedseq0(fe, n, k)
+    k <<- z[1:2]
+    z[-(1:2)]
+  }
 }
 
 #' @export
