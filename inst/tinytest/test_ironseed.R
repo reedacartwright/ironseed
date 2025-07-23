@@ -223,6 +223,9 @@ expect_equal(f(10L), create_seedseq(fe, 10))
 expect_equal(f(10L), create_seedseq(fe, 20)[11:20])
 expect_equal(f(10L), create_seedseq(fe, 30)[21:30])
 
+expect_silent(g <- ironseed_stream())
+expect_false(is.null(g()))
+
 expect_false(has_random_seed())
 
 #### Miscellaneous #############################################################

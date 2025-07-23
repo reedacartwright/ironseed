@@ -179,7 +179,7 @@ ironseed <- function(
   }
 
   # return the previous ironseed object
-  if (n == 0L && !isTRUE(set_seed)) {
+  if (n == 0L && isFALSE(set_seed)) {
     return(the$ironseed)
   }
   fe <- NULL
@@ -201,6 +201,7 @@ ironseed <- function(
     stop("Unable to construct an ironseed.", call. = FALSE)
   }
 
+  # do not set seed if seed is FALSE or NA
   if (!isTRUE(set_seed)) {
     return(fe)
   }
@@ -342,7 +343,7 @@ ironseed_stream <- function(
   methods = c("dots", "args", "env", "auto", "null")
 ) {
   local({
-    fe <- ironseed(..., set_seed = FALSE, quiet = TRUE, methods = methods)
+    fe <- ironseed(..., set_seed = NA, quiet = TRUE, methods = methods)
     k <- NULL
     function(n) {
       if (missing(n)) {
