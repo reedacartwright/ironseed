@@ -43,6 +43,8 @@ void attribute_visible R_init_ironseed(DllInfo *info) {
   R_forceSymbols(info, TRUE);
 }
 
+// #nocov start
 void attribute_visible R_unload_ironseed(DllInfo *info) {
   (void)info;  // do nothing
 }
+// #nocov end
