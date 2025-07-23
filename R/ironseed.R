@@ -35,13 +35,16 @@ the <- new.env(parent = emptyenv())
 #'  system. It also initializes R's built-in random number generator from an
 #'  ironseed.
 #'
-#' - `create_seqseq()` uses an ironseed to generate a sequence of 32-bit seeds.
+#' - `create_seedseq()` uses an ironseed to generate a sequence of 32-bit seeds.
 #'
 #' - `is_ironseed()` tests whether an object is an ironseed, and
 #'   `is_ironseed_str()` tests if it is a string representing and ironseed.
 #'
 #' - `as_ironseed()` casts an object to an ironseed, and `parse_ironseed_str()`
 #'   parses a string to an ironseed.
+#'
+#' - `ironseed_stream()` returns a function that can be used to generate
+#'   a seed sequence iteratively.
 #'
 #' @param ... objects
 #' @param set_seed a logical indicating whether to initialize `.Random.seed`.
@@ -141,6 +144,18 @@ the <- new.env(parent = emptyenv())
 #'
 #' # Generate an ironseed automatically and initialize `.Random.seed` with it
 #' ironseed::ironseed(set_seed = TRUE)
+#'
+#' # Create a function that can be called multiple times to produce seeds
+#' get_seeds <- ironseed::ironseed_stream("Experiment", 20251031, 1)
+#'
+#' # generate 10 seeds
+#' get_seeds(10)
+#'
+#' # generate 10 more seeds
+#' get_seeds(10)
+#'
+#' # output the ironseed in the stream
+#' get_seeds()
 #'
 #' \dontshow{
 #' ironseed::set_random_seed(oldseed)
@@ -322,11 +337,39 @@ auto_ironseed <- function() {
 
 #' @export
 #' @rdname ironseed
+ironseed_stream <- function(
+  ...,
+  methods = c("dots", "args", "env", "auto", "null")
+) {
+  local({
+    fe <- ironseed(..., set_seed = FALSE, quiet = TRUE, methods = methods)
+    k <- NULL
+    function(n) {
+      if (missing(n)) {
+        return(fe)
+      }
+      z <- create_seedseq0(fe, n, k)
+      k <<- z[1:2]
+      z[-(1:2)]
+    }
+  })
+}
+
+#' @export
+#' @rdname ironseed
 create_seedseq <- function(fe, n) {
   fe <- as_ironseed(fe)
   n <- as.integer(n)
   stopifnot(length(fe) == 8L)
   .Call(R_create_seedseq, fe, n)
+}
+
+create_seedseq0 <- function(fe, n, k = NULL) {
+  fe <- as_ironseed(fe)
+  n <- as.integer(n)
+  stopifnot(length(fe) == 8L)
+  stopifnot(is.null(k) || (is.integer(k) && length(k) >= 2))
+  .Call(R_create_seedseq0, fe, n, k)
 }
 
 ironseed_re <- paste0(

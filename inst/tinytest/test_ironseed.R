@@ -140,9 +140,7 @@ ironseed:::rm_random_seed()
 
 expect_false(has_random_seed())
 expect_message(
-  fe <- ironseed(
-    "rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1"
-  )
+  fe <- ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
 )
 expect_true(has_random_seed())
 
@@ -209,6 +207,23 @@ expect_equal(
   ironseed(NULL, methods = c("env", "null")),
   as_ironseed("A2cwaFmU65i-5PTX4ArTEh4-PEyNAiVet8A-h5VEGG9qYaF")
 )
+
+#### Stream API ################################################################
+
+ironseed:::rm_random_seed()
+expect_false(has_random_seed())
+expect_silent(f <- ironseed_stream(1L))
+
+expect_equal(
+  fe <- f(),
+  as_ironseed("DRNq18FUqhE-BCecATDkKsN-9yuPKnB2p2X-8kBBU7AJJCf")
+)
+
+expect_equal(f(10L), create_seedseq(fe, 10))
+expect_equal(f(10L), create_seedseq(fe, 20)[11:20])
+expect_equal(f(10L), create_seedseq(fe, 30)[21:30])
+
+expect_false(has_random_seed())
 
 #### Miscellaneous #############################################################
 

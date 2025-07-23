@@ -2,6 +2,7 @@
 % Please edit documentation in R/ironseed.R
 \name{ironseed}
 \alias{ironseed}
+\alias{ironseed_stream}
 \alias{create_seedseq}
 \alias{is_ironseed}
 \alias{is_ironseed_str}
@@ -15,6 +16,8 @@ ironseed(
   quiet = FALSE,
   methods = c("dots", "args", "env", "auto", "null")
 )
+
+ironseed_stream(..., methods = c("dots", "args", "env", "auto", "null"))
 
 create_seedseq(fe, n)
 
@@ -54,11 +57,13 @@ of seeds, including initializing R's built-in random number generator.
 arguments, or automatically from multiple sources of entropy on the local
 system. It also initializes R's built-in random number generator from an
 ironseed.
-\item \code{create_seqseq()} uses an ironseed to generate a sequence of 32-bit seeds.
+\item \code{create_seedseq()} uses an ironseed to generate a sequence of 32-bit seeds.
 \item \code{is_ironseed()} tests whether an object is an ironseed, and
 \code{is_ironseed_str()} tests if it is a string representing and ironseed.
 \item \code{as_ironseed()} casts an object to an ironseed, and \code{parse_ironseed_str()}
 parses a string to an ironseed.
+\item \code{ironseed_stream()} returns a function that can be used to generate
+a seed sequence iteratively.
 }
 }
 \details{
@@ -128,6 +133,18 @@ ironseed::ironseed("Experiment", 20251031, 1)
 
 # Generate an ironseed automatically and initialize `.Random.seed` with it
 ironseed::ironseed(set_seed = TRUE)
+
+# Create a function that can be called multiple times to produce seeds
+get_seeds <- ironseed::ironseed_stream("Experiment", 20251031, 1)
+
+# generate 10 seeds
+get_seeds(10)
+
+# generate 10 more seeds
+get_seeds(10)
+
+# output the ironseed in the stream
+get_seeds()
 
 \dontshow{
 ironseed::set_random_seed(oldseed)

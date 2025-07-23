@@ -1,5 +1,6 @@
 ## ironseed (development)
 
+* Add a streaming API: `ironseed_stream()`
 * Require `...` arguments to be unnammed in `ironseed()`.
 * Expand `ironseed()` to support multiple methods out of the box for collecting
   seeds.
