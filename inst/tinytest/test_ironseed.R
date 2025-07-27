@@ -1,5 +1,6 @@
-# save random seed
 oldseed <- get_random_seed()
+
+#### Basic Tests ###############################################################
 
 # Initialize .Random.seed if needed
 invisible(runif(1))
@@ -113,6 +114,11 @@ expect_equal(
   as_ironseed("4iiEGnZcQh9-TWyx31k6fnD-9T4EPLvausH-qP9Vif65AyM")
 )
 
+expect_equal(
+  ironseed("S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28", "2"),
+  as_ironseed("BujqDjvW4nh-XhxcBXSM9Bj-T1X8XfPzhk1-5xZS2aupn93")
+)
+
 # Order matters
 expect_equal(
   ironseed(1.0, 1:10),
@@ -132,6 +138,7 @@ expect_equal(
 )
 
 # Two auto-ironseeds are different
+expect_equal(Sys.getenv("IRONSEED"), "")
 expect_false(all(ironseed(NULL) == ironseed(NULL)))
 
 #### Initializing .Random.seed #################################################
@@ -257,6 +264,55 @@ expect_error(ironseed:::create_ironseed(quote(c(x))))
 expect_error(ironseed(NULL, methods = "error"))
 expect_error(ironseed(NULL, methods = character(0L)))
 expect_error(ironseed(a = NULL))
+
+#### CommandArgs ###############################################################
+
+# NOTE: These tests may issue out-of-date results if the installed version
+# differs from the currently loaded version.
+
+rscript <- function(args, ...) {
+  system2(file.path(R.home("bin"), "Rscript"), args, ...)
+}
+cmd <- "cat(as.character(ironseed::ironseed(quiet = TRUE)))"
+
+# Exact seed
+res <- rscript(c("--vanilla", "-e", shQuote(cmd),
+  "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28"), stdout = TRUE)
+expect_null(attr(res, "status", exact = TRUE))
+expect_equivalent(res, "S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28")
+
+# Since these tests are slow, we will run the rest of them only at home
+if(at_home()) {
+  # No seed
+  res <- rscript(c("--vanilla", "-e", shQuote(cmd)), stdout = TRUE)
+  expect_null(attr(res, "status", exact = TRUE))
+
+  # One seed
+  res <- rscript(c("--vanilla", "-e", shQuote(cmd), "--seed=1"), stdout = TRUE)
+  expect_null(attr(res, "status", exact = TRUE))
+  expect_equivalent(res, "S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28")
+
+  # Two seeds
+  res <- rscript(c("--vanilla", "-e", shQuote(cmd),
+    "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28", "--seed=2"),
+    stdout = TRUE)
+  expect_null(attr(res, "status", exact = TRUE))
+  expect_equivalent(res, "BujqDjvW4nh-XhxcBXSM9Bj-T1X8XfPzhk1-5xZS2aupn93")
+
+  res <- rscript(c("--vanilla", "-e", shQuote(cmd),
+    "--seed=1", "--seed=2"),
+    stdout = TRUE)
+  expect_null(attr(res, "status", exact = TRUE))
+  expect_equivalent(res, "Uk3qdTdHeeY-KU3D5wPAkk7-aghr84jENgR-ZkXye44Kzbj")
+
+  # Two seeds and other args
+  res <- rscript(c("--vanilla", "-e", shQuote(cmd), "--seed=1", "-seed=2",
+    "--", "---seed=notused"), stdout = TRUE)
+  expect_null(attr(res, "status", exact = TRUE))
+  expect_equivalent(res, "Uk3qdTdHeeY-KU3D5wPAkk7-aghr84jENgR-ZkXye44Kzbj")
+}
+
+#### Cleanup ###################################################################
 
 # restore random seed
 set_random_seed(oldseed)
