@@ -276,13 +276,20 @@ rscript <- function(args, ...) {
 cmd <- "cat(as.character(ironseed::ironseed(quiet = TRUE)))"
 
 # Exact seed
-res <- rscript(c("--vanilla", "-e", shQuote(cmd),
-  "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28"), stdout = TRUE)
+res <- rscript(
+  c(
+    "--vanilla",
+    "-e",
+    shQuote(cmd),
+    "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28"
+  ),
+  stdout = TRUE
+)
 expect_null(attr(res, "status", exact = TRUE))
 expect_equivalent(res, "S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28")
 
 # Since these tests are slow, we will run the rest of them only at home
-if(at_home()) {
+if (at_home()) {
   # No seed
   res <- rscript(c("--vanilla", "-e", shQuote(cmd)), stdout = TRUE)
   expect_null(attr(res, "status", exact = TRUE))
@@ -293,21 +300,39 @@ if(at_home()) {
   expect_equivalent(res, "S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28")
 
   # Two seeds
-  res <- rscript(c("--vanilla", "-e", shQuote(cmd),
-    "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28", "--seed=2"),
-    stdout = TRUE)
+  res <- rscript(
+    c(
+      "--vanilla",
+      "-e",
+      shQuote(cmd),
+      "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28",
+      "--seed=2"
+    ),
+    stdout = TRUE
+  )
   expect_null(attr(res, "status", exact = TRUE))
   expect_equivalent(res, "BujqDjvW4nh-XhxcBXSM9Bj-T1X8XfPzhk1-5xZS2aupn93")
 
-  res <- rscript(c("--vanilla", "-e", shQuote(cmd),
-    "--seed=1", "--seed=2"),
-    stdout = TRUE)
+  res <- rscript(
+    c("--vanilla", "-e", shQuote(cmd), "--seed=1", "--seed=2"),
+    stdout = TRUE
+  )
   expect_null(attr(res, "status", exact = TRUE))
   expect_equivalent(res, "Uk3qdTdHeeY-KU3D5wPAkk7-aghr84jENgR-ZkXye44Kzbj")
 
   # Two seeds and other args
-  res <- rscript(c("--vanilla", "-e", shQuote(cmd), "--seed=1", "-seed=2",
-    "--", "---seed=notused"), stdout = TRUE)
+  res <- rscript(
+    c(
+      "--vanilla",
+      "-e",
+      shQuote(cmd),
+      "--seed=1",
+      "-seed=2",
+      "--",
+      "---seed=notused"
+    ),
+    stdout = TRUE
+  )
   expect_null(attr(res, "status", exact = TRUE))
   expect_equivalent(res, "Uk3qdTdHeeY-KU3D5wPAkk7-aghr84jENgR-ZkXye44Kzbj")
 }
