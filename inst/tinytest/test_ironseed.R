@@ -99,6 +99,16 @@ expect_equal(
   as_ironseed("A2cwaFmU65i-5PTX4ArTEh4-PEyNAiVet8A-h5VEGG9qYaF")
 )
 
+expect_equal(
+  ironseed(""),
+  as_ironseed("1wz5Npn1D2M-KnWwTNSCsTS-vmrK736PXuX-EdNBDbjZBMd")
+)
+
+expect_equal(
+  ironseed(0L, 0L),
+  as_ironseed("1wz5Npn1D2M-KnWwTNSCsTS-vmrK736PXuX-EdNBDbjZBMd")
+)
+
 # Multiple values produce an ironseed
 expect_equal(
   ironseed(1:10),

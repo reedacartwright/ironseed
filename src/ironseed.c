@@ -162,6 +162,9 @@ static void update_ironseed_hash_v(
 }
 
 static void update_ironseed_hash_s(ironseed_hash_t *p, const char *s) {
+  if(s == NULL) {
+    return;
+  }
   update_ironseed_hash_v(p, s, strlen(s));
 }
 
@@ -185,6 +188,7 @@ uint64_t pid_entropy(void);
 uint64_t tid_entropy(void);
 uint64_t readcycle_entropy(void);
 uint64_t system_entropy(void);
+void hostname_entropy(char *name, size_t size);
 
 // Inspired by ideas from M.E. O'Neill
 // - https://www.pcg-random.org/posts/simple-portable-cpp-seed-entropy.html
@@ -193,6 +197,8 @@ uint64_t system_entropy(void);
 // TODO: extract entropy from cluster environmental variables like JOB_ID
 static void autofill_ironseed_hash(ironseed_hash_t *p) {
   assert(p != NULL);
+
+  char buffer[256];
 
   // string that changes every time this file is compiled
   const char compile_stamp[] = __DATE__ __TIME__ __FILE__;
@@ -225,6 +231,35 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
 
   // os entropy
   update_ironseed_hash_ll(p, system_entropy());
+
+  // hostname entropy
+  hostname_entropy(buffer, sizeof(buffer));
+  update_ironseed_hash_s(p, buffer);
+
+  // Job ID entropy on clusters
+  const char *s;
+  if((s = getenv("SLURM_JOB_ID")) != NULL) {
+    update_ironseed_hash_s(p, s);
+    update_ironseed_hash_s(p, getenv("SLURM_JOB_NAME"));
+    update_ironseed_hash_s(p, getenv("SLURM_ARRAY_TASK_ID"));
+  } else if((s = getenv("PBS_JOBID")) != NULL) {
+    update_ironseed_hash_s(p, s);
+    update_ironseed_hash_s(p, getenv("PBS_JOBNAME"));
+  } else if((s = getenv("LSB_JOBID")) != NULL) {
+    update_ironseed_hash_s(p, s);
+    update_ironseed_hash_s(p, getenv("LSB_JOBNAME"));
+    update_ironseed_hash_s(p, getenv("LSB_JOBINDEX"));
+  } else if((s = getenv("FLUX_JOB_ID")) != NULL) {
+    update_ironseed_hash_s(p, s);
+  } else if((s = getenv("JOB_ID")) != NULL) {
+    update_ironseed_hash_s(p, s);
+    update_ironseed_hash_s(p, getenv("JOB_NAME"));
+    update_ironseed_hash_s(p, getenv("SGE_TASK_ID"));
+  } else if((s = getenv("AWS_BATCH_JOB_ID")) != NULL) {
+    update_ironseed_hash_s(p, s);
+    update_ironseed_hash_s(p, getenv("AWS_BATCH_JOB_ATTEMPT"));
+    update_ironseed_hash_s(p, getenv("AWS_BATCH_JOB_ARRAY_INDEX"));
+  }
 }
 
 static void create_seedseq(

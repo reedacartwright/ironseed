@@ -153,6 +153,17 @@ uint64_t readcycle_entropy(void) {
 #endif
 }
 
+void hostname_entropy(char *name, size_t size) {
+#ifdef HAS_GETHOSTNAME
+  int ret = gethostname(name, size);
+  (void)ret;
+#else
+  if(size > 0 && name != NULL) {
+    name[0] = '\0';
+  }
+#endif
+}
+
 // #nocov start
 SEXP R_ironseed_config(void) {
   const char *names[] = {
@@ -164,6 +175,7 @@ SEXP R_ironseed_config(void) {
     "HAS_TIME_MONOTONIC",
     "HAS_TIME_UTC",
     "HAS_READCYCLE",
+    "HAS_GETHOSTNAME",
     ""
   };
   SEXP ret = PROTECT(Rf_mkNamed(LGLSXP, names));
@@ -211,6 +223,12 @@ SEXP R_ironseed_config(void) {
 #endif
 
   LOGICAL(ret)[7] = (readcycle_entropy() != 0);
+
+#ifdef HAS_GETHOSTNAME
+  LOGICAL(ret)[8] = true;
+#else
+  LOGICAL(ret)[8] = false;
+#endif
 
   UNPROTECT(1);
   return ret;
