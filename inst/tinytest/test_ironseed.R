@@ -286,6 +286,32 @@ expect_error(ironseed(NULL, methods = "error"))
 expect_error(ironseed(NULL, methods = character(0L)))
 expect_error(ironseed(a = NULL))
 
+#### Cluster Variables #########################################################
+
+Sys.setenv("SLURM_JOB_ID" = "1")
+expect_silent(ironseed(NULL, methods = "auto", set_seed = FALSE))
+Sys.unsetenv("SLURM_JOB_ID")
+
+Sys.setenv("PBS_JOBID" = "1")
+expect_silent(ironseed(NULL, methods = "auto", set_seed = FALSE))
+Sys.unsetenv("PBS_JOBID")
+
+Sys.setenv("LSB_JOBID" = "1")
+expect_silent(ironseed(NULL, methods = "auto", set_seed = FALSE))
+Sys.unsetenv("LSB_JOBID")
+
+Sys.setenv("FLUX_JOB_ID" = "1")
+expect_silent(ironseed(NULL, methods = "auto", set_seed = FALSE))
+Sys.unsetenv("FLUX_JOB_ID")
+
+Sys.setenv("JOB_ID" = "1")
+expect_silent(ironseed(NULL, methods = "auto", set_seed = FALSE))
+Sys.unsetenv("JOB_ID")
+
+Sys.setenv("AWS_BATCH_JOB_ID" = "1")
+expect_silent(ironseed(NULL, methods = "auto", set_seed = FALSE))
+Sys.unsetenv("AWS_BATCH_JOB_ID")
+
 #### CommandArgs ###############################################################
 
 # NOTE: These tests may issue out-of-date results if the installed version
