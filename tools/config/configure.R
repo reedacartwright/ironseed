@@ -6,7 +6,7 @@
 define(
   DEFINE_HAS_ARC4RANDOM = "//#define HAS_ARC4RANDOM",
   DEFINE_HAS_GETENTROPY = "//#define HAS_GETENTROPY",
-  DEFINE_HAS_GETHOSTNAME = "//#define HAS_GETENTROPY"
+  DEFINE_HAS_GETHOSTNAME = "//#define HAS_GETHOSTNAME"
 )
 
 CC <- r_cmd_config("CC")
@@ -68,5 +68,5 @@ int f(void) {
 }
 "
 if (check_compile(tmpl, "gethostname()")) {
-  define(DEFINE_HAS_GETHOSTNAME = "#define HAS_GETENTROPY")
+  define(DEFINE_HAS_GETHOSTNAME = "#define HAS_GETHOSTNAME")
 }
