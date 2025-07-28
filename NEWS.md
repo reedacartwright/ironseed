@@ -1,5 +1,8 @@
 ## ironseed (development)
 
+* [Breaking] When hashing a string, include the length of the string in the hash
+  to avoid input collision. This will change any inputs -> ironseed that use
+  strings or raws. ironseed -> outputs is unaffected.
 * Add a streaming API: `ironseed_stream()`
 * Require `...` arguments to be unnammed in `ironseed()`.
 * Expand `ironseed()` to support multiple methods out of the box for collecting

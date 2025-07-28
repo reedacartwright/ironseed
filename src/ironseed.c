@@ -141,9 +141,16 @@ static void update_ironseed_hash_v(
 
   size_t i = 0;
 
-  const char *b = buffer;
+  // Hash length since it may not be a multiple of 4.
+  update_ironseed_hash_ll(p, len);
+
+  // Exit early if length is 0.
+  if(len == 0) {
+    return;
+  }
 
   // Turn buffer into an array of integers using little-endian format.
+  const char *b = buffer;
   for(; i + 4 < len; i += 4) {
     uint32_t u;
     memcpy(&u, b + i, 4);
