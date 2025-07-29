@@ -9,6 +9,24 @@ define(
   DEFINE_HAS_GETHOSTNAME = "//#define HAS_GETHOSTNAME"
 )
 
+enable <- function(n) {
+  n <- paste0("DEFINE_", n)
+  db <- configure_database()
+  val <- db[[n]]
+  stopifnot(!is.null(val))
+  db[[n]] <- sub("^/*", "", val)
+  invisible(val)
+}
+
+disable <- function(n) {
+  n <- paste0("DEFINE_", n)
+  db <- configure_database()
+  val <- db[[n]]
+  stopifnot(!is.null(val))
+  db[[n]] <- sub("^/*", "//", val)
+  invisible(val)
+}
+
 CC <- r_cmd_config("CC")
 CPPFLAGS <- r_cmd_config("CPPFLAGS")
 CPICFLAGS <- r_cmd_config("CPICFLAGS")
@@ -25,10 +43,11 @@ check_compile <- function(tmpl, name) {
     message(cmd)
   }
   ret <- system(cmd)
-  message(sprintf("**** %s: %s", if (ret == 0) "Found" else "Not found", name))
+  message(sprintf("**** %s: %s", if (ret) "Not found" else "Found", name))
   remove_file(cfile, verbose = FALSE)
   remove_file(ofile, verbose = FALSE)
-  ret == 0
+
+  !ret
 }
 
 if (.Platform$OS.type != "windows") {
@@ -41,7 +60,7 @@ int f(void) {
 }
 "
   if (check_compile(tmpl, "arc4random()")) {
-    define(DEFINE_HAS_ARC4RANDOM = "#define HAS_ARC4RANDOM")
+    enable("HAS_ARC4RANDOM")
   }
 
   # Check for getentropy
@@ -54,7 +73,7 @@ int f(void) {
 }
 "
   if (check_compile(tmpl, "getentropy()")) {
-    define(DEFINE_HAS_GETENTROPY = "#define HAS_GETENTROPY")
+    enable("HAS_GETENTROPY")
   }
 }
 
@@ -68,5 +87,5 @@ int f(void) {
 }
 "
 if (check_compile(tmpl, "gethostname()")) {
-  define(DEFINE_HAS_GETHOSTNAME = "#define HAS_GETHOSTNAME")
+  enable("HAS_GETHOSTNAME")
 }
