@@ -198,7 +198,7 @@ void hostname_entropy(char *name, size_t size);
 static void autofill_ironseed_hash(ironseed_hash_t *p) {
   assert(p != NULL);
 
-  char buffer[256];
+  char buffer[256] = "";
 
   // string that changes every time this file is compiled
   const char compile_stamp[] = __DATE__ __TIME__ __FILE__;
@@ -234,7 +234,6 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
 
   // hostname entropy
   hostname_entropy(buffer, sizeof(buffer));
-  buffer[255] = '\0';
   update_ironseed_hash_s(p, buffer);
 
   // Job ID entropy on clusters

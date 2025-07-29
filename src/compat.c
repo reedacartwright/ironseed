@@ -154,13 +154,15 @@ uint64_t readcycle_entropy(void) {
 }
 
 void hostname_entropy(char *name, size_t size) {
+  if(name == NULL || size == 0) {
+    return;
+  }
 #ifdef HAS_GETHOSTNAME
   int ret = gethostname(name, size);
   (void)ret;
+  name[size - 1] = '\0';
 #else
-  if(size > 0 && name != NULL) {
-    name[0] = '\0';
-  }
+  name[0] = '\0';
 #endif
 }
 
