@@ -255,11 +255,11 @@ env_ironseed <- function() {
 #'
 #' @export
 #' @keywords internal
-#' @importFrom stats runif
 fill_random_seed <- function(x, quiet = FALSE) {
   stopifnot(is_ironseed(x))
   if (isFALSE(quiet)) {
-    msg <- sprintf("** Ironseed : Seed %s", format(x))
+    msg <- sprintf("** Ironseed : Seed %s v%s", format(x),
+      format(utils::packageVersion("ironseed")))
     message(msg)
   }
   # save oldseed
@@ -279,7 +279,7 @@ fill_random_seed <- function(x, quiet = FALSE) {
   # update .Random.seed with our own state
   assign(".Random.seed", seed, globalenv(), inherits = FALSE)
   # draw one value to trigger seed fixup
-  runif(1)
+  stats::runif(1)
   # return old seed
   invisible(oldseed)
 }
