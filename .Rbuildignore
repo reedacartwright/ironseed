@@ -1,13 +1,13 @@
 ^LICENSE\.md$
-^src/config.h$
+^src/config\.h$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^ironseed.sublime-project$
-^ironseed.sublime-workspace$
+^ironseed\.sublime-project$
+^ironseed\.sublime-workspace$
 ^\.github$
 ^\.clang-format$
 ^\.clang_complete$
-^cran-comments.md$
+^cran-comments\.md$
 ^CRAN-RELEASE$
 ^codecov\.yml$
 ^\.lintr$
@@ -19,5 +19,6 @@
 ^README\.Rmd$
 ^[\.]?air\.toml$
 ^\.vscode$
-^compile_flags.txt$
+^compile_flags\.txt$
 ^cran-comments\.md$
+^tools/ironseed-bin$

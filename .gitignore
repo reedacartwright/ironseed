@@ -85,3 +85,5 @@ vignettes/*.pdf
 docs
 
 src/config.h
+
+tools/ironseed-bin/ironseed-bin

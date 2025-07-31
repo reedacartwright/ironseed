@@ -1,5 +1,9 @@
 ## ironseed (development)
 
+* [Breaking] Avalanche behavior and observed randomness were improved by
+  including additional bit mixing at the end of hashing. This changes the
+  calculation of all ironseeds and seed streams, but allows the algorithms to
+  pass PractRand tests.
 * [Breaking] When hashing a string, include the length of the string in the hash
   to avoid input collision. This will change any inputs -> ironseed that use
   strings or raws. ironseed -> outputs is unaffected.

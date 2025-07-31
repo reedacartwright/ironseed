@@ -1,6 +1,6 @@
 Package: ironseed
 Title: Improved Random Number Generator Seeding
-Version: 0.1.0.9000
+Version: 0.1.0.9001
 Authors@R: 
     person("Reed", "Cartwright",
            role = c("aut", "cre"),
