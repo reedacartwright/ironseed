@@ -23,6 +23,7 @@
 
 Example Usage: ./ironseed-bin 1 | RNG_test stdin32 -tlmax 16GB
 ./ironseed-bin $(od -vAn -N32 -t u4 < /dev/urandom) | RNG_test stdin32 -tlmax 16GB
+./ironseed-bin | od -vAn -N400 -t d4 -
 */
 
 #include <assert.h>

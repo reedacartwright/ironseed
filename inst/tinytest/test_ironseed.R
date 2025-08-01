@@ -261,6 +261,16 @@ expect_false(is.null(g()))
 
 expect_false(has_random_seed())
 
+#### SeedSeq Validation ########################################################
+
+# 100th value produced by default initialized ironseed is -1801965879
+expect_silent(fe <- ironseed(NULL, methods = "null"))
+expect_equal(create_seedseq(fe, 100)[100], -1801965879)
+
+expect_silent(f <- ironseed_stream(fe))
+invisible(f(99))
+expect_equal(f(1), -1801965879)
+
 #### Miscellaneous #############################################################
 
 expect_stdout(
