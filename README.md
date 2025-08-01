@@ -66,10 +66,10 @@ to reproduce the run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed("Experiment", 20251031, 1)
-#> ** Ironseed : Seed RqJqS4g2aXV-nxfGU5xHWaF-2rX8iBiNWuR-jKj5DXzfWbE v0.1.0.9001
+#> ** Ironseed : Seed ZZaisFMror3-ZhLosGqfN3R-8B6PqHJ5hhf-CFFsWhrQvBd v0.1.0.9002
 runif(10)
-#>  [1] 0.27209988 0.05401526 0.51204877 0.94806819 0.96840822 0.53816970
-#>  [7] 0.37497052 0.42676681 0.18194411 0.26769675
+#>  [1] 0.89705422 0.04560317 0.83527653 0.45908361 0.12400794 0.60115341
+#>  [7] 0.12773858 0.91012865 0.53115788 0.22756973
 ```
 
 If your script is intended to be called multiple times as part of a
@@ -79,10 +79,10 @@ large study, you can also seed based on the command line arguments.
 #!/usr/bin/env -S Rscript --vanilla
 args <- commandArgs(trailingOnly = TRUE)
 ironseed::ironseed("A Simulation Script 1", args)
-#> ** Ironseed : Seed CoKoWKuHqgD-yVtzDkJ4pCh-jAJn3zBpj1h-yFM1Cu3nbNK v0.1.0.9001
+#> ** Ironseed : Seed 8cqtTGB8vrS-WYjGZ3isTH2-pHzMHbEDV38-PBfFNYcUjEG v0.1.0.9002
 runif(10)
-#>  [1] 0.11870746 0.78272032 0.68515287 0.40175965 0.49900522 0.37332730
-#>  [7] 0.82011979 0.03284861 0.48356992 0.90040306
+#>  [1] 0.84992808 0.64469355 0.89756643 0.19331885 0.23951235 0.62736989
+#>  [7] 0.18903081 0.11728875 0.98641615 0.04123155
 ```
 
 Specific command line arguments can also be used. For large, nested
@@ -93,10 +93,10 @@ seeds. Ironseed makes this easy to accomplish.
 #!/usr/bin/env -S Rscript --vanilla
 args <- commandArgs(trailingOnly = TRUE)
 ironseed::ironseed("A Simulation Script 2", args[grepl("--seed=", args)])
-#> ** Ironseed : Seed 16BWCcc5nZf-juvzXi5XCpS-5K7kRnicohf-xVNeKUA6MZF v0.1.0.9001
+#> ** Ironseed : Seed CP5fKZWMYsB-ERVXpk3k8xd-6j18poR5Sgc-eKWXg7VJFPd v0.1.0.9002
 runif(10)
-#>  [1] 0.5747996 0.3383344 0.7703499 0.9094458 0.3666125 0.2713542 0.8344397
-#>  [8] 0.6304827 0.6447120 0.9894029
+#>  [1] 0.89075876 0.48203428 0.08680504 0.51708634 0.04348393 0.50693477
+#>  [7] 0.38465350 0.64060167 0.26286422 0.54601453
 ```
 
 ### Automatic Seeding
@@ -108,16 +108,16 @@ occurs if no data is passed to `ironseed()`.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
-#> ** Ironseed : Seed ZZ41wa2rBeM-Z3h6bgLrpz8-oJnrLDQpNLb-yjUPa7Tbh32 v0.1.0.9001
+#> ** Ironseed : Seed AfaPdekUCoA-fhRoazvKnTc-EnqCD7wKNfB-2mdwgP1zuP5 v0.1.0.9002
 runif(10)
-#>  [1] 0.51692160 0.83086269 0.42096813 0.95326117 0.68974016 0.55060962
-#>  [7] 0.12255819 0.07522713 0.77790200 0.89292403
+#>  [1] 0.81606451 0.01563447 0.02842008 0.92643311 0.93597330 0.70551466
+#>  [7] 0.75512336 0.25908712 0.98250676 0.03561528
 
 # Since RNG initializing has occurred, the next call will simply
 # return the ironseed used in previous seeding.
 fe <- ironseed::ironseed()
 fe
-#> Ironseed: ZZ41wa2rBeM-Z3h6bgLrpz8-oJnrLDQpNLb-yjUPa7Tbh32
+#> Ironseed: AfaPdekUCoA-fhRoazvKnTc-EnqCD7wKNfB-2mdwgP1zuP5
 ```
 
 Or achieving the same thing with one call. Note that the automatically
@@ -126,12 +126,12 @@ generated seed is different from the previous run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 fe <- ironseed::ironseed()
-#> ** Ironseed : Seed o3oBspjYs84-vTkmYVwdd95-gYs2a7mqHDc-KuxJiazC7yX v0.1.0.9001
+#> ** Ironseed : Seed iENGNd69yVH-ue59xcZc3fF-f4R9qYhESkd-pfWMYxMmFoM v0.1.0.9002
 runif(10)
-#>  [1] 0.9465604 0.4767022 0.9364781 0.2474247 0.0981720 0.5996615 0.6877794
-#>  [8] 0.2495181 0.9621318 0.9867489
+#>  [1] 0.60404956 0.07975961 0.03384779 0.84441315 0.53671970 0.46416535
+#>  [7] 0.10455209 0.33560387 0.43316807 0.27369468
 fe
-#> Ironseed: o3oBspjYs84-vTkmYVwdd95-gYs2a7mqHDc-KuxJiazC7yX
+#> Ironseed: iENGNd69yVH-ue59xcZc3fF-f4R9qYhESkd-pfWMYxMmFoM
 ```
 
 ### Reproducible Code
@@ -143,10 +143,10 @@ used, and the previously generated seed has been logged.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed("RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4")
-#> ** Ironseed : Seed RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4 v0.1.0.9001
+#> ** Ironseed : Seed RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4 v0.1.0.9002
 runif(10)
-#>  [1] 0.7912117 0.8591453 0.5992849 0.8067858 0.0786397 0.2018691 0.9127011
-#>  [8] 0.7985957 0.4259903 0.9625653
+#>  [1] 0.05348978 0.02073685 0.08883963 0.94422739 0.36191244 0.25720998
+#>  [7] 0.61729578 0.89536005 0.86046463 0.06095049
 ```
 
 ## Analysis
@@ -185,9 +185,9 @@ dat <- sapply(z, \(a) sum(intToBits(a$x) != intToBits(a$y)))
 
 ``` r
 mean(dat) # expectation: 128
-#> [1] 127.9792
+#> [1] 128.0011
 sd(dat) # expectation: 8
-#> [1] 7.998941
+#> [1] 8.008929
 hist(dat, breaks = 86:170, main = NULL)
 ```
 
@@ -200,9 +200,9 @@ set.seed(20251221)
 z <- replicate(100000, rand_fe_pair(256), simplify = FALSE)
 dat <- sapply(z, \(a) sum(intToBits(a$x) != intToBits(a$y)))
 mean(dat) # expectation: 128
-#> [1] 127.9896
+#> [1] 128.0405
 sd(dat) # expectation: 8
-#> [1] 8.016092
+#> [1] 8.019668
 hist(dat, breaks = 86:170, main = NULL)
 ```
 

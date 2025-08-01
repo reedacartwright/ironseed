@@ -62,10 +62,12 @@ static inline uint64_t init_hash4o_coef(void) { return PRIME_C; }
 
 static inline uint64_t hash4o_coef(uint64_t *m) { return *m += PRIME_D; }
 
+// Adapted from mix32 of Java's SplittableRandom algorithm
+// This is variant 4 of Stafford's mixing algorithms.
+// http://zimbry.blogspot.com/2011/09/better-bit-mixing-improving-on.html
 static inline uint32_t finalmix(uint64_t u) {
-  // Final mixing adapted from splitmix64
-  u = (u ^ (u >> 30)) * 0xbf58476d1ce4e5b9;
-  u = (u ^ (u >> 27)) * 0x94d049bb133111eb;
+  u = (u ^ (u >> 33)) * 0x62a9d9ed799705f5;
+  u = (u ^ (u >> 28)) * 0xcb24d0a5c88c35b3;
   return u >> 32;
 }
 

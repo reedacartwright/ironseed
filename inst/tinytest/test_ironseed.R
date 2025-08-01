@@ -17,12 +17,12 @@ expect_equal(
 # as.character() and format() work
 expect_equal(
   as.character(ironseed(1L)),
-  "JurR2ejJKXj-qMWP3GfF5oF-spTdYPe746M-oAPF88MfzXP"
+  "aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"
 )
 
 expect_equal(
   format(ironseed(1L)),
-  "JurR2ejJKXj-qMWP3GfF5oF-spTdYPe746M-oAPF88MfzXP"
+  "aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"
 )
 
 #### Validation ################################################################
@@ -32,135 +32,135 @@ expect_equal(
 # Integer 1
 expect_equal(
   ironseed(1L),
-  as_ironseed("JurR2ejJKXj-qMWP3GfF5oF-spTdYPe746M-oAPF88MfzXP")
+  as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
 )
 
 expect_equal(
   ironseed(TRUE),
-  as_ironseed("JurR2ejJKXj-qMWP3GfF5oF-spTdYPe746M-oAPF88MfzXP")
+  as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
 )
 
 # Double 1.0
 expect_equal(
   ironseed(1.0),
-  as_ironseed("dciFX9p1yGH-LQ1UTeR5xE5-PQjdPaKSTP7-aSxh9ANXS3f")
+  as_ironseed("5Cu3pu8ZH59-6gArqHELcdd-MD3R5ZHtMmQ-DW7Uya19PcY")
 )
 
 expect_equal(
   ironseed(0L, 1072693248L),
-  as_ironseed("dciFX9p1yGH-LQ1UTeR5xE5-PQjdPaKSTP7-aSxh9ANXS3f")
+  as_ironseed("5Cu3pu8ZH59-6gArqHELcdd-MD3R5ZHtMmQ-DW7Uya19PcY")
 )
 
 # Raw 1
 expect_equal(
   ironseed(as.raw(1L)),
-  as_ironseed("9ojoGntW9Vb-CEUHxxPQ4gh-hHBHRZM4zNg-PWjZRvWXCFP")
+  as_ironseed("un3nd4pk7FA-cgdMNEGhag4-ASeu5oiqNo2-YVtwE8fqWJd")
 )
 
 expect_equal(
   ironseed("\01"),
-  as_ironseed("9ojoGntW9Vb-CEUHxxPQ4gh-hHBHRZM4zNg-PWjZRvWXCFP")
+  as_ironseed("un3nd4pk7FA-cgdMNEGhag4-ASeu5oiqNo2-YVtwE8fqWJd")
 )
 
 expect_equal(
   ironseed(1L, 1L),
-  as_ironseed("9ojoGntW9Vb-CEUHxxPQ4gh-hHBHRZM4zNg-PWjZRvWXCFP")
+  as_ironseed("un3nd4pk7FA-cgdMNEGhag4-ASeu5oiqNo2-YVtwE8fqWJd")
 )
 
 # Character "1"
 expect_equal(
   ironseed("1"),
-  as_ironseed("5TK4Kmqd6xN-BvEQcPxNGZ2-5KYDUcyY31E-U9fhQPHQQPb")
+  as_ironseed("5VRdb2Z6LwS-73RLQRR3kFM-LRLPqnkDei7-UqtqWxvhuZ4")
 )
 
 expect_equal(
   ironseed(as.raw(49L)),
-  as_ironseed("5TK4Kmqd6xN-BvEQcPxNGZ2-5KYDUcyY31E-U9fhQPHQQPb")
+  as_ironseed("5VRdb2Z6LwS-73RLQRR3kFM-LRLPqnkDei7-UqtqWxvhuZ4")
 )
 
 expect_equal(
   ironseed(1L, 49L),
-  as_ironseed("5TK4Kmqd6xN-BvEQcPxNGZ2-5KYDUcyY31E-U9fhQPHQQPb")
+  as_ironseed("5VRdb2Z6LwS-73RLQRR3kFM-LRLPqnkDei7-UqtqWxvhuZ4")
 )
 
 # Empty data
 expect_equal(
   ironseed(list()),
-  as_ironseed("8f8xBQ71SNf-F4jetMedYES-Z7qzFk77AAG-3uDpd2QmRpM")
+  as_ironseed("yDFnG5U51EL-iPvgn9qtcjg-JbmoCCBJUY7-NcqXAz6AAZC")
 )
 
 expect_equal(
   ironseed(character(0L)),
-  as_ironseed("8f8xBQ71SNf-F4jetMedYES-Z7qzFk77AAG-3uDpd2QmRpM")
+  as_ironseed("yDFnG5U51EL-iPvgn9qtcjg-JbmoCCBJUY7-NcqXAz6AAZC")
 )
 
 expect_equal(
   ironseed(integer(0L)),
-  as_ironseed("8f8xBQ71SNf-F4jetMedYES-Z7qzFk77AAG-3uDpd2QmRpM")
+  as_ironseed("yDFnG5U51EL-iPvgn9qtcjg-JbmoCCBJUY7-NcqXAz6AAZC")
 )
 
 expect_equal(
   ironseed(""),
-  as_ironseed("Z7qzFk77AAG-3uDpd2QmRpM-RH9ixtaaEo5-vmTqmirJRed")
+  as_ironseed("JbmoCCBJUY7-NcqXAz6AAZC-Dh8JPZuoS4H-Aej9neXnxuB")
 )
 
 expect_equal(
   ironseed(0L),
-  as_ironseed("Z7qzFk77AAG-3uDpd2QmRpM-RH9ixtaaEo5-vmTqmirJRed")
+  as_ironseed("JbmoCCBJUY7-NcqXAz6AAZC-Dh8JPZuoS4H-Aej9neXnxuB")
 )
 
 # Multiple values produce an ironseed
 expect_equal(
   ironseed(1:10),
-  as_ironseed("ZAC3ztj4P2N-kDJg8ujhua4-7opTzXYVEEJ-dmutZPE7gVA")
+  as_ironseed("bgfYicF3xGP-ULaaHM5qVja-XacoSML5JZX-mwozZFSoHsb")
 )
 
 expect_equal(
   ironseed(c(1.0, 0.0)),
-  as_ironseed("YPuthLk5iRZ-LKhHq8pN7f3-3H7L7i9gMGM-66NyDeTgodB")
+  as_ironseed("QbmwKK4RykS-Brpw7YaWLc2-xMRPy1dw9nY-NNynHN1w9DK")
 )
 
 expect_equal(
   ironseed(1.0, 0.0),
-  as_ironseed("YPuthLk5iRZ-LKhHq8pN7f3-3H7L7i9gMGM-66NyDeTgodB")
+  as_ironseed("QbmwKK4RykS-Brpw7YaWLc2-xMRPy1dw9nY-NNynHN1w9DK")
 )
 
 expect_equal(
   ironseed(1:10, 1.0),
-  as_ironseed("WoBhgLSqyS8-wnDEJpmdnY6-ViMneF1ZD85-Ucti5JTtmoX")
+  as_ironseed("vbtJzsJjH7Q-Kn5AavJJMeb-Kc8rxz7ziPH-kC59ycJYwpW")
 )
 
 expect_equal(
   ironseed(1:10, 1.0, LETTERS),
-  as_ironseed("afnXzejfDEj-dLg1ZEiVRU1-aYTVWsYmyDe-Eh8d6cgK2AY")
+  as_ironseed("FcnrW23c6pV-LGsyUXzoqrB-K7jPccabHHF-JqwCfsYvkJV")
 )
 
 expect_equal(
   ironseed(1:10, 1.0, LETTERS, FALSE),
-  as_ironseed("wEZCcyLMWsa-AYbCbYV3DKF-VcxykeMEH4i-wxqs7FCx3wB")
+  as_ironseed("NRrjNLq1Lm4-s4dRYy3DVCD-uruA5i18RJK-SFQptiW5yMV")
 )
 
 expect_equal(
   ironseed("S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28", "2"),
-  as_ironseed("HHmHoeDSWyL-WaCZXn6AWz4-bhR3RAqvJXj-hTHb9Z9su7j")
+  as_ironseed("tfedys71rDT-NhNQbzrhWDQ-DEpsYSJ6dAN-jHnKGsv1Thh")
 )
 
 # Order matters
 expect_equal(
   ironseed(1.0, 1:10),
-  as_ironseed("jQ2ktTvdeVL-ai2MVyKurF7-aA4ETdUvTtV-MkjDQLLjGdL")
+  as_ironseed("aeoo9a7ntRd-42tmMpWwMM7-PcVXjQhPa7i-qgjUt8R1xUJ")
 )
 
 # Final zero matters
 expect_equal(
   ironseed(1L, 0L),
-  as_ironseed("1RFw351545P-4hm76kQxwo4-8nTLSkg5Wrb-LozozaG935M")
+  as_ironseed("wczYx67JsMD-LsPMEiMmvr1-xBMm8fWGR2f-wWTxGThzFzb")
 )
 
 # Complex values are the same as pairs of doubles
 expect_equal(
   ironseed(1 + 0i),
-  as_ironseed("YPuthLk5iRZ-LKhHq8pN7f3-3H7L7i9gMGM-66NyDeTgodB")
+  as_ironseed("QbmwKK4RykS-Brpw7YaWLc2-xMRPy1dw9nY-NNynHN1w9DK")
 )
 
 # Two auto-ironseeds are different
@@ -233,12 +233,12 @@ expect_equal(
 Sys.setenv(IRONSEED = "ironseed")
 expect_equal(
   ironseed(NULL),
-  as_ironseed("nxi1BcWUMMM-nYkfefqmhW3-ve54PEDHtfd-TE3bbBNkiNe")
+  as_ironseed("MHHYnNaVNyS-TTu7okcxpZ9-NjmT3Tv1JHA-buJZfX4vqWN")
 )
 Sys.unsetenv("IRONSEED")
 expect_equal(
   ironseed(NULL, methods = c("env", "null")),
-  as_ironseed("8f8xBQ71SNf-F4jetMedYES-Z7qzFk77AAG-3uDpd2QmRpM")
+  as_ironseed("yDFnG5U51EL-iPvgn9qtcjg-JbmoCCBJUY7-NcqXAz6AAZC")
 )
 
 #### Stream API ################################################################
@@ -249,7 +249,7 @@ expect_silent(f <- ironseed_stream(1L))
 
 expect_equal(
   fe <- f(),
-  as_ironseed("JurR2ejJKXj-qMWP3GfF5oF-spTdYPe746M-oAPF88MfzXP")
+  as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
 )
 
 expect_equal(f(10L), create_seedseq(fe, 10))
@@ -263,13 +263,13 @@ expect_false(has_random_seed())
 
 #### SeedSeq Validation ########################################################
 
-# 100th value produced by default initialized ironseed is -1801965879
-expect_silent(fe <- ironseed(NULL, methods = "null"))
-expect_equal(create_seedseq(fe, 100)[100], -1801965879)
+# 100th value produced by default initialized ironseed is -1366525975
+expect_silent(fe <- ironseed(NULL, methods = "null", set_seed = FALSE))
+expect_equal(create_seedseq(fe, 100)[100], -1366525975)
 
 expect_silent(f <- ironseed_stream(fe))
 invisible(f(99))
-expect_equal(f(1), -1801965879)
+expect_equal(f(1), -1366525975)
 
 #### Miscellaneous #############################################################
 
@@ -361,7 +361,7 @@ if (at_home()) {
   # One seed
   res <- rscript(c("--vanilla", "-e", shQuote(cmd), "--seed=1"), stdout = TRUE)
   expect_null(attr(res, "status", exact = TRUE))
-  expect_equivalent(res, "5TK4Kmqd6xN-BvEQcPxNGZ2-5KYDUcyY31E-U9fhQPHQQPb")
+  expect_equivalent(res, "5VRdb2Z6LwS-73RLQRR3kFM-LRLPqnkDei7-UqtqWxvhuZ4")
 }
 
 if (at_home()) {
@@ -377,7 +377,7 @@ if (at_home()) {
     stdout = TRUE
   )
   expect_null(attr(res, "status", exact = TRUE))
-  expect_equivalent(res, "HHmHoeDSWyL-WaCZXn6AWz4-bhR3RAqvJXj-hTHb9Z9su7j")
+  expect_equivalent(res, "tfedys71rDT-NhNQbzrhWDQ-DEpsYSJ6dAN-jHnKGsv1Thh")
 }
 
 if (at_home()) {
@@ -386,7 +386,7 @@ if (at_home()) {
     stdout = TRUE
   )
   expect_null(attr(res, "status", exact = TRUE))
-  expect_equivalent(res, "C6FBPZ8sKK8-LMRnp8qqD6Q-H5aSBZgcyV1-FRBqUns3HZ7")
+  expect_equivalent(res, "yFMXneM1LRg-bJgWtncCE6Q-6uFP4DThrJ9-tL3c4VBxVqK")
 
   # Two seeds and other args
   res <- rscript(
@@ -402,7 +402,7 @@ if (at_home()) {
     stdout = TRUE
   )
   expect_null(attr(res, "status", exact = TRUE))
-  expect_equivalent(res, "C6FBPZ8sKK8-LMRnp8qqD6Q-H5aSBZgcyV1-FRBqUns3HZ7")
+  expect_equivalent(res, "yFMXneM1LRg-bJgWtncCE6Q-6uFP4DThrJ9-tL3c4VBxVqK")
 }
 
 #### Cleanup ###################################################################
