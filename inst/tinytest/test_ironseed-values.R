@@ -78,6 +78,10 @@ expect_equal(
   as_ironseed("JbmoCCBJUY7-NcqXAz6AAZC-Dh8JPZuoS4H-Aej9neXnxuB")
 )
 
+# fe as an input
+expect_equal(create_ironseed(null_fe), null_fe)
+expect_equal(create_ironseed(one_fe), one_fe)
+
 # 8-bit input
 expect_equal(
   create_ironseed("\01"),

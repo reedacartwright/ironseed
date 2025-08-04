@@ -38,23 +38,17 @@
 #'
 #' - `set_ironseed()` calls `ironseed()` with set_seed = TRUE.
 #'
-#' - `create_seedseq()` uses an ironseed to generate a sequence of 32-bit seeds.
-#'
 #' - `is_ironseed()` tests whether an object is an ironseed, and
 #'   `is_ironseed_str()` tests if it is a string representing and ironseed.
 #'
 #' - `as_ironseed()` casts an object to an ironseed, and `parse_ironseed_str()`
 #'   parses a string to an ironseed.
 #'
-#' - `ironseed_stream()` returns a function that can be used to generate
-#'   a seed sequence iteratively.
-#'
 #' @param ... objects
 #' @param set_seed a logical indicating whether to initialize `.Random.seed`.
 #' @param quiet a logical indicating whether to silence messages.
 #' @param methods a character vector.
 #' @param fe an ironseed
-#' @param n a scalar integer specifying the number of seeds to generate
 #' @param x a string, ironseed, list, or other object
 #'
 #' @returns An ironseed. If `.Random.seed` was initialized, the ironseed used
@@ -154,18 +148,6 @@
 #'
 #' # Generate an ironseed automatically and initialize `.Random.seed` with it
 #' ironseed::ironseed(set_seed = TRUE)
-#'
-#' # Create a function that can be called multiple times to produce seeds
-#' get_seeds <- ironseed::ironseed_stream("Experiment", 20251031, 1)
-#'
-#' # generate 10 seeds
-#' get_seeds(10)
-#'
-#' # generate 10 more seeds
-#' get_seeds(10)
-#'
-#' # output the ironseed in the stream
-#' get_seeds()
 #'
 #' \dontshow{
 #' ironseed::set_random_seed(oldseed)
@@ -272,24 +254,6 @@ auto_ironseed <- function() {
   .Call(R_auto_ironseed)
 }
 
-#' @export
-#' @rdname ironseed
-ironseed_stream <- function(
-  ...,
-  methods = c("dots", "args", "env", "auto", "null")
-) {
-  fe <- ironseed(..., set_seed = NA, quiet = TRUE, methods = methods)
-  k <- NULL
-  function(n) {
-    if (missing(n)) {
-      return(fe)
-    }
-    z <- create_seedseq0(fe, n, k)
-    k <<- z[1:2]
-    z[-(1:2)]
-  }
-}
-
 ironseed_re <- paste0(
   "^[1-9A-HJ-NP-Za-km-z]{11}",
   "-[1-9A-HJ-NP-Za-km-z]{11}",
@@ -330,8 +294,8 @@ as_ironseed <- function(x) {
 }
 
 str_ironseed <- function(x) {
-  stopifnot(length(x) == 8)
-  x <- as.integer(x)
+  x <- as.integer(unclass(x))
+  stopifnot(length(x) == 8L)
 
   # pack into 4 doubles
   x <- packBits(intToBits(x), "double")
@@ -339,6 +303,33 @@ str_ironseed <- function(x) {
 
   # Concatenate
   paste0(x, collapse = "-")
+}
+
+# NOTE: Ironseed is always 8 elements long and that cannot be changed
+
+#' @export
+length.ironseed_ironseed <- function(x) {
+  1L
+}
+
+#' @export
+`[.ironseed_ironseed` <- function(x, i, j) {
+  x
+}
+
+#' @export
+`[<-.ironseed_ironseed` <- function(x, i, j, value) {
+  stop("Not supported")
+}
+
+#' @export
+`[[.ironseed_ironseed` <- function(x, i, j) {
+  x
+}
+
+#' @export
+`[[<-.ironseed_ironseed` <- function(x, i, j, value) {
+  stop("Not supported")
 }
 
 #' @export
