@@ -10,11 +10,33 @@ expect_null(create_ironseed(integer(0L)))
 
 expect_error(create_ironseed(list(quote(c(x)))))
 
-null_fe <- structure(c(-2128494816L, 1928268316L, -1098770175L, -309390410L,
-1233806517L, 656251397L, -1726969757L, 1158962031L), class = "ironseed_ironseed")
+null_fe <- structure(
+  c(
+    -2128494816L,
+    1928268316L,
+    -1098770175L,
+    -309390410L,
+    1233806517L,
+    656251397L,
+    -1726969757L,
+    1158962031L
+  ),
+  class = "ironseed_ironseed"
+)
 
-one_fe <- structure(c(1100802175L, -412525365L, 1477556999L, 1670677042L,
-281748010L, 494767993L, 808804019L, -864784934L), class = "ironseed_ironseed")
+one_fe <- structure(
+  c(
+    1100802175L,
+    -412525365L,
+    1477556999L,
+    1670677042L,
+    281748010L,
+    494767993L,
+    808804019L,
+    -864784934L
+  ),
+  class = "ironseed_ironseed"
+)
 
 # An ironseed with no data has a default value.
 expect_equal(create_ironseed(list(list())), null_fe)

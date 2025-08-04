@@ -102,4 +102,3 @@ rm_random_seed <- function() {
   the$ironseed <- NULL
   invisible(oldseed)
 }
-
