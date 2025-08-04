@@ -35,6 +35,11 @@ the <- new.env(parent = emptyenv())
 #'  system. It also initializes R's built-in random number generator from an
 #'  ironseed.
 #'
+#' - `create_ironseed()` constructs an ironseed from a list of seed objects,
+#'   following the rules described below.
+#'
+#' - `set_ironseed()` calls `ironseed()` with set_seed = TRUE.
+#'
 #' - `create_seedseq()` uses an ironseed to generate a sequence of 32-bit seeds.
 #'
 #' - `is_ironseed()` tests whether an object is an ironseed, and
@@ -52,7 +57,7 @@ the <- new.env(parent = emptyenv())
 #' @param methods a character vector.
 #' @param fe an ironseed
 #' @param n a scalar integer specifying the number of seeds to generate
-#' @param x a string, ironseed, or other object
+#' @param x a string, ironseed, list, or other object
 #'
 #' @returns An ironseed. If `.Random.seed` was initialized, the ironseed used
 #'   will be returned invisibly.
@@ -193,11 +198,11 @@ ironseed <- function(
   for (method in methods) {
     fe <- switch(
       method,
-      dots = dots_ironseed(x),
+      dots = create_ironseed(x),
       args = args_ironseed(),
       env = env_ironseed(),
       auto = auto_ironseed(),
-      null = create_ironseed(NULL),
+      null = create_ironseed0(NULL),
       stop("Invalid ironseed input method.", call. = FALSE)
     )
     if (!is.null(fe)) {
@@ -218,23 +223,26 @@ ironseed <- function(
   invisible(fe)
 }
 
-dots_ironseed <- function(x) {
+#' @export
+#' @rdname ironseed
+set_ironseed <- function(
+  ...,
+  quiet = FALSE,
+  methods = c("dots", "args", "env", "auto", "null")
+) {
+  ironseed(..., set_seed = TRUE, quiet = quiet, methods = methods)
+}
+
+#' @export
+#' @rdname ironseed
+create_ironseed <- function(x) {
   n <- length(x)
   if (n == 0L || (n == 1L && is.null(x[[1]]))) {
     NULL
   } else if (n == 1L && is_ironseed2(x[[1]])) {
     as_ironseed(x[[1]])
   } else {
-    create_ironseed(x)
-  }
-}
-
-# wrapper to return NULL if x is an empty string or NA string
-dots_ironseed2 <- function(x) {
-  if (is.character(x) && length(x) == 1L && (is.na(x) || nchar(x) == 0L)) {
-    NULL
-  } else {
-    dots_ironseed(x)
+    create_ironseed0(x)
   }
 }
 
@@ -243,12 +251,17 @@ args_ironseed <- function() {
   x <- commandArgs(trailingOnly = TRUE)
   x <- x[grepl("^--?seed=", x)]
   x <- sub("^[^=]*=", "", x)
-  dots_ironseed(x)
+  create_ironseed(x)
 }
 
 # Extract ironseed input from environment
 env_ironseed <- function() {
-  dots_ironseed2(Sys.getenv("IRONSEED"))
+  x <- Sys.getenv("IRONSEED")
+  if (is.character(x) && length(x) == 1L && (is.na(x) || nchar(x) == 0L)) {
+    NULL
+  } else {
+    create_ironseed(x)
+  }
 }
 
 #' Initialize .Random.seed
@@ -326,16 +339,14 @@ set_random_seed <- function(seed) {
 
 rm_random_seed <- function() {
   oldseed <- get_random_seed()
-  rm(".Random.seed", envir = globalenv(), inherits = FALSE)
+  suppressWarnings(rm(".Random.seed", envir = globalenv(), inherits = FALSE))
+  the$ironseed <- NULL
   invisible(oldseed)
 }
 
-create_ironseed <- function(x) {
-  if (is.list(x)) {
-    x <- lapply(x, unlist, use.names = FALSE)
-  } else {
-    x <- list(x)
-  }
+create_ironseed0 <- function(x) {
+  x <- simplify_list(x)
+  x <- lapply(x, unlist, use.names = FALSE)
   .Call(R_create_ironseed, x)
 }
 

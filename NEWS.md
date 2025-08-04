@@ -7,6 +7,11 @@
 * [Breaking] When hashing a string, include the length of the string in the hash
   to avoid input collision. This will change any inputs -> ironseed that use
   strings or raws. ironseed -> outputs is unaffected.
+* Added `with_ironseed()` and `local_ironseed()` functions.
+* Added `create_ironseed()` function to construct an ironseed from objects. This
+  function has a stricter interface than `ironseed()` and is useful for internal
+  usage.
+* Added `set_ironseed(...)` wrapper for `ironseed(..., set_seed = TRUE)`
 * Add entropy from hostname and cluster job ids (if present)
 * Add a streaming API: `ironseed_stream()`
 * Require `...` arguments to be unnammed in `ironseed()`.

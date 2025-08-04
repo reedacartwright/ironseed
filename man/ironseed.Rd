@@ -2,6 +2,8 @@
 % Please edit documentation in R/ironseed.R
 \name{ironseed}
 \alias{ironseed}
+\alias{set_ironseed}
+\alias{create_ironseed}
 \alias{ironseed_stream}
 \alias{create_seedseq}
 \alias{is_ironseed}
@@ -16,6 +18,14 @@ ironseed(
   quiet = FALSE,
   methods = c("dots", "args", "env", "auto", "null")
 )
+
+set_ironseed(
+  ...,
+  quiet = FALSE,
+  methods = c("dots", "args", "env", "auto", "null")
+)
+
+create_ironseed(x)
 
 ironseed_stream(..., methods = c("dots", "args", "env", "auto", "null"))
 
@@ -38,11 +48,11 @@ parse_ironseed_str(x)
 
 \item{methods}{a character vector.}
 
+\item{x}{a string, ironseed, list, or other object}
+
 \item{fe}{an ironseed}
 
 \item{n}{a scalar integer specifying the number of seeds to generate}
-
-\item{x}{a string, ironseed, or other object}
 }
 \value{
 An ironseed. If \code{.Random.seed} was initialized, the ironseed used
@@ -57,6 +67,9 @@ of seeds, including initializing R's built-in random number generator.
 arguments, or automatically from multiple sources of entropy on the local
 system. It also initializes R's built-in random number generator from an
 ironseed.
+\item \code{create_ironseed()} constructs an ironseed from a list of seed objects,
+following the rules described below.
+\item \code{set_ironseed()} calls \code{ironseed()} with set_seed = TRUE.
 \item \code{create_seedseq()} uses an ironseed to generate a sequence of 32-bit seeds.
 \item \code{is_ironseed()} tests whether an object is an ironseed, and
 \code{is_ironseed_str()} tests if it is a string representing and ironseed.

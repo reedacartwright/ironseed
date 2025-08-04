@@ -1,4 +1,4 @@
-oldseed <- get_random_seed()
+reallyoldseed <- get_random_seed()
 
 #### Basic Tests ###############################################################
 
@@ -109,7 +109,7 @@ expect_equal(
   as_ironseed("JbmoCCBJUY7-NcqXAz6AAZC-Dh8JPZuoS4H-Aej9neXnxuB")
 )
 
-# Multiple values produce an ironseed
+# Multiple values produce different ironseeds
 expect_equal(
   ironseed(1:10),
   as_ironseed("bgfYicF3xGP-ULaaHM5qVja-XacoSML5JZX-mwozZFSoHsb")
@@ -145,6 +145,24 @@ expect_equal(
   as_ironseed("tfedys71rDT-NhNQbzrhWDQ-DEpsYSJ6dAN-jHnKGsv1Thh")
 )
 
+# If dots is a single list, it gets unwrapped.
+expect_equal(
+  ironseed(list(1:10, 1.0, LETTERS, FALSE)),
+  ironseed(1:10, 1.0, LETTERS, FALSE)
+)
+
+# Otherwise, a list argument is "unlisted"
+expect_equal(
+  ironseed(list(1:10, 1.0, LETTERS, FALSE), 1L),
+  ironseed(unlist(list(1:10, 1.0, LETTERS, FALSE)), 1L)
+)
+
+# Nested lists are unlisted as well
+expect_equal(
+  ironseed(list(list(1:10, 1.0, LETTERS, FALSE))),
+  ironseed(unlist(list(1:10, 1.0, LETTERS, FALSE)))
+)
+
 # Order matters
 expect_equal(
   ironseed(1.0, 1:10),
@@ -160,18 +178,33 @@ expect_equal(
 # Complex values are the same as pairs of doubles
 expect_equal(
   ironseed(1 + 0i),
-  as_ironseed("QbmwKK4RykS-Brpw7YaWLc2-xMRPy1dw9nY-NNynHN1w9DK")
+  ironseed(1, 0)
 )
 
 # Two auto-ironseeds are different
-expect_equal(Sys.getenv("IRONSEED"), "")
-expect_false(all(ironseed(NULL) == ironseed(NULL)))
+expect_false(
+  all(ironseed(NULL, methods = "auto") == ironseed(NULL, methods = "auto"))
+)
+
+# Ironseed respects RNGkind
+oldkind <- RNGkind()
+
+RNGkind("Knuth-TAOCP-2002")
+expect_silent(ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1"))
+expect_equal(RNGkind()[1], "Knuth-TAOCP-2002")
+
+RNGkind("Mersenne-Twister")
+expect_silent(ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1"))
+expect_equal(RNGkind()[1], "Mersenne-Twister")
+
+RNGkind(oldkind[1], oldkind[2], oldkind[3])
 
 #### Initializing .Random.seed #################################################
 
 ironseed:::rm_random_seed()
 
 expect_false(has_random_seed())
+expect_null(ironseed(set_seed = FALSE))
 expect_message(
   fe <- ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
 )
@@ -408,4 +441,4 @@ if (at_home()) {
 #### Cleanup ###################################################################
 
 # restore random seed
-set_random_seed(oldseed)
+set_random_seed(reallyoldseed)
