@@ -278,8 +278,11 @@ env_ironseed <- function() {
 fill_random_seed <- function(x, quiet = FALSE) {
   stopifnot(is_ironseed(x))
   if (isFALSE(quiet)) {
-    msg <- sprintf("** Ironseed : Seed %s v%s", format(x),
-      format(utils::packageVersion("ironseed")))
+    msg <- sprintf(
+      "** Ironseed : Seed %s v%s",
+      format(x),
+      format(utils::packageVersion("ironseed"))
+    )
     message(msg)
   }
   # save oldseed

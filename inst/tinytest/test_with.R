@@ -33,9 +33,13 @@ expect_equal(
 
 RNGkind("Knuth-TAOCP-2002")
 expect_silent(expect_equal(
-  with_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1", {
-    sample(1000, 4L)
-  }, quiet = TRUE),
+  with_ironseed(
+    "rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1",
+    {
+      sample(1000, 4L)
+    },
+    quiet = TRUE
+  ),
   c(43, 466, 321, 956)
 ))
 
@@ -43,9 +47,13 @@ expect_silent(expect_equal(
 set.seed(1)
 oldseed <- get_random_seed()
 expect_equal(
-  with_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1", {
-    ironseed()
-  }, quiet = TRUE),
+  with_ironseed(
+    "rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1",
+    {
+      ironseed()
+    },
+    quiet = TRUE
+  ),
   as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
 )
 expect_equal(.Random.seed, oldseed)
