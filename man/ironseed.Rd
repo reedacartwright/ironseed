@@ -43,8 +43,6 @@ parse_ironseed_str(x)
 \item{methods}{a character vector.}
 
 \item{x}{a string, ironseed, list, or other object}
-
-\item{fe}{an ironseed}
 }
 \value{
 An ironseed. If \code{.Random.seed} was initialized, the ironseed used

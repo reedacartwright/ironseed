@@ -48,7 +48,6 @@
 #' @param set_seed a logical indicating whether to initialize `.Random.seed`.
 #' @param quiet a logical indicating whether to silence messages.
 #' @param methods a character vector.
-#' @param fe an ironseed
 #' @param x a string, ironseed, list, or other object
 #'
 #' @returns An ironseed. If `.Random.seed` was initialized, the ironseed used

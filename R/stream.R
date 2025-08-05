@@ -36,6 +36,7 @@
 #'
 #' @inheritParams ironseed
 #' @param n a scalar integer specifying the number of seeds to generate
+#' @param fe an ironseed
 #'
 #' @returns an integer vector containing 32-bit output seeds. If `n` is missing,
 #' `ironseed_stream()` returns the underlying ironseed.
