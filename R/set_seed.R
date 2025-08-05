@@ -22,7 +22,7 @@
 
 #' Initialize .Random.seed
 #'
-#' @param x an ironseed.
+#' @param fe an ironseed or ironseed stream function
 #' @param seed a previous `.Random.seed`
 #' @param quiet a logical indicating whether to silence messages.
 #'
@@ -31,12 +31,12 @@
 #'
 #' @export
 #' @keywords internal
-fill_random_seed <- function(x, quiet = FALSE) {
-  stopifnot(is_ironseed(x))
-  if (isFALSE(quiet)) {
+fill_random_seed <- function(fe, quiet = FALSE) {
+  stopifnot(is_ironseed(fe) || is.function(fe))
+  if (is_ironseed(fe) && isFALSE(quiet)) {
     msg <- sprintf(
       "** Ironseed : Seed %s v%s",
-      format(x),
+      format(fe),
       format(utils::packageVersion("ironseed"))
     )
     message(msg)
@@ -49,7 +49,12 @@ fill_random_seed <- function(x, quiet = FALSE) {
   is_mt <- seed[2] == 624L
 
   # generate a seed sequence of the correct length
-  seed[-1] <- create_seedseq(x, length(seed) - 1)
+  if (is_ironseed(fe)) {
+    seed[-1] <- create_seedseq(fe, length(seed) - 1)
+  } else {
+    seed[-1] <- fe(length(seed) - 1)
+  }
+  
   # if seed[2] = 625, then MT will think it is uninitialized
   # set seed[2] to 624 to signal that it is initialized
   if (is_mt) {

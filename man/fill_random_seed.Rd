@@ -7,7 +7,7 @@
 \alias{set_random_seed}
 \title{Initialize .Random.seed}
 \usage{
-fill_random_seed(x, quiet = FALSE)
+fill_random_seed(fe, quiet = FALSE)
 
 has_random_seed()
 
@@ -16,7 +16,7 @@ get_random_seed()
 set_random_seed(seed)
 }
 \arguments{
-\item{x}{an ironseed.}
+\item{fe}{an ironseed or ironseed stream function}
 
 \item{quiet}{a logical indicating whether to silence messages.}
 
