@@ -54,7 +54,7 @@ fill_random_seed <- function(fe, quiet = FALSE) {
   } else {
     seed[-1] <- fe(length(seed) - 1)
   }
-  
+
   # if seed[2] = 625, then MT will think it is uninitialized
   # set seed[2] to 624 to signal that it is initialized
   if (is_mt) {
