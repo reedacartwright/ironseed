@@ -30,8 +30,7 @@
 static const R_CallMethodDef callMethods[] = {
   {"R_create_ironseed", (DL_FUNC)&R_create_ironseed, 1},
   {"R_auto_ironseed", (DL_FUNC)&R_auto_ironseed, 0},
-  {"R_create_seedseq", (DL_FUNC)&R_create_seedseq, 2},
-  {"R_create_seedseq0", (DL_FUNC)&R_create_seedseq0, 3},
+  {"R_create_seedseq", (DL_FUNC)&R_create_seedseq, 3},
   {"R_base58_encode64", (DL_FUNC)&R_base58_encode64, 1},
   {"R_base58_decode64", (DL_FUNC)&R_base58_decode64, 1},
   {"R_ironseed_config", (DL_FUNC)&R_ironseed_config, 0},

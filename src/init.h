@@ -6,8 +6,7 @@
 
 SEXP R_create_ironseed(SEXP x);
 SEXP R_auto_ironseed(void);
-SEXP R_create_seedseq(SEXP x, SEXP n);
-SEXP R_create_seedseq0(SEXP x, SEXP n, SEXP k);
+SEXP R_create_seedseq(SEXP x, SEXP n, SEXP k);
 
 SEXP R_base58_encode64(SEXP x);
 SEXP R_base58_decode64(SEXP x);

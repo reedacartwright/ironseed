@@ -373,47 +373,28 @@ SEXP R_auto_ironseed(void) {
   return ret;
 }
 
-static uint64_t as_uint64(int a, int b) {
-  uint64_t u = (unsigned int)b;
-  u = (u << 32) + (uint64_t)(unsigned int)a;
-  return u;
-}
-
-SEXP R_create_seedseq0(SEXP x, SEXP n, SEXP k) {
-  assert(Rf_isNull(k) || XLENGTH(k) >= 2);
+SEXP R_create_seedseq(SEXP x, SEXP n, SEXP k) {
+  union {
+    uint64_t u;
+    double d;
+  } u = {init_hash4o_coef()};
 
   int len = Rf_asInteger(n);
-  uint64_t u =
-    Rf_isNull(k) ? init_hash4o_coef() : as_uint64(INTEGER(k)[0], INTEGER(k)[1]);
+
+  if(!Rf_isNull(k)) {
+    u.d = Rf_asReal(k);
+  }
 
   ironseed_t seed;
   for(int i = 0; i < 8; ++i) {
     seed.seed[i] = INTEGER(x)[i];
   }
-
-  SEXP ret = PROTECT(Rf_allocVector(INTSXP, len + 2));
-
-  create_seedseq(&seed, &u, (unsigned int *)INTEGER(ret) + 2, XLENGTH(ret) - 2);
-
-  INTEGER(ret)[0] = (int)(uint32_t)u;
-  INTEGER(ret)[1] = (int)(uint32_t)(u >> 32);
-
-  UNPROTECT(1);
-  return ret;
-}
-
-SEXP R_create_seedseq(SEXP x, SEXP n) {
-  int len = Rf_asInteger(n);
-
-  ironseed_t seed;
-  for(int i = 0; i < 8; ++i) {
-    seed.seed[i] = INTEGER(x)[i];
-  }
-
-  uint64_t u = init_hash4o_coef();
 
   SEXP ret = PROTECT(Rf_allocVector(INTSXP, len));
-  create_seedseq(&seed, &u, (unsigned int *)INTEGER(ret), XLENGTH(ret));
+
+  create_seedseq(&seed, &u.u, (unsigned int *)INTEGER(ret), XLENGTH(ret));
+
+  Rf_setAttrib(ret, Rf_install("k"), Rf_ScalarReal(u.d));
 
   UNPROTECT(1);
   return ret;

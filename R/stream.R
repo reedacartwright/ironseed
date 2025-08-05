@@ -73,24 +73,20 @@ ironseed_stream <- function(
     }
     n <- as.integer(n)
     z <- create_seedseq0(fe, n, k)
-    k <<- z[1:2]
-    z[-(1:2)]
+    k <<- attr(z, "k", exact = TRUE)
+    c(z) # strip attributes
   }
 }
 
 #' @export
 #' @rdname ironseed_stream
 create_seedseq <- function(fe, n) {
-  fe <- as_ironseed(fe)
-  n <- as.integer(n)
-  stopifnot(length(unclass(fe)) == 8L)
-  .Call(R_create_seedseq, fe, n)
+  c(create_seedseq0(fe, n, NULL)) # strip attributes
 }
 
 create_seedseq0 <- function(fe, n, k = NULL) {
   fe <- as_ironseed(fe)
   n <- as.integer(n)
   stopifnot(length(unclass(fe)) == 8L)
-  stopifnot(is.null(k) || (is.integer(k) && length(k) >= 2))
-  .Call(R_create_seedseq0, fe, n, k)
+  .Call(R_create_seedseq, fe, n, k)
 }
