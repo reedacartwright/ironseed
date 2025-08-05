@@ -40,6 +40,7 @@ one_fe <- structure(
 
 # An ironseed with no data has a default value.
 expect_equal(create_ironseed(list(list())), null_fe)
+expect_equal(create_ironseed(list(NULL, NULL)), null_fe)
 
 # A ironseed string is parsed directly.
 expect_equal(

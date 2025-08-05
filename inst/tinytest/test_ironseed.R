@@ -151,6 +151,14 @@ expect_error(ironseed(NULL, methods = "error"))
 expect_error(ironseed(NULL, methods = character(0L)))
 expect_error(ironseed(a = NULL))
 
+fe <- create_ironseed(1L)
+
+expect_equal(length(fe), 1L)
+expect_equal(fe[1], fe)
+expect_equal(fe[[1]], fe)
+expect_error(fe[] <- 1L)
+expect_error(fe[[]] <- 1L)
+
 #### Cluster Variables #########################################################
 
 Sys.setenv("SLURM_JOB_ID" = "1")
