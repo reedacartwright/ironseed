@@ -33,10 +33,11 @@
 #'  system. It also initializes R's built-in random number generator from an
 #'  ironseed.
 #'
-#' - `create_ironseed()` constructs an ironseed from a list of seed objects,
-#'   following the rules described below.
-#'
 #' - `set_ironseed()` calls `ironseed()` with set_seed = TRUE.
+
+#' - `create_ironseed()` constructs an ironseed from a list of seed objects,
+#'   following the rules described below. `auto_ironseed()` constructs an
+#'   ironseed from multiple sources of entropy on the local system.
 #'
 #' - `is_ironseed()` tests whether an object is an ironseed, and
 #'   `is_ironseed_str()` tests if it is a string representing and ironseed.
@@ -249,6 +250,8 @@ create_ironseed0 <- function(x) {
   .Call(R_create_ironseed, x)
 }
 
+#' @export
+#' @rdname ironseed
 auto_ironseed <- function() {
   .Call(R_auto_ironseed)
 }
@@ -288,7 +291,7 @@ as_ironseed <- function(x) {
     x <- as.integer(x)
     structure(x, class = "ironseed_ironseed")
   } else {
-    stop("unable to convert `x` to ironseed")
+    stop("unable to convert `x` to an ironseed")
   }
 }
 

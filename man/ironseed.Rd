@@ -4,6 +4,7 @@
 \alias{ironseed}
 \alias{set_ironseed}
 \alias{create_ironseed}
+\alias{auto_ironseed}
 \alias{is_ironseed}
 \alias{is_ironseed_str}
 \alias{as_ironseed}
@@ -24,6 +25,8 @@ set_ironseed(
 )
 
 create_ironseed(x)
+
+auto_ironseed()
 
 is_ironseed(x)
 
@@ -57,9 +60,10 @@ of seeds, including initializing R's built-in random number generator.
 arguments, or automatically from multiple sources of entropy on the local
 system. It also initializes R's built-in random number generator from an
 ironseed.
-\item \code{create_ironseed()} constructs an ironseed from a list of seed objects,
-following the rules described below.
 \item \code{set_ironseed()} calls \code{ironseed()} with set_seed = TRUE.
+\item \code{create_ironseed()} constructs an ironseed from a list of seed objects,
+following the rules described below. \code{auto_ironseed()} constructs an
+ironseed from multiple sources of entropy on the local system.
 \item \code{is_ironseed()} tests whether an object is an ironseed, and
 \code{is_ironseed_str()} tests if it is a string representing and ironseed.
 \item \code{as_ironseed()} casts an object to an ironseed, and \code{parse_ironseed_str()}
