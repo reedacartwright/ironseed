@@ -154,11 +154,11 @@ uint64_t readcycle_entropy(void) {
 }
 
 void hostname_entropy(char *name, size_t size) {
-// #nocov start
+  // #nocov start
   if(name == NULL || size == 0) {
     return;
   }
-// #nocov end
+  // #nocov end
 #ifdef HAS_GETHOSTNAME
   int ret = gethostname(name, size);
   (void)ret;
@@ -170,7 +170,7 @@ void hostname_entropy(char *name, size_t size) {
 
 // #nocov start
 SEXP R_ironseed_config(void) {
-// clang-format off
+  // clang-format off
   const char *names[] = {
     "HAS_ARC4RANDOM",
     "HAS_GETENTROPY",
@@ -183,7 +183,7 @@ SEXP R_ironseed_config(void) {
     "HAS_GETHOSTNAME",
     ""
   };
-// clang-format on
+  // clang-format on
 
   SEXP ret = PROTECT(Rf_mkNamed(LGLSXP, names));
 
