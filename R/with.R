@@ -29,6 +29,7 @@
 #' @inheritParams ironseed
 #' @param seeds An object or list of objects suitable for constructing an
 #' ironseed.
+#' @param func A stream function returned by `ironseed_stream()`
 #' @param ... Additional objects.
 #' @param code Code to execute in the temporary environment.
 #' @param .local_envir The environment to use for scoping.
@@ -36,7 +37,7 @@
 #' @returns `with_ironseed()` returns the results of the evaluation of the code
 #' argument. `local_ironseed()` returns the constructed ironseed.
 #'
-#' @seealso [ironseed]
+#' @seealso [ironseed] [ironseed_stream]
 #'
 #' @export
 with_ironseed <- function(
@@ -75,4 +76,32 @@ local_ironseed <- function(
     set_random_seed(old_seed)
   })
   invisible(fe)
+}
+
+#' @export
+#' @rdname with_ironseed
+with_ironseed_stream <- function(
+  func,
+  code
+) {
+  stopifnot(is.function(func))
+  old_seed <- fill_random_seed(func, quiet = TRUE)
+  on.exit({
+    set_random_seed(old_seed)
+  })
+  force(code)
+}
+
+#' @export
+#' @rdname with_ironseed
+local_ironseed_stream <- function(
+  func,
+  .local_envir = parent.frame()
+) {
+  stopifnot(is.function(func))
+  old_seed <- fill_random_seed(func, quiet = TRUE)
+  defer(envir = .local_envir, {
+    set_random_seed(old_seed)
+  })
+  invisible(NULL)
 }

@@ -3,11 +3,17 @@
 \name{with_ironseed}
 \alias{with_ironseed}
 \alias{local_ironseed}
+\alias{with_ironseed_stream}
+\alias{local_ironseed_stream}
 \title{Temporary ironseeds}
 \usage{
 with_ironseed(seeds, code, quiet = FALSE)
 
 local_ironseed(seeds, ..., quiet = FALSE, .local_envir = parent.frame())
+
+with_ironseed_stream(func, code)
+
+local_ironseed_stream(func, .local_envir = parent.frame())
 }
 \arguments{
 \item{seeds}{An object or list of objects suitable for constructing an
@@ -20,6 +26,8 @@ ironseed.}
 \item{...}{Additional objects.}
 
 \item{.local_envir}{The environment to use for scoping.}
+
+\item{func}{A stream function returned by \code{ironseed_stream()}}
 }
 \value{
 \code{with_ironseed()} returns the results of the evaluation of the code
@@ -31,5 +39,5 @@ state afterwards. \code{local_ironseed()} restores global state when the current
 evaluation state ends.
 }
 \seealso{
-\link{ironseed}
+\link{ironseed} \link{ironseed_stream}
 }
