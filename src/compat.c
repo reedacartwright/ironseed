@@ -129,7 +129,7 @@ uint64_t system_entropy(void) {
   if(random_number == 0) {
     random_number = system_entropy_once();
   }
-  return random_number += 0xcaced73e648668efULL;
+  return random_number += 0xcaced73e648668ef;
 }
 
 // Using ideas from MariaDB to make this portable
@@ -170,6 +170,7 @@ void hostname_entropy(char *name, size_t size) {
 
 // #nocov start
 SEXP R_ironseed_config(void) {
+// clang-format off
   const char *names[] = {
     "HAS_ARC4RANDOM",
     "HAS_GETENTROPY",
@@ -182,6 +183,8 @@ SEXP R_ironseed_config(void) {
     "HAS_GETHOSTNAME",
     ""
   };
+// clang-format on
+
   SEXP ret = PROTECT(Rf_mkNamed(LGLSXP, names));
 
 #ifdef HAS_ARC4RANDOM
