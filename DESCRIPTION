@@ -2,10 +2,12 @@ Package: ironseed
 Title: Improved Random Number Generator Seeding
 Version: 0.1.0.9002
 Authors@R: 
-    person("Reed", "Cartwright",
-           role = c("aut", "cre"),
-           email = "racartwright@gmail.com",
-           comment = c(ORCID = "0000-0002-0837-9380"))
+    c(person("Reed", "Cartwright",
+             role = c("aut", "cre"),
+             email = "racartwright@gmail.com",
+             comment = c(ORCID = "0000-0002-0837-9380")),
+      person("National Science Foundation DBI-1929850",
+             role = "fnd"))
 Description: A procedure for seeding R's built in random number
     generators using a variable-length sequence of values.
     Accumulates input entropy into a 256-bit hash digest or "ironseed"
