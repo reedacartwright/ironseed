@@ -130,9 +130,9 @@
 #' - O’Neill (2015) Random-Number Utilities.
 #'   <https://gist.github.com/imneme/540829265469e673d045>
 #' - Lemire and Kaser (2018) Strongly universal string hashing is fast.
-#'   <http://arxiv.org/pdf/1202.4961>
+#'   <https://arxiv.org/pdf/1202.4961>
 #' - Steele et al. (2014) Fast splittable pseudorandom number generators.
-#'   <https://doi.org/10.1145/2714064.2660195>
+#'   \doi{10.1145/2714064.2660195}
 #' - Weyl Sequence <https://en.wikipedia.org/wiki/Weyl_sequence>
 #' - PractRand <https://pracrand.sourceforge.net/>
 #'

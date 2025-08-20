@@ -1,5 +1,10 @@
 ## Submission
 
+This is a new submission version 0.2.0 of the ironseed package. This version
+contains fixes for portability issues in 0.1.0 version, as well as new features.
+Notably the ironseed algorithm has been enhanced with additional bit mixing
+and now passes PractRand tests.
+
 ## Test Environments
 
 * Arch Linux - R 4.5.1 (Local Install)

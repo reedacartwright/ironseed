@@ -161,9 +161,9 @@ ironseed::set_random_seed(oldseed)
 \item O’Neill (2015) Random-Number Utilities.
 \url{https://gist.github.com/imneme/540829265469e673d045}
 \item Lemire and Kaser (2018) Strongly universal string hashing is fast.
-\url{http://arxiv.org/pdf/1202.4961}
+\url{https://arxiv.org/pdf/1202.4961}
 \item Steele et al. (2014) Fast splittable pseudorandom number generators.
-\url{https://doi.org/10.1145/2714064.2660195}
+\doi{10.1145/2714064.2660195}
 \item Weyl Sequence \url{https://en.wikipedia.org/wiki/Weyl_sequence}
 \item PractRand \url{https://pracrand.sourceforge.net/}
 }
