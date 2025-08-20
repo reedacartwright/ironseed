@@ -1,6 +1,8 @@
-## ironseed 0.2.0
+# ironseed (development version)
 
-### Breaking Changes
+# ironseed 0.2.0
+
+## Breaking Changes
 
 * Avalanche behavior and observed randomness were improved by including
   additional bit mixing at the end of hashing. This changes the calculation of
@@ -10,7 +12,7 @@
   the hash. This avoids input collision for two strings that are of different
   length but correspond to the same set of 32-bit values due to padding.
 
-### New Features
+## New Features
 
 * New `with_ironseed()` and `local_ironseed()` functions to temporarily change
   the `.Random.seed` state.
@@ -27,7 +29,7 @@
 * Automatically generated ironseeds will now use also use entropy from hostnames
   and cluster job ids (if present).
 
-### Miscellaneous fixes and features
+## Miscellaneous fixes and features
 
 * New `set_ironseed(...)` function to wrap `ironseed(..., set_seed = TRUE)`
 * New `create_ironseed()` function to construct an ironseed from objects. This
@@ -38,6 +40,6 @@
 * Better support for \*BSD systems
 * Better support for big-endian systems
 
-## ironseed 0.1.0
+# ironseed 0.1.0
 
 * Initial CRAN submission.
