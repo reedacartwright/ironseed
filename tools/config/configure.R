@@ -81,6 +81,9 @@ int f(void) {
 tmpl <- "
 #pragma GCC diagnostic error \"-Wimplicit-function-declaration\"
 #include <unistd.h>
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
 int f(void) {
   char buffer[256];
   return gethostname(buffer, sizeof(buffer));

@@ -44,6 +44,10 @@
 #include <time.h>
 #include <unistd.h>
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
 #if __has_builtin(__builtin_readcyclecounter)
 #elif defined(_WIN32)
 #include <intrin.h>
