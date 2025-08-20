@@ -83,7 +83,7 @@ tmpl <- "
 #include <unistd.h>
 int f(void) {
   char buffer[256];
-  return getentropy(buffer, sizeof(buffer));
+  return gethostname(buffer, sizeof(buffer));
 }
 "
 if (check_compile(tmpl, "gethostname()")) {
