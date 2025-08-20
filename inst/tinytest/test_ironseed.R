@@ -158,6 +158,7 @@ expect_equal(fe[1], fe)
 expect_equal(fe[[1]], fe)
 expect_error(fe[] <- 1L)
 expect_error(fe[[]] <- 1L)
+expect_error(length(fe) <- 10L)
 
 #### Cluster Variables #########################################################
 
