@@ -1,4 +1,4 @@
-## ironseed (development)
+## ironseed 0.2.0
 
 * [Breaking] Avalanche behavior and observed randomness were improved by
   including additional bit mixing at the end of hashing. This changes the
