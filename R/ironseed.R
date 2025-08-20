@@ -335,7 +335,7 @@ length.ironseed_ironseed <- function(x) {
 }
 
 #' @export
-`length<-.ironseed_ironseed` <- function(x) {
+`length<-.ironseed_ironseed` <- function(x, value) {
   stop("Not supported")
 }
 
