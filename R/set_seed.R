@@ -35,9 +35,9 @@ fill_random_seed <- function(fe, quiet = FALSE) {
   stopifnot(is_ironseed(fe) || is.function(fe))
   if (is_ironseed(fe) && isFALSE(quiet)) {
     msg <- sprintf(
-      "** Ironseed : Seed %s v%s",
-      format(fe),
-      format(utils::packageVersion("ironseed"))
+      "** Ironseed v%s: SetSeed %s",
+      format(utils::packageVersion("ironseed")),
+      format(fe)
     )
     message(msg)
   }

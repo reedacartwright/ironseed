@@ -3,6 +3,7 @@
 \name{ironseed}
 \alias{ironseed}
 \alias{set_ironseed}
+\alias{get_ironseed}
 \alias{create_ironseed}
 \alias{auto_ironseed}
 \alias{is_ironseed}
@@ -13,7 +14,7 @@
 \usage{
 ironseed(
   ...,
-  set_seed = !has_random_seed(),
+  set_seed = TRUE,
   quiet = FALSE,
   methods = c("dots", "args", "env", "auto", "null")
 )
@@ -23,6 +24,8 @@ set_ironseed(
   quiet = FALSE,
   methods = c("dots", "args", "env", "auto", "null")
 )
+
+get_ironseed()
 
 create_ironseed(x)
 
@@ -60,6 +63,8 @@ of seeds, including initializing R's built-in random number generator.
 arguments, or automatically from multiple sources of entropy on the local
 system. It also initializes R's built-in random number generator from an
 ironseed.
+\item \code{get_ironseed()} returns the ironseed most recently used to initialize
+\code{.Random.seed}.
 \item \code{set_ironseed()} calls \code{ironseed()} with set_seed = TRUE.
 \item \code{create_ironseed()} constructs an ironseed from a list of seed objects,
 following the rules described below. \code{auto_ironseed()} constructs an
@@ -75,18 +80,11 @@ Ironseeds have a specific string representation, e.g.
 "rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1", where each element is a
 64-bit number encoded in little-endian base58 format.
 
-Parameter \code{set_seed} defaults to \code{TRUE} if \code{.Random.seed} does not already
-exist and \code{FALSE} otherwise.
-
-Ironseed behaves differently depending on the number of arguments passed as
-\code{...} and the value of \code{methods}. If \code{...} has a length of zero \strong{and}
-initialization is disabled, then \code{ironseed()} returns the last ironseed used
-to initialize \code{.Random.seed}. Otherwise, it generates an ironseed from an
-input sequence according to the methods included in \code{methods}.
-
-When generating an ironseed, \code{ironseed()} tries the listed methods starting
-from the first value and continuing until it can generate an ironseed. If no
-method works, an error will be raised.
+Ironseed generates an ironseed from an input sequence according to the
+methods included in \code{methods}. When generating an ironseed, \code{ironseed()}
+tries the listed methods starting from the first value and continuing
+until it can generate an ironseed. If no method works, an error will be
+raised.
 \itemize{
 \item dots: Use the values passed as \code{...} to construct an ironseed. Most atomic
 types and lists of atomic types can be used. \code{ironseed()} and
@@ -131,7 +129,6 @@ a finalizer adapted from SplitMix64. With the additional mixing from the
 finalizer, the output seed sequence passes PractRand tests.
 }
 \examples{
-
 \dontshow{
 oldseed <- ironseed::get_random_seed()
 }
@@ -141,11 +138,10 @@ oldseed <- ironseed::get_random_seed()
 ironseed::ironseed("Experiment", 20251031, 1)
 
 # Generate an ironseed automatically and force initialize
-# `.Random.seed` with it.
 ironseed::ironseed(set_seed = TRUE)
 
 # Return last used ironseed.
-ironseed::ironseed()
+ironseed::get_ironseed()
 
 \dontshow{
 ironseed::set_random_seed(oldseed)

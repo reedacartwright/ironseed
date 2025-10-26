@@ -5,46 +5,49 @@ reallyoldseed <- get_random_seed()
 # Initialize .Random.seed if needed
 invisible(runif(1))
 
-# this should be quiet since .Random.seed is initialized
-expect_silent(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+expect_message(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+expect_silent(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb",
+  quiet = TRUE
+))
+
 
 # Ironseed creates ironseeds via create_ironseed(list(...))
 expect_equal(
-  ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"),
+  ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", quiet = TRUE),
   as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
 )
 expect_equal(
-  ironseed(1L),
+  ironseed(1L, quiet = TRUE),
   as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
 )
 expect_equal(
-  ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", "2"),
+  ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", "2", quiet = TRUE),
   create_ironseed(list("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", "2"))
 )
 expect_equal(
-  ironseed(1:10, 1.0, LETTERS, FALSE),
+  ironseed(1:10, 1.0, LETTERS, FALSE, quiet = TRUE),
   create_ironseed(list(1:10, 1.0, LETTERS, FALSE)),
 )
 expect_equal(
-  ironseed(list(1:10, 1.0, LETTERS, FALSE)),
+  ironseed(list(1:10, 1.0, LETTERS, FALSE), quiet = TRUE),
   create_ironseed(list(1:10, 1.0, LETTERS, FALSE)),
 )
 expect_equal(
-  ironseed(list(1:5, 6:10), 1.0, LETTERS, FALSE),
+  ironseed(list(1:5, 6:10), 1.0, LETTERS, FALSE, quiet = TRUE),
   create_ironseed(list(1:10, 1.0, LETTERS, FALSE)),
 )
 expect_equal(
-  ironseed(list(list(1:5, 6:10), 1.0, LETTERS, FALSE)),
+  ironseed(list(list(1:5, 6:10), 1.0, LETTERS, FALSE), quiet = TRUE),
   create_ironseed(list(1:10, 1.0, LETTERS, FALSE)),
 )
 expect_equal(
-  ironseed(list()),
+  ironseed(list(), quiet = TRUE),
   create_ironseed(list(list()))
 )
 
 # Two auto-ironseeds are different
 expect_false(
-  all(ironseed(NULL, methods = "auto") == ironseed(NULL, methods = "auto"))
+  all(ironseed(NULL, methods = "auto", quiet = TRUE) == ironseed(NULL, methods = "auto", quiet = TRUE))
 )
 
 #### RNGkind ###################################################################
@@ -53,11 +56,11 @@ expect_false(
 oldkind <- RNGkind()
 
 RNGkind("Knuth-TAOCP-2002")
-expect_silent(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+expect_message(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
 expect_equal(RNGkind()[1], "Knuth-TAOCP-2002")
 
 RNGkind("Mersenne-Twister")
-expect_silent(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+expect_message(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
 expect_equal(RNGkind()[1], "Mersenne-Twister")
 
 RNGkind(oldkind[1], oldkind[2], oldkind[3])
@@ -69,21 +72,21 @@ RNGkind(oldkind[1], oldkind[2], oldkind[3])
 ironseed:::rm_random_seed()
 
 expect_false(has_random_seed())
-expect_null(ironseed(set_seed = FALSE))
+expect_inherits(ironseed(set_seed = FALSE), "ironseed_ironseed")
 expect_message(
   fe <- ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
 )
 expect_true(has_random_seed())
 
 expect_equal(fe, as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
-expect_equal(fe, ironseed())
+expect_equal(fe, get_ironseed())
 
 # empty arguments initializes with an autoseed
 ironseed:::rm_random_seed()
 expect_false(has_random_seed())
 expect_message(fe <- ironseed())
 expect_true(has_random_seed())
-expect_equal(fe, ironseed())
+expect_equal(fe, get_ironseed())
 
 # Forcing setting a seed
 expect_true(has_random_seed())
@@ -107,24 +110,24 @@ expect_silent(set_ironseed(
 
 # Using automatic ironseeds emits messages
 expect_message(expect_false(
-  all(set_ironseed(NULL) == ironseed(NULL, set_seed = TRUE))
+  all(set_ironseed() == ironseed(set_seed = TRUE))
 ))
 
 #### Environmental Variable ####################################################
 
 Sys.setenv(IRONSEED = "rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
 expect_equal(
-  ironseed(NULL),
+  ironseed(quiet = TRUE),
   as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
 )
 Sys.setenv(IRONSEED = "IRONSEED")
 expect_equal(
-  ironseed(NULL),
+  ironseed(quiet = TRUE),
   create_ironseed("IRONSEED")
 )
 Sys.unsetenv("IRONSEED")
 expect_equal(
-  ironseed(NULL, methods = c("env", "null")),
+  ironseed(methods = c("env", "null"), quiet = TRUE),
   create_ironseed(list(list()))
 )
 

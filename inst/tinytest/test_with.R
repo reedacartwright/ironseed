@@ -10,24 +10,24 @@ ironseed:::rm_random_seed()
 expect_false(has_random_seed())
 expect_message(expect_equal(
   with_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", {
-    ironseed()
+    get_ironseed()
   }),
   as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
 ))
 expect_false(has_random_seed())
 
 expect_equal(
-  with_ironseed(1L, ironseed(), quiet = TRUE),
+  with_ironseed(1L, get_ironseed(), quiet = TRUE),
   create_ironseed(list(1L))
 )
 
 expect_equal(
-  with_ironseed(list(1:2), ironseed(), quiet = TRUE),
+  with_ironseed(list(1:2), get_ironseed(), quiet = TRUE),
   create_ironseed(list(1L, 2L))
 )
 
 expect_equal(
-  with_ironseed(list(1L, "2"), ironseed(), quiet = TRUE),
+  with_ironseed(list(1L, "2"), get_ironseed(), quiet = TRUE),
   create_ironseed(list(1L, "2"))
 )
 
@@ -50,7 +50,7 @@ expect_equal(
   with_ironseed(
     "aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb",
     {
-      ironseed()
+      get_ironseed()
     },
     quiet = TRUE
   ),
@@ -70,7 +70,7 @@ local({
     local_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
   )
   expect_equal(
-    ironseed(),
+    get_ironseed(),
     as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
   )
   runif(1L)
@@ -80,7 +80,7 @@ expect_equal(.Random.seed, oldseed)
 
 local({
   expect_message(local_ironseed("IRONSEED"))
-  expect_equal(ironseed(), create_ironseed(list("IRONSEED")))
+  expect_equal(get_ironseed(), create_ironseed(list("IRONSEED")))
   runif(1L)
 })
 
@@ -88,7 +88,7 @@ expect_equal(.Random.seed, oldseed)
 
 local({
   local_ironseed(list(1L, "2"), quiet = TRUE)
-  expect_equal(ironseed(), create_ironseed(list(1L, "2")))
+  expect_equal(get_ironseed(), create_ironseed(list(1L, "2")))
   runif(1L)
 })
 
@@ -96,7 +96,7 @@ expect_equal(.Random.seed, oldseed)
 
 local({
   local_ironseed(1L, "2", quiet = TRUE)
-  expect_equal(ironseed(), create_ironseed(list(1L, "2")))
+  expect_equal(get_ironseed(), create_ironseed(list(1L, "2")))
   runif(1L)
 })
 

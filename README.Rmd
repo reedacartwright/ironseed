@@ -116,14 +116,18 @@ Ironseed can also automatically initialize the random number generator using an
 ironseed constructed from multiple sources of entropy. This occurs if no data
 is passed to `ironseed()`.
 
+```{r, include = FALSE}
+# Use an environment variable to make the "automatic" seed stay the same/
+Sys.setenv(IRONSEED = "A")
+```
+
 ```{r}
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
 runif(10)
 
-# Since RNG initializing has occurred, the next call will simply
-# return the ironseed used in previous seeding.
-fe <- ironseed::ironseed()
+# Access the ironseed that was used for RNG seeding.
+fe <- ironseed::get_ironseed()
 fe
 ```
 
@@ -133,6 +137,10 @@ ironseed:::rm_random_seed()
 
 Or achieving the same thing with one call. Note that the automatically generated
 seed is different from the previous run.
+
+```{r, include = FALSE}
+Sys.setenv(IRONSEED = "B")
+```
 
 ```{r}
 #!/usr/bin/env -S Rscript --vanilla

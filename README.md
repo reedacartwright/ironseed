@@ -66,7 +66,7 @@ to reproduce the run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed("Experiment", 20251031, 1)
-#> ** Ironseed : Seed ZZaisFMror3-ZhLosGqfN3R-8B6PqHJ5hhf-CFFsWhrQvBd v0.2.0
+#> ** Ironseed v0.2.0.9000: SetSeed ZZaisFMror3-ZhLosGqfN3R-8B6PqHJ5hhf-CFFsWhrQvBd
 runif(10)
 #>  [1] 0.89705422 0.04560317 0.83527653 0.45908361 0.12400794 0.60115341
 #>  [7] 0.12773858 0.91012865 0.53115788 0.22756973
@@ -79,7 +79,7 @@ large study, you can also seed based on the command line arguments.
 #!/usr/bin/env -S Rscript --vanilla
 args <- commandArgs(trailingOnly = TRUE)
 ironseed::ironseed("A Simulation Script 1", args)
-#> ** Ironseed : Seed 8cqtTGB8vrS-WYjGZ3isTH2-pHzMHbEDV38-PBfFNYcUjEG v0.2.0
+#> ** Ironseed v0.2.0.9000: SetSeed 8cqtTGB8vrS-WYjGZ3isTH2-pHzMHbEDV38-PBfFNYcUjEG
 runif(10)
 #>  [1] 0.84992808 0.64469355 0.89756643 0.19331885 0.23951235 0.62736989
 #>  [7] 0.18903081 0.11728875 0.98641615 0.04123155
@@ -93,7 +93,7 @@ seeds. Ironseed makes this easy to accomplish.
 #!/usr/bin/env -S Rscript --vanilla
 args <- commandArgs(trailingOnly = TRUE)
 ironseed::ironseed("A Simulation Script 2", args[grepl("--seed=", args)])
-#> ** Ironseed : Seed CP5fKZWMYsB-ERVXpk3k8xd-6j18poR5Sgc-eKWXg7VJFPd v0.2.0
+#> ** Ironseed v0.2.0.9000: SetSeed CP5fKZWMYsB-ERVXpk3k8xd-6j18poR5Sgc-eKWXg7VJFPd
 runif(10)
 #>  [1] 0.89075876 0.48203428 0.08680504 0.51708634 0.04348393 0.50693477
 #>  [7] 0.38465350 0.64060167 0.26286422 0.54601453
@@ -108,16 +108,15 @@ occurs if no data is passed to `ironseed()`.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
-#> ** Ironseed : Seed 8mmJCBnfpBF-noEfDbydhD2-medoPUGW2i2-QjBush7wLiZ v0.2.0
+#> ** Ironseed v0.2.0.9000: SetSeed ckSoUFVH9fN-9wJe9kfd7FL-cWzRC3gJUPG-wyFtTmQD7g9
 runif(10)
-#>  [1] 0.9647588 0.9519299 0.8189291 0.5603576 0.7317311 0.4657534 0.2285476
-#>  [8] 0.7607036 0.7591850 0.6396470
+#>  [1] 0.06900998 0.06594472 0.32008133 0.33656005 0.85582115 0.68652147
+#>  [7] 0.18941541 0.29384726 0.93065840 0.69517078
 
-# Since RNG initializing has occurred, the next call will simply
-# return the ironseed used in previous seeding.
-fe <- ironseed::ironseed()
+# Access the ironseed that was used for RNG seeding.
+fe <- ironseed::get_ironseed()
 fe
-#> Ironseed: 8mmJCBnfpBF-noEfDbydhD2-medoPUGW2i2-QjBush7wLiZ
+#> Ironseed: ckSoUFVH9fN-9wJe9kfd7FL-cWzRC3gJUPG-wyFtTmQD7g9
 ```
 
 Or achieving the same thing with one call. Note that the automatically
@@ -126,12 +125,12 @@ generated seed is different from the previous run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 fe <- ironseed::ironseed()
-#> ** Ironseed : Seed s6ADCwGZzwJ-RZ6vnLtiBGJ-eUXBjT52vq5-RipVnRwsDaC v0.2.0
+#> ** Ironseed v0.2.0.9000: SetSeed SvX7azB1Mbg-JxFGbqWPvdH-dsuxz8bRPme-owrkcr6FwiM
 runif(10)
-#>  [1] 0.82094690 0.94750303 0.53323251 0.52446560 0.84767763 0.33846097
-#>  [7] 0.75811391 0.53731134 0.06625995 0.32167871
+#>  [1] 0.2386597 0.3513830 0.6152753 0.2354798 0.9017971 0.9914904 0.8860379
+#>  [8] 0.3611021 0.1676600 0.4401827
 fe
-#> Ironseed: s6ADCwGZzwJ-RZ6vnLtiBGJ-eUXBjT52vq5-RipVnRwsDaC
+#> Ironseed: SvX7azB1Mbg-JxFGbqWPvdH-dsuxz8bRPme-owrkcr6FwiM
 ```
 
 ### Reproducible Code
@@ -143,7 +142,7 @@ used, and the previously generated seed has been logged.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed("RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4")
-#> ** Ironseed : Seed RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4 v0.2.0
+#> ** Ironseed v0.2.0.9000: SetSeed RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4
 runif(10)
 #>  [1] 0.05348978 0.02073685 0.08883963 0.94422739 0.36191244 0.25720998
 #>  [7] 0.61729578 0.89536005 0.86046463 0.06095049

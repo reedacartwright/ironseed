@@ -1,5 +1,27 @@
 # ironseed (development version)
 
+## Breaking Changes
+
+* `ironseed()` now defaults to initializing `.Random.seed`. Making the default
+  depend on whether the seed has been initialized or not ended up being
+  counter-intuitive and easy to forget.
+* Retrieving the last-used ironseed is no longer done via `ironseed()`. A
+  dedicated `get_ironseed()` function is now used for that purpose.
+* `ironseed()` now generates an automatic ironseed and `ironseed(NULL)`
+  generates the 'null' ironseed.
+* The return value of `ironseed()` is now always invisible.
+
+## New Features
+
+* New `get_ironseed()` function returns the last ironseed used to initialize
+  `.Random.seed`. This is a replacement for the discontinued functionality of
+  using `ironseed::ironseed()` to return the seed that was last used.
+
+## Miscellaneous Fixes and Features
+
+* The format of the message emitted when initializing `.Random.seed` has been
+  updated to better indicate that a seed was set.
+
 # ironseed 0.2.0
 
 ## Breaking Changes
@@ -29,7 +51,7 @@
 * Automatically generated ironseeds will now use also use entropy from hostnames
   and cluster job ids (if present).
 
-## Miscellaneous fixes and features
+## Miscellaneous Fixes and Features
 
 * New `set_ironseed(...)` function to wrap `ironseed(..., set_seed = TRUE)`
 * New `create_ironseed()` function to construct an ironseed from objects. This
