@@ -19,11 +19,7 @@ ironseed(
   methods = c("dots", "args", "env", "auto", "null")
 )
 
-set_ironseed(
-  ...,
-  quiet = FALSE,
-  methods = c("dots", "args", "env", "auto", "null")
-)
+set_ironseed(x, ..., quiet = FALSE)
 
 get_ironseed()
 
@@ -65,7 +61,8 @@ system. It also initializes R's built-in random number generator from an
 ironseed.
 \item \code{get_ironseed()} returns the ironseed most recently used to initialize
 \code{.Random.seed}.
-\item \code{set_ironseed()} calls \code{ironseed()} with set_seed = TRUE.
+\item \code{set_ironseed()} is a wrapper around \code{ironseed()} for initializing
+\code{.Random.seed} with user-supplied data.
 \item \code{create_ironseed()} constructs an ironseed from a list of seed objects,
 following the rules described below. \code{auto_ironseed()} constructs an
 ironseed from multiple sources of entropy on the local system.

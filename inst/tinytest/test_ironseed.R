@@ -10,7 +10,6 @@ expect_silent(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb",
   quiet = TRUE
 ))
 
-
 # Ironseed creates ironseeds via create_ironseed(list(...))
 expect_equal(
   ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", quiet = TRUE),
@@ -48,6 +47,15 @@ expect_equal(
 # Two auto-ironseeds are different
 expect_false(
   all(ironseed(NULL, methods = "auto", quiet = TRUE) == ironseed(NULL, methods = "auto", quiet = TRUE))
+)
+
+# set_ironseed()
+
+expect_error(set_ironseed())
+expect_equal(set_ironseed(NULL, quiet = TRUE), create_ironseed(list(NULL)))
+expect_equal(
+  set_ironseed("A", "B", quiet = TRUE),
+  create_ironseed(list(c("A", "B")))
 )
 
 #### RNGkind ###################################################################
@@ -109,9 +117,7 @@ expect_silent(set_ironseed(
 ))
 
 # Using automatic ironseeds emits messages
-expect_message(expect_false(
-  all(set_ironseed() == ironseed(set_seed = TRUE))
-))
+expect_message(expect_false(all(ironseed() == ironseed())))
 
 #### Environmental Variable ####################################################
 

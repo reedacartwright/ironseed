@@ -10,6 +10,8 @@
 * `ironseed()` now generates an automatic ironseed and `ironseed(NULL)`
   generates the 'null' ironseed.
 * The return value of `ironseed()` is now always invisible.
+* `set_ironseed()` requires at least one data argument and only uses the `dots`
+  method for creating an ironseed.
 
 ## New Features
 

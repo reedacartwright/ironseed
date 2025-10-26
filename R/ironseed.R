@@ -36,7 +36,8 @@
 #' - `get_ironseed()` returns the ironseed most recently used to initialize
 #'   `.Random.seed`.
 #'
-#' - `set_ironseed()` calls `ironseed()` with set_seed = TRUE.
+#' - `set_ironseed()` is a wrapper around `ironseed()` for initializing
+#'   `.Random.seed` with user-supplied data.
 #'
 #' - `create_ironseed()` constructs an ironseed from a list of seed objects,
 #'   following the rules described below. `auto_ironseed()` constructs an
@@ -195,11 +196,8 @@ ironseed <- function(
 
 #' @export
 #' @rdname ironseed
-set_ironseed <- function(
-    ...,
-    quiet = FALSE,
-    methods = c("dots", "args", "env", "auto", "null")) {
-  ironseed(..., set_seed = TRUE, quiet = quiet, methods = methods)
+set_ironseed <- function(x, ..., quiet = FALSE) {
+  ironseed(x, ..., quiet = quiet, set_seed = TRUE, methods = "dots")
 }
 
 #' @export
