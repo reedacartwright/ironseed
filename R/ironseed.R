@@ -220,16 +220,26 @@ create_ironseed <- function(x) {
 }
 
 # Extract ironseed inputs from command line arguments
-args_ironseed <- function() {
-  x <- commandArgs(trailingOnly = TRUE)
-  x <- x[grepl("^--?seed=", x)]
-  x <- sub("^[^=]*=", "", x)
-  create_ironseed(x)
+args_ironseed <- function(x = commandArgs(trailingOnly = TRUE)) {
+  # remove -- and any args after it
+  m <- match("--", x)
+  x <- x[is.na(m) | seq_along(x) < m]
+  # identify arguments
+  p <- grep("^--?seed(=.*)?$", x)
+  # identify arguments that have a separate option
+  b <- grepl("^--?seed$", x[p])
+
+  # construct seed vector
+  y <- character(length(b))
+  y[b] <- x[p[b] + 1]
+  y[!b] <- sub("^--?seed=", "", x[p[!b]])
+  y <- y[!is.na(y)]
+
+  create_ironseed(y)
 }
 
 # Extract ironseed input from environment
-env_ironseed <- function() {
-  x <- Sys.getenv("IRONSEED")
+env_ironseed <- function(x = Sys.getenv("IRONSEED")) {
   if (is.character(x) && length(x) == 1L && (is.na(x) || nchar(x) == 0L)) {
     NULL
   } else {

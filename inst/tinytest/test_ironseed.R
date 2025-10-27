@@ -197,65 +197,54 @@ Sys.unsetenv("AWS_BATCH_JOB_ID")
 
 #### CommandArgs ###############################################################
 
-# NOTE: These tests may issue out-of-date results if the installed version
-# differs from the currently loaded version.
-
 rscript <- function(args, ...) {
   system2(file.path(R.home("bin"), "Rscript"), args, ...)
 }
 cmd <- "cat(as.character(ironseed::ironseed(quiet = TRUE)))"
 
 # Exact seed
-res <- rscript(
-  c(
-    "--vanilla",
-    "-e",
-    shQuote(cmd),
-    "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28"
-  ),
-  stdout = TRUE
+expect_equal(
+  ironseed:::args_ironseed("--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28"),
+  as_ironseed("S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28")
 )
-expect_null(attr(res, "status", exact = TRUE))
-expect_equivalent(res, "S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28")
 
-# Since these tests are slow, we will run the rest of them only at home
+# No seed
+expect_null(ironseed:::args_ironseed(character(0L)))
+
+# One seed
+expect_equal(
+  ironseed:::args_ironseed("--seed=1"),
+  as_ironseed("5VRdb2Z6LwS-73RLQRR3kFM-LRLPqnkDei7-UqtqWxvhuZ4")
+)
+
+# Two seeds
+expect_equal(
+  ironseed:::args_ironseed(c("--seed", "1", "-seed=2")),
+  as_ironseed("yFMXneM1LRg-bJgWtncCE6Q-6uFP4DThrJ9-tL3c4VBxVqK")
+)
+
+expect_equal(
+  ironseed:::args_ironseed(c(
+    "-seed",
+    "S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28",
+    "--seed=2"
+  )),
+  as_ironseed("tfedys71rDT-NhNQbzrhWDQ-DEpsYSJ6dAN-jHnKGsv1Thh")
+)
+
+expect_equal(
+  ironseed:::args_ironseed(c(
+    "--seed=1",
+    "-seed",
+    "2",
+    "---seed=notused",
+    "--",
+    "--seed=3"
+  )),
+  as_ironseed("yFMXneM1LRg-bJgWtncCE6Q-6uFP4DThrJ9-tL3c4VBxVqK")
+)
+
 if (at_home()) {
-  # No seed
-  res <- rscript(c("--vanilla", "-e", shQuote(cmd)), stdout = TRUE)
-  expect_null(attr(res, "status", exact = TRUE))
-}
-
-if (at_home()) {
-  # One seed
-  res <- rscript(c("--vanilla", "-e", shQuote(cmd), "--seed=1"), stdout = TRUE)
-  expect_null(attr(res, "status", exact = TRUE))
-  expect_equivalent(res, "5VRdb2Z6LwS-73RLQRR3kFM-LRLPqnkDei7-UqtqWxvhuZ4")
-}
-
-if (at_home()) {
-  # Two seeds
-  res <- rscript(
-    c(
-      "--vanilla",
-      "-e",
-      shQuote(cmd),
-      "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28",
-      "--seed=2"
-    ),
-    stdout = TRUE
-  )
-  expect_null(attr(res, "status", exact = TRUE))
-  expect_equivalent(res, "tfedys71rDT-NhNQbzrhWDQ-DEpsYSJ6dAN-jHnKGsv1Thh")
-}
-
-if (at_home()) {
-  res <- rscript(
-    c("--vanilla", "-e", shQuote(cmd), "--seed=1", "--seed=2"),
-    stdout = TRUE
-  )
-  expect_null(attr(res, "status", exact = TRUE))
-  expect_equivalent(res, "yFMXneM1LRg-bJgWtncCE6Q-6uFP4DThrJ9-tL3c4VBxVqK")
-
   # Two seeds and other args
   res <- rscript(
     c(
@@ -263,9 +252,11 @@ if (at_home()) {
       "-e",
       shQuote(cmd),
       "--seed=1",
-      "-seed=2",
+      "-seed",
+      "2",
+      "---seed=notused",
       "--",
-      "---seed=notused"
+      "--seed=3"
     ),
     stdout = TRUE
   )

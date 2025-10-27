@@ -18,6 +18,10 @@
 * New `get_ironseed()` function returns the last ironseed used to initialize
   `.Random.seed`. This is a replacement for the discontinued functionality of
   using `ironseed::ironseed()` to return the seed that was last used.
+* The extraction of seeds from command line parameters now detects seeds
+  passed as the next value after a "--seed" argument. Seeds written directly
+  after "--seed=" are still supported. Any arguments after a "--" parameter
+  are now ignored. The one-dash "-seed" argument is recognized as well.
 
 ## Miscellaneous Fixes and Features
 
