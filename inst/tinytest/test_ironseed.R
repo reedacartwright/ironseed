@@ -5,23 +5,28 @@ reallyoldseed <- get_random_seed()
 # Initialize .Random.seed if needed
 invisible(runif(1))
 
-expect_message(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
-expect_silent(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb",
+expect_message(ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"))
+expect_silent(ironseed(
+  "MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3",
   quiet = TRUE
 ))
 
 # Ironseed creates ironseeds via create_ironseed(list(...))
 expect_equal(
-  ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", quiet = TRUE),
-  as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
+  ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3", quiet = TRUE),
+  as_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3")
 )
 expect_equal(
   ironseed(1L, quiet = TRUE),
-  as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
+  as_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3")
 )
 expect_equal(
-  ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", "2", quiet = TRUE),
-  create_ironseed(list("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb", "2"))
+  ironseed(
+    "MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3",
+    "2",
+    quiet = TRUE
+  ),
+  create_ironseed(list("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3", "2"))
 )
 expect_equal(
   ironseed(1:10, 1.0, LETTERS, FALSE, quiet = TRUE),
@@ -45,9 +50,10 @@ expect_equal(
 )
 
 # Two auto-ironseeds are different
-expect_false(
-  all(ironseed(NULL, methods = "auto", quiet = TRUE) == ironseed(NULL, methods = "auto", quiet = TRUE))
-)
+expect_false(all(
+  ironseed(NULL, methods = "auto", quiet = TRUE) ==
+    ironseed(NULL, methods = "auto", quiet = TRUE)
+))
 
 # set_ironseed()
 
@@ -64,11 +70,11 @@ expect_equal(
 oldkind <- RNGkind()
 
 RNGkind("Knuth-TAOCP-2002")
-expect_message(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+expect_message(ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"))
 expect_equal(RNGkind()[1], "Knuth-TAOCP-2002")
 
 RNGkind("Mersenne-Twister")
-expect_message(ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+expect_message(ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"))
 expect_equal(RNGkind()[1], "Mersenne-Twister")
 
 RNGkind(oldkind[1], oldkind[2], oldkind[3])
@@ -82,11 +88,11 @@ ironseed:::rm_random_seed()
 expect_false(has_random_seed())
 expect_inherits(ironseed(set_seed = FALSE), "ironseed_ironseed")
 expect_message(
-  fe <- ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
+  fe <- ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3")
 )
 expect_true(has_random_seed())
 
-expect_equal(fe, as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+expect_equal(fe, as_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"))
 expect_equal(fe, get_ironseed())
 
 # empty arguments initializes with an autoseed
@@ -100,19 +106,19 @@ expect_equal(fe, get_ironseed())
 expect_true(has_random_seed())
 prevseed <- get_random_seed()
 expect_message(ironseed(
-  "aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb",
+  "MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3",
   set_seed = TRUE
 ))
 expect_false(all(get_random_seed() == prevseed))
-expect_message(set_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+expect_message(set_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"))
 
 expect_silent(ironseed(
-  "aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb",
+  "MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3",
   set_seed = TRUE,
   quiet = TRUE
 ))
 expect_silent(set_ironseed(
-  "aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb",
+  "MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3",
   quiet = TRUE
 ))
 
@@ -140,11 +146,11 @@ expect_equal(
 #### Miscellaneous #############################################################
 
 expect_stdout(
-  print(as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+  print(as_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"))
 )
 
 expect_stdout(
-  str(as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb"))
+  str(as_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"))
 )
 
 expect_equal(as_ironseed(1:8), structure(1:8, class = "ironseed_ironseed"))
@@ -204,7 +210,9 @@ cmd <- "cat(as.character(ironseed::ironseed(quiet = TRUE)))"
 
 # Exact seed
 expect_equal(
-  ironseed:::args_ironseed("--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28"),
+  ironseed:::args_ironseed(
+    "--seed=S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28"
+  ),
   as_ironseed("S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28")
 )
 
@@ -214,13 +222,13 @@ expect_null(ironseed:::args_ironseed(character(0L)))
 # One seed
 expect_equal(
   ironseed:::args_ironseed("--seed=1"),
-  as_ironseed("5VRdb2Z6LwS-73RLQRR3kFM-LRLPqnkDei7-UqtqWxvhuZ4")
+  as_ironseed("9ZnnLNUsr2K-5Z9NGurhRx4-kcHU2PVtFL5-aZfzpMvaEZQ")
 )
 
 # Two seeds
 expect_equal(
   ironseed:::args_ironseed(c("--seed", "1", "-seed=2")),
-  as_ironseed("yFMXneM1LRg-bJgWtncCE6Q-6uFP4DThrJ9-tL3c4VBxVqK")
+  as_ironseed("2XkAM5PZfLc-1YEvjQj1XWf-rCmWMaTg1UF-gQpFKRCXLS4")
 )
 
 expect_equal(
@@ -229,7 +237,7 @@ expect_equal(
     "S5ehwMKzbsK-YDmkGN95LCW-MD4H4Gy94Xg-migXDWE3G28",
     "--seed=2"
   )),
-  as_ironseed("tfedys71rDT-NhNQbzrhWDQ-DEpsYSJ6dAN-jHnKGsv1Thh")
+  as_ironseed("Dgp3XQw6juE-rQKY2YMrukB-R2mYZLgAKCA-fjBCYqpXfcS")
 )
 
 expect_equal(
@@ -241,7 +249,7 @@ expect_equal(
     "--",
     "--seed=3"
   )),
-  as_ironseed("yFMXneM1LRg-bJgWtncCE6Q-6uFP4DThrJ9-tL3c4VBxVqK")
+  as_ironseed("2XkAM5PZfLc-1YEvjQj1XWf-rCmWMaTg1UF-gQpFKRCXLS4")
 )
 
 if (at_home()) {
@@ -261,7 +269,8 @@ if (at_home()) {
     stdout = TRUE
   )
   expect_null(attr(res, "status", exact = TRUE))
-  expect_equivalent(res, "yFMXneM1LRg-bJgWtncCE6Q-6uFP4DThrJ9-tL3c4VBxVqK")
+  # NOTE: This may fail if locally installed version has not been updated.
+  expect_equivalent(res, "2XkAM5PZfLc-1YEvjQj1XWf-rCmWMaTg1UF-gQpFKRCXLS4")
 }
 
 #### Cleanup ###################################################################

@@ -27,20 +27,20 @@ expect_false(has_random_seed())
 expect_silent(runif(1))
 
 ## fill_random_seed() supports ironseed or stream input
-one_fe <- create_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
+one_fe <- create_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3")
 one_fe_stream <- ironseed_stream(one_fe)
 expect_message(fill_random_seed(one_fe, quiet = FALSE))
-expect_equal(sample(1000L, 4L), c(897, 834, 696, 863))
+expect_equal(sample(1000L, 4L), c(847, 79, 597, 201))
 expect_silent(fill_random_seed(one_fe_stream, quiet = FALSE))
-expect_equal(sample(1000L, 4L), c(897, 834, 696, 863))
+expect_equal(sample(1000L, 4L), c(847, 79, 597, 201))
 
 ## Reseeding with one_fe will be the same
 expect_message(fill_random_seed(one_fe, quiet = FALSE))
-expect_equal(sample(1000L, 4L), c(897, 834, 696, 863))
+expect_equal(sample(1000L, 4L), c(847, 79, 597, 201))
 
 ## But reseeding with one_fe_stream will differ
 expect_silent(fill_random_seed(one_fe_stream, quiet = FALSE))
-expect_equal(sample(1000L, 4L), c(635, 293, 907, 708))
+expect_equal(sample(1000L, 4L), c(45, 874, 577, 245))
 
 #### Cleanup ###################################################################
 

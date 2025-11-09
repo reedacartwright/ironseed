@@ -11,7 +11,7 @@ expect_silent(f <- ironseed_stream(1L))
 
 expect_equal(
   fe <- f(),
-  as_ironseed("aaLzYxsxyhf-4B9K67L14fH-XZzrm2vU6w5-CHFFPRH8UCb")
+  as_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3")
 )
 
 expect_equal(f(10L), create_seedseq(fe, 10))
@@ -25,13 +25,13 @@ expect_false(has_random_seed())
 
 #### SeedSeq Validation ########################################################
 
-# 100th value produced by default initialized ironseed is -1366525975
+# 100th value produced by default initialized ironseed is 592413702
 expect_silent(fe <- ironseed(NULL, methods = "null", set_seed = FALSE))
-expect_equal(create_seedseq(fe, 100)[100], -1366525975)
+expect_equal(create_seedseq(fe, 100)[100], 592413702)
 
 expect_silent(f <- ironseed_stream(fe))
 invisible(f(99))
-expect_equal(f(1), -1366525975)
+expect_equal(f(1), 592413702)
 
 #### Cleanup ###################################################################
 
