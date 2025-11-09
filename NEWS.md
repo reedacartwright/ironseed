@@ -2,6 +2,10 @@
 
 ## Breaking Changes
 
+* The underlying hash algorithms have been updated to only use odd coefficients,
+  which avoids hashing values with using a coefficient of zero. This does not affect the strongly universal property of the multilinear hash, but it does
+  mean that the coefficient sequence will loop after 2^63 inputs instead of
+  2^64 inputs.
 * `ironseed()` now defaults to initializing `.Random.seed`. Making the default
   depend on whether the seed has been initialized or not ended up being
   counter-intuitive and easy to forget.
