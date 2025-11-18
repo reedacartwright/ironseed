@@ -3,16 +3,17 @@
 ## Breaking Changes
 
 * The underlying hash algorithms have been updated to only use odd coefficients,
-  which avoids hashing values with using a coefficient of zero. This does not affect the strongly universal property of the multilinear hash, but it does
-  mean that the coefficient sequence will loop after 2^63 inputs instead of
-  2^64 inputs.
+  which avoids hashing values using a coefficient of zero. This does not affect
+  the strongly universal property of the multilinear hash, but it does mean
+  that the coefficient sequence will loop after 2^63 inputs instead of 2^64
+  inputs.
 * `ironseed()` now defaults to initializing `.Random.seed`. Making the default
-  depend on whether the seed has been initialized or not ended up being
+  depend on whether the seed has been initialized ended up being
   counter-intuitive and easy to forget.
 * Retrieving the last-used ironseed is no longer done via `ironseed()`. A
   dedicated `get_ironseed()` function is now used for that purpose.
-* `ironseed()` now generates an automatic ironseed and `ironseed(NULL)`
-  generates the 'null' ironseed.
+* `ironseed()` without any arguments now generates an automatic ironseed and
+  `ironseed(NULL)` generates the 'null' ironseed.
 * The return value of `ironseed()` is now always invisible.
 * `set_ironseed()` requires at least one data argument and only uses the `dots`
   method for creating an ironseed.
