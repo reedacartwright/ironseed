@@ -6,7 +6,7 @@ prevent hash coefficients of 0 from being used.
 
 ## Test Environments
 
-* Arch Linux - R 4.5.1 (Local Install)
+* Arch Linux - R 4.5.2 (Local Install)
 * Windows-Latest - Release (GitHub Actions)
 * MacOS-Latest - Release (GitHub Actions)
 * Ubuntu-Latest - Release (GitHub Actions)
@@ -14,7 +14,7 @@ prevent hash coefficients of 0 from being used.
 * Ubuntu-Latest - Oldrel-1 (Github Actions)
 * FreeBSD, OpenBSD, NetBSD, DragonflyBSD (Github Actions)
 * devtools::check_win_devel()
-* rhub::rhub_check()
+* rhub::rhub_check(platforms = rhub::rhub_platforms()$name)
 
 ## R CMD check results
 
