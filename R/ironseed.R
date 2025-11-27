@@ -54,6 +54,7 @@
 #' @param quiet a logical indicating whether to silence messages.
 #' @param methods a character vector.
 #' @param x a string, ironseed, list, or other object
+#' @param salt a scalar integer. Used to vary RNG seeding between applications.
 #'
 #' @returns An ironseed. If `.Random.seed` was initialized, the ironseed used
 #'   will be returned invisibly.
@@ -164,7 +165,8 @@ ironseed <- function(
   ...,
   set_seed = TRUE,
   quiet = FALSE,
-  methods = c("dots", "args", "env", "auto", "null")
+  methods = c("dots", "args", "env", "auto", "null"),
+  salt = 0L
 ) {
   x <- list(...)
 
@@ -195,7 +197,7 @@ ironseed <- function(
   }
 
   if (isTRUE(set_seed)) {
-    fill_random_seed(fe, quiet = quiet)
+    fill_random_seed(fe, quiet = quiet, salt = salt)
     the$ironseed <- fe
   }
 
@@ -204,8 +206,11 @@ ironseed <- function(
 
 #' @export
 #' @rdname ironseed
-set_ironseed <- function(x, ..., quiet = FALSE) {
-  ironseed(x, ..., quiet = quiet, set_seed = TRUE, methods = "dots")
+set_ironseed <- function(x, ..., quiet = FALSE, salt = 0L) {
+  ironseed(x, ...,
+    quiet = quiet, set_seed = TRUE, methods = "dots",
+    salt = salt
+  )
 }
 
 #' @export

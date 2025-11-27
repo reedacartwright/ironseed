@@ -6,6 +6,12 @@
   `ironseed()`. `ironseed(NULL)` still creates the default/null ironseed. This change was made to support package and tools authors who can now easily
   control whether their code defaults to a random or a deterministic ironseed if
   no seeds were passed by a user.
+* `create_seedseq()` now includes a `salt` parameter to vary the generated seed
+  sequence. The generated sequence now depends on both the ironseed and the
+  salt. Package and tools authors can specify a salt constant to generate
+  unique seed sequences even if users reuse ironseeds across applications.
+  A `salt` parameter was also added to several functions that call
+  `create_seedseed()`.
 
 # ironseed 0.3.0
 

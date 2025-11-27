@@ -94,13 +94,13 @@ static const uint64_t IRONSEED_D = 0xf55176215fdee4b6;
 static inline uint64_t init_hash4i_coef(void) { return IRONSEED_A; }
 static inline uint64_t init_hash4o_coef(void) { return IRONSEED_C; }
 
-static inline uint64_t hash4i_coef(uint64_t *m) {
+static inline uint64_t hash4i_coef(uint64_t* m) {
   uint64_t r = *m;
   *m += IRONSEED_B;
   return r;
 }
 
-static inline uint64_t hash4o_coef(uint64_t *m) {
+static inline uint64_t hash4o_coef(uint64_t* m) {
   uint64_t r = *m;
   *m += IRONSEED_D;
   return r;
@@ -117,7 +117,7 @@ static inline uint32_t finalmix(uint64_t u) {
 
 // Initialize an ironseed_hash object. Stores the intermediate values of
 // 8 multilinear hashes as additional values are added to the hash.
-static void init_ironseed_hash(ironseed_hash_t *p) {
+static void init_ironseed_hash(ironseed_hash_t* p) {
   assert(p != NULL);
   p->coef = init_hash4i_coef();
   for(int i = 0; i < 8; ++i) {
@@ -135,36 +135,36 @@ static void init_ironseed_hash(ironseed_hash_t *p) {
 #endif
 
 // Update the intermediate state of each sub-hash.
-static void update_ironseed_hash(ironseed_hash_t *p, uint32_t value) {
+static void update_ironseed_hash(ironseed_hash_t* p, uint32_t value) {
   assert(p != NULL);
   for(int i = 0; i < 8; ++i) {
     p->hashes[i] += hash4i_coef(&p->coef) * value;
   }
 }
 
-static void update_ironseed_hash_ll(ironseed_hash_t *p, uint64_t value) {
+static void update_ironseed_hash_ll(ironseed_hash_t* p, uint64_t value) {
   assert(p != NULL);
   update_ironseed_hash(p, (uint32_t)value);
   update_ironseed_hash(p, (uint32_t)(value >> 32));
 }
 
-static void update_ironseed_hash_d(ironseed_hash_t *p, double value) {
+static void update_ironseed_hash_d(ironseed_hash_t* p, double value) {
   assert(p != NULL);
   uint64_t u;
   memcpy(&u, &value, sizeof(u));
   update_ironseed_hash_ll(p, u);
 }
 
-static void update_ironseed_hash_p(ironseed_hash_t *p, void *value) {
+static void update_ironseed_hash_p(ironseed_hash_t* p, void* value) {
   update_ironseed_hash_ll(p, (uint64_t)((uintptr_t)value));
 }
 
-static void update_ironseed_hash_f(ironseed_hash_t *p, DL_FUNC value) {
+static void update_ironseed_hash_f(ironseed_hash_t* p, DL_FUNC value) {
   update_ironseed_hash_ll(p, (uint64_t)((uintptr_t)value));
 }
 
 static void update_ironseed_hash_v(
-  ironseed_hash_t *p, const void *buffer, size_t len
+  ironseed_hash_t* p, const void* buffer, size_t len
 ) {
   assert(p != NULL);
   assert(buffer != NULL);
@@ -180,7 +180,7 @@ static void update_ironseed_hash_v(
   }
 
   // Turn buffer into an array of integers using little-endian format.
-  const char *b = buffer;
+  const char* b = buffer;
   for(; i + 4 < len; i += 4) {
     uint32_t u;
     memcpy(&u, b + i, 4);
@@ -191,14 +191,14 @@ static void update_ironseed_hash_v(
   update_ironseed_hash(p, htol32(u));
 }
 
-static void update_ironseed_hash_s(ironseed_hash_t *p, const char *s) {
+static void update_ironseed_hash_s(ironseed_hash_t* p, const char* s) {
   if(s == NULL) {
     return;
   }
   update_ironseed_hash_v(p, s, strlen(s));
 }
 
-static void create_ironseed(const ironseed_hash_t *p, ironseed_t *v) {
+static void create_ironseed(const ironseed_hash_t* p, ironseed_t* v) {
   assert(p != NULL);
   assert(v != NULL);
 
@@ -218,14 +218,14 @@ uint64_t pid_entropy(void);
 uint64_t tid_entropy(void);
 uint64_t readcycle_entropy(void);
 uint64_t system_entropy(void);
-void hostname_entropy(char *name, size_t size);
+void hostname_entropy(char* name, size_t size);
 
 // Inspired by ideas from M.E. O'Neill
 // - https://www.pcg-random.org/posts/simple-portable-cpp-seed-entropy.html
 // - https://gist.github.com/imneme/540829265469e673d045
 //
 // TODO: extract entropy from cluster environmental variables like JOB_ID
-static void autofill_ironseed_hash(ironseed_hash_t *p) {
+static void autofill_ironseed_hash(ironseed_hash_t* p) {
   assert(p != NULL);
 
   char buffer[256] = "";
@@ -235,8 +235,8 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
   update_ironseed_hash_s(p, compile_stamp);
 
   // heap and stack randomness
-  void *malloc_addr = malloc(sizeof(int));
-  void *stack_addr = &malloc_addr;
+  void* malloc_addr = malloc(sizeof(int));
+  void* stack_addr = &malloc_addr;
   update_ironseed_hash_p(p, malloc_addr);
   update_ironseed_hash_p(p, stack_addr);
   free(malloc_addr);
@@ -267,7 +267,7 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
   update_ironseed_hash_s(p, buffer);
 
   // Job ID entropy on clusters
-  const char *s;
+  const char* s;
   if((s = getenv("SLURM_JOB_ID")) != NULL) {
     update_ironseed_hash_s(p, s);
     update_ironseed_hash_s(p, getenv("SLURM_JOB_NAME"));
@@ -293,7 +293,7 @@ static void autofill_ironseed_hash(ironseed_hash_t *p) {
 }
 
 static void create_seedseq(
-  const ironseed_t *p, uint64_t *m, unsigned int *u, size_t len
+  const ironseed_t* p, uint32_t salt, uint64_t* m, unsigned int* u, size_t len
 ) {
   assert(p != NULL);
   assert(u != NULL);
@@ -304,6 +304,7 @@ static void create_seedseq(
     for(int j = 0; j < 8; ++j) {
       v += hash4o_coef(m) * p->seed[j];
     }
+    v += hash4o_coef(m) * salt;
     u[i] = finalmix(v);
   }
 }
@@ -388,7 +389,7 @@ SEXP R_auto_ironseed(void) {
   return ret;
 }
 
-SEXP R_create_seedseq(SEXP x, SEXP n, SEXP k) {
+SEXP R_create_seedseq(SEXP x, SEXP n, SEXP salt, SEXP k) {
   union {
     uint64_t u;
     double d;
@@ -407,7 +408,10 @@ SEXP R_create_seedseq(SEXP x, SEXP n, SEXP k) {
 
   SEXP ret = PROTECT(Rf_allocVector(INTSXP, len));
 
-  create_seedseq(&seed, &u.u, (unsigned int *)INTEGER(ret), XLENGTH(ret));
+  create_seedseq(
+    &seed, (uint32_t)Rf_asInteger(salt), &u.u, (unsigned int*)INTEGER(ret),
+    XLENGTH(ret)
+  );
 
   Rf_setAttrib(ret, Rf_install("k"), Rf_ScalarReal(u.d));
 

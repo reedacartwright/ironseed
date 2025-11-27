@@ -25,13 +25,14 @@
 #' @param fe an ironseed or ironseed stream function
 #' @param seed a previous `.Random.seed`
 #' @param quiet a logical indicating whether to silence messages.
+#' @param salt a scalar integer. Used to vary RNG seeding between applications.
 #'
 #' @returns `fill_random_seed()` returns the previous value of `.Random.seed` or
 #' `NULL`.
 #'
 #' @export
 #' @keywords internal
-fill_random_seed <- function(fe, quiet = FALSE) {
+fill_random_seed <- function(fe, quiet = FALSE, salt = 0L) {
   stopifnot(is_ironseed(fe) || is.function(fe))
   if (is_ironseed(fe) && isFALSE(quiet)) {
     msg <- sprintf(
@@ -50,7 +51,7 @@ fill_random_seed <- function(fe, quiet = FALSE) {
 
   # generate a seed sequence of the correct length
   if (is_ironseed(fe)) {
-    seed[-1] <- create_seedseq(fe, length(seed) - 1)
+    seed[-1] <- create_seedseq(fe, length(seed) - 1, salt = salt)
   } else {
     seed[-1] <- fe(length(seed) - 1)
   }

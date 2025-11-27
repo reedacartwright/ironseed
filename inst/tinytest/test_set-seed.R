@@ -30,17 +30,30 @@ expect_silent(runif(1))
 one_fe <- create_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3")
 one_fe_stream <- ironseed_stream(one_fe)
 expect_message(fill_random_seed(one_fe, quiet = FALSE))
-expect_equal(sample(1000L, 4L), c(847, 79, 597, 201))
+expect_equal(sample(1000L, 4L), c(691, 505, 533, 950))
 expect_silent(fill_random_seed(one_fe_stream, quiet = FALSE))
-expect_equal(sample(1000L, 4L), c(847, 79, 597, 201))
+expect_equal(sample(1000L, 4L), c(691, 505, 533, 950))
 
 ## Reseeding with one_fe will be the same
 expect_message(fill_random_seed(one_fe, quiet = FALSE))
-expect_equal(sample(1000L, 4L), c(847, 79, 597, 201))
+expect_equal(sample(1000L, 4L), c(691, 505, 533, 950))
 
 ## But reseeding with one_fe_stream will differ
 expect_silent(fill_random_seed(one_fe_stream, quiet = FALSE))
-expect_equal(sample(1000L, 4L), c(45, 874, 577, 245))
+expect_equal(sample(1000L, 4L), c(262, 207, 935, 99))
+
+## Using a salt changes the results
+expect_message(fill_random_seed(one_fe, quiet = FALSE, salt = 1L))
+expect_equal(sample(1000L, 4L), c(757, 402, 159, 733))
+
+## Salt needs to be included in stream creation
+one_fe_stream <- ironseed_stream(one_fe)
+expect_silent(fill_random_seed(one_fe_stream, quiet = FALSE, salt = 1L))
+expect_equal(sample(1000L, 4L), c(691, 505, 533, 950))
+one_fe_stream <- ironseed_stream(one_fe, salt = 1L)
+expect_silent(fill_random_seed(one_fe_stream, quiet = FALSE))
+expect_equal(sample(1000L, 4L), c(757, 402, 159, 733))
+
 
 #### Cleanup ###################################################################
 

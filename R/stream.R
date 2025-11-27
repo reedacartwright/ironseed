@@ -37,6 +37,8 @@
 #' @inheritParams ironseed
 #' @param n a scalar integer specifying the number of seeds to generate
 #' @param fe an ironseed
+#' @param salt a scalar integer that can be used to vary stream output between
+#' applications
 #'
 #' @returns an integer vector containing 32-bit output seeds. If `n` is missing,
 #' `ironseed_stream()` returns the underlying ironseed.
@@ -47,6 +49,9 @@
 #' # Generate 20 seeds from an ironseed
 #' fe <- ironseed("Experiment", 20251031, 1, set_seed = FALSE)
 #' create_seedseq(fe, 20)
+#'
+#' # Generate 20 seeds from the ironseed using a salt to change results
+#' create_seedseq(fe, 20, salt = 142)
 #'
 #' # Create a function that can be called multiple times to produce seeds
 #' get_seeds <- ironseed_stream("Experiment", 20251031, 1)
@@ -63,16 +68,19 @@
 #' @export
 ironseed_stream <- function(
   ...,
-  methods = c("dots", "args", "env", "auto", "null")
+  methods = c("dots", "args", "env", "auto", "null"),
+  salt = 0L
 ) {
   fe <- ironseed(..., set_seed = FALSE, quiet = TRUE, methods = methods)
   k <- NULL
+  force(salt)
+
   function(n) {
     if (missing(n)) {
       return(fe)
     }
     n <- as.integer(n)
-    z <- create_seedseq0(fe, n, k)
+    z <- create_seedseq0(fe, n, salt, k)
     k <<- attr(z, "k", exact = TRUE)
     c(z) # strip attributes
   }
@@ -80,13 +88,14 @@ ironseed_stream <- function(
 
 #' @export
 #' @rdname ironseed_stream
-create_seedseq <- function(fe, n) {
-  c(create_seedseq0(fe, n, NULL)) # strip attributes
+create_seedseq <- function(fe, n, salt = 0L) {
+  c(create_seedseq0(fe, n, salt, NULL)) # strip attributes
 }
 
-create_seedseq0 <- function(fe, n, k = NULL) {
+create_seedseq0 <- function(fe, n, salt = 0L, k = NULL) {
   fe <- as_ironseed(fe)
   n <- as.integer(n)
+  salt <- as.integer(salt)
   stopifnot(length(unclass(fe)) == 8L)
-  .Call(R_create_seedseq, fe, n, k)
+  .Call(R_create_seedseq, fe, n, salt, k)
 }

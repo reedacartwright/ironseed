@@ -25,13 +25,19 @@ expect_false(has_random_seed())
 
 #### SeedSeq Validation ########################################################
 
-# 100th value produced by default initialized ironseed is 592413702
+# 100th value produced by null ironseed is 482098510
 expect_silent(fe <- ironseed(NULL, methods = "null", set_seed = FALSE))
-expect_equal(create_seedseq(fe, 100)[100], 592413702)
+expect_equal(create_seedseq(fe, 100)[100], 482098510)
 
 expect_silent(f <- ironseed_stream(fe))
 invisible(f(99))
-expect_equal(f(1), 592413702)
+expect_equal(f(1), 482098510)
+
+# 100th value produced by null ironseed with salt 1L is 1537975129
+expect_equal(create_seedseq(fe, 100, salt = 1L)[100], 1537975129)
+expect_silent(f <- ironseed_stream(fe, salt = 1L))
+invisible(f(99))
+expect_equal(f(1), 1537975129)
 
 #### Cleanup ###################################################################
 

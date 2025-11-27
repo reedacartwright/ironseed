@@ -5,14 +5,21 @@
 \alias{create_seedseq}
 \title{Ironseed output seed sequences}
 \usage{
-ironseed_stream(..., methods = c("dots", "args", "env", "auto", "null"))
+ironseed_stream(
+  ...,
+  methods = c("dots", "args", "env", "auto", "null"),
+  salt = 0L
+)
 
-create_seedseq(fe, n)
+create_seedseq(fe, n, salt = 0L)
 }
 \arguments{
 \item{...}{objects}
 
 \item{methods}{a character vector.}
+
+\item{salt}{a scalar integer that can be used to vary stream output between
+applications}
 
 \item{fe}{an ironseed}
 
@@ -37,6 +44,9 @@ a seed sequence iteratively.
 # Generate 20 seeds from an ironseed
 fe <- ironseed("Experiment", 20251031, 1, set_seed = FALSE)
 create_seedseq(fe, 20)
+
+# Generate 20 seeds from the ironseed using a salt to change results
+create_seedseq(fe, 20, salt = 142)
 
 # Create a function that can be called multiple times to produce seeds
 get_seeds <- ironseed_stream("Experiment", 20251031, 1)

@@ -7,7 +7,7 @@
 \alias{set_random_seed}
 \title{Initialize .Random.seed}
 \usage{
-fill_random_seed(fe, quiet = FALSE)
+fill_random_seed(fe, quiet = FALSE, salt = 0L)
 
 has_random_seed()
 
@@ -19,6 +19,8 @@ set_random_seed(seed)
 \item{fe}{an ironseed or ironseed stream function}
 
 \item{quiet}{a logical indicating whether to silence messages.}
+
+\item{salt}{a scalar integer. Used to vary RNG seeding between applications.}
 
 \item{seed}{a previous \code{.Random.seed}}
 }

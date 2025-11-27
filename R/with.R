@@ -43,12 +43,13 @@
 with_ironseed <- function(
   seeds,
   code,
-  quiet = FALSE
+  quiet = FALSE,
+  salt = 0L
 ) {
   old_ironseed <- the$ironseed
   seeds <- simplify_list(list(seeds))
   fe <- create_ironseed(seeds)
-  old_seed <- fill_random_seed(fe, quiet = quiet)
+  old_seed <- fill_random_seed(fe, quiet = quiet, salt = salt)
   the$ironseed <- fe
   on.exit({
     the$ironseed <- old_ironseed
@@ -63,13 +64,14 @@ local_ironseed <- function(
   seeds,
   ...,
   quiet = FALSE,
+  salt = 0L,
   .local_envir = parent.frame()
 ) {
   old_ironseed <- the$ironseed
   seeds <- simplify_list(list(seeds))
   seeds <- c(seeds, list(...))
   fe <- create_ironseed(seeds)
-  old_seed <- fill_random_seed(fe, quiet = quiet)
+  old_seed <- fill_random_seed(fe, quiet = quiet, salt = salt)
   the$ironseed <- fe
   defer(envir = .local_envir, {
     the$ironseed <- old_ironseed

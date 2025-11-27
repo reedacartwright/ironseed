@@ -16,10 +16,11 @@ ironseed(
   ...,
   set_seed = TRUE,
   quiet = FALSE,
-  methods = c("dots", "args", "env", "auto", "null")
+  methods = c("dots", "args", "env", "auto", "null"),
+  salt = 0L
 )
 
-set_ironseed(x, ..., quiet = FALSE)
+set_ironseed(x, ..., quiet = FALSE, salt = 0L)
 
 get_ironseed()
 
@@ -43,6 +44,8 @@ parse_ironseed_str(x)
 \item{quiet}{a logical indicating whether to silence messages.}
 
 \item{methods}{a character vector.}
+
+\item{salt}{a scalar integer. Used to vary RNG seeding between applications.}
 
 \item{x}{a string, ironseed, list, or other object}
 }

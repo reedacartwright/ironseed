@@ -7,9 +7,15 @@
 \alias{local_ironseed_stream}
 \title{Temporary ironseeds}
 \usage{
-with_ironseed(seeds, code, quiet = FALSE)
+with_ironseed(seeds, code, quiet = FALSE, salt = 0L)
 
-local_ironseed(seeds, ..., quiet = FALSE, .local_envir = parent.frame())
+local_ironseed(
+  seeds,
+  ...,
+  quiet = FALSE,
+  salt = 0L,
+  .local_envir = parent.frame()
+)
 
 with_ironseed_stream(func, code)
 
@@ -22,6 +28,8 @@ ironseed.}
 \item{code}{Code to execute in the temporary environment.}
 
 \item{quiet}{a logical indicating whether to silence messages.}
+
+\item{salt}{a scalar integer. Used to vary RNG seeding between applications.}
 
 \item{...}{Additional objects.}
 
