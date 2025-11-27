@@ -38,9 +38,15 @@ one_fe <- structure(
 )
 
 # An ironseed with no data has a default value.
-expect_equal(create_ironseed(list(list())), null_fe)
 expect_equal(create_ironseed(list(NULL)), null_fe)
 expect_equal(create_ironseed(list(NULL, NULL)), null_fe)
+expect_equal(create_ironseed(list(list(), NULL)), null_fe)
+expect_equal(create_ironseed(list(list(), list())), null_fe)
+
+# The default value is skipped if an empty list is passed instead of NULL
+expect_null(create_ironseed(list(list())))
+expect_null(create_ironseed(list(integer())))
+expect_null(create_ironseed(list(character())))
 
 # A ironseed string is parsed directly.
 expect_equal(
@@ -148,20 +154,6 @@ expect_equal(
 expect_equal(
   create_ironseed(list(c(0L, 1072693248L), c(0L, 0L))),
   as_ironseed("5kihT3aBu6h-NVHkGTcPeHg-LgMX9weGRhj-quuja3RezrB")
-)
-
-# Empty input
-expect_equal(
-  create_ironseed(list(list())),
-  as_ironseed("14KyPGBJUY7-ieCzQZuoS4H-oRUW4QornA9-eCkczSZruUL")
-)
-expect_equal(
-  create_ironseed(list(character(0L))),
-  as_ironseed("14KyPGBJUY7-ieCzQZuoS4H-oRUW4QornA9-eCkczSZruUL")
-)
-expect_equal(
-  create_ironseed(list(integer(0L))),
-  as_ironseed("14KyPGBJUY7-ieCzQZuoS4H-oRUW4QornA9-eCkczSZruUL")
 )
 
 # Empty strings

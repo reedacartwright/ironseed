@@ -71,24 +71,25 @@
 #' raised.
 #'
 #' - dots: Use the values passed as `...` to construct an ironseed. Most atomic
-#' types and lists of atomic types can be used. `ironseed()` and
-#' `ironseed(NULL)` are considered empty inputs and the next method will be
-#' tried.
+#'   types and lists of atomic types can be used. `ironseed(NULL)` constructs a
+#'   default ironseed from no data (equivalent to the "null" method below).
+#'   `ironseed()`, `ironseed(list())`, `ironseed(character())`, etc. are
+#'   considered empty inputs and the next method will be tried.
 #'
 #' - args: Use command line arguments to construct an ironseed. Any arguments
-#' that begins with `--seed=` or `-seed=` will be used as strings, after the
-#' argument names are trimmed. If no matching arguments are found, the next
-#' method will be tried.
+#'   that begins with `--seed=` or `-seed=` will be used as strings, after the
+#'   argument names are trimmed. If no matching arguments are found, the next
+#'   method will be tried.
 #'
 #' - env: Use the value of the environmental variable "IRONSEED" as a scalar
-#' character to construct an ironseed. If this variable doesn't exist or is set
-#' to an empty string, the next method will be tried.
+#'   character to construct an ironseed. If this variable doesn't exist or is
+#'   set to an empty string, the next method will be tried.
 #'
 #' - auto: Use multiple sources of entropy from the system to generate an
-#' ironseed. This method always constructs an ironseed.
+#'   ironseed. This method always constructs an ironseed.
 #'
 #' - null: Generate a "default" ironseed using no input. This method always
-#' constructs an ironseed.
+#'   constructs an ironseed.
 #'
 #' If the input sequence has one value and it is an ironseed object, it is used
 #' as is. If the input sequence is a scalar character that matches an ironseed
@@ -146,6 +147,12 @@
 #' # Generate an ironseed automatically and force initialize
 #' ironseed::ironseed(set_seed = TRUE)
 #'
+#' # Generate a deterministic ironseed when user data is missing
+#' ironseed::ironseed(NULL)
+#'
+#' # Generate a random ironseed when user data is missing
+#' ironseed::ironseed(character()) # list(), integer(), etc. also work.
+#'
 #' # Return last used ironseed.
 #' ironseed::get_ironseed()
 #'
@@ -171,8 +178,7 @@ ironseed <- function(
 
   fe <- NULL
   for (method in methods) {
-    fe <- switch(
-      method,
+    fe <- switch(method,
       dots = create_ironseed(x),
       args = args_ironseed(),
       env = env_ironseed(),
@@ -213,6 +219,8 @@ get_ironseed <- function() {
 create_ironseed <- function(x) {
   n <- length(x)
   if (n == 0L) {
+    NULL
+  } else if (n == 1L && !is.null(x[[1]]) && length(x[[1]]) == 0L) {
     NULL
   } else if (n == 1L && is_ironseed2(x[[1]])) {
     as_ironseed(x[[1]])

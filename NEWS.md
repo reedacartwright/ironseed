@@ -1,5 +1,12 @@
 # ironseed (development version)
 
+## Breaking Changes
+
+* `ironseed(list())`, `ironseed(integer())`, etc. are now equivalent to
+  `ironseed()`. `ironseed(NULL)` still creates the default/null ironseed. This change was made to support package and tools authors who can now easily
+  control whether their code defaults to a random or a deterministic ironseed if
+  no seeds were passed by a user.
+
 # ironseed 0.3.0
 
 ## Breaking Changes

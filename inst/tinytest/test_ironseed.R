@@ -44,10 +44,11 @@ expect_equal(
   ironseed(list(list(1:5, 6:10), 1.0, LETTERS, FALSE), quiet = TRUE),
   create_ironseed(list(1:10, 1.0, LETTERS, FALSE)),
 )
-expect_equal(
-  ironseed(list(), quiet = TRUE),
-  create_ironseed(list(list()))
-)
+
+# Passing NULL and passing list() are different
+expect_false(all(
+  ironseed(list(), quiet = TRUE) == ironseed(NULL, quiet = TRUE)
+))
 
 # Two auto-ironseeds are different
 expect_false(all(
@@ -132,6 +133,15 @@ expect_equal(
   ironseed(quiet = TRUE),
   as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
 )
+expect_equal(
+  ironseed(list(), quiet = TRUE),
+  as_ironseed("rBQSjhjYv1d-z8dfMATEicf-sw1NSWAvVDi-bQaKSKKQmz1")
+)
+expect_equal(
+  ironseed(NULL, quiet = TRUE),
+  as_ironseed("14KyPGBJUY7-ieCzQZuoS4H-oRUW4QornA9-eCkczSZruUL")
+)
+
 Sys.setenv(IRONSEED = "IRONSEED")
 expect_equal(
   ironseed(quiet = TRUE),
@@ -140,7 +150,7 @@ expect_equal(
 Sys.unsetenv("IRONSEED")
 expect_equal(
   ironseed(methods = c("env", "null"), quiet = TRUE),
-  create_ironseed(list(list()))
+  create_ironseed(list(NULL))
 )
 
 #### Miscellaneous #############################################################

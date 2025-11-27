@@ -84,16 +84,17 @@ until it can generate an ironseed. If no method works, an error will be
 raised.
 \itemize{
 \item dots: Use the values passed as \code{...} to construct an ironseed. Most atomic
-types and lists of atomic types can be used. \code{ironseed()} and
-\code{ironseed(NULL)} are considered empty inputs and the next method will be
-tried.
+types and lists of atomic types can be used. \code{ironseed(NULL)} constructs a
+default ironseed from no data (equivalent to the "null" method below).
+\code{ironseed()}, \code{ironseed(list())}, \code{ironseed(character())}, etc. are
+considered empty inputs and the next method will be tried.
 \item args: Use command line arguments to construct an ironseed. Any arguments
 that begins with \verb{--seed=} or \verb{-seed=} will be used as strings, after the
 argument names are trimmed. If no matching arguments are found, the next
 method will be tried.
 \item env: Use the value of the environmental variable "IRONSEED" as a scalar
-character to construct an ironseed. If this variable doesn't exist or is set
-to an empty string, the next method will be tried.
+character to construct an ironseed. If this variable doesn't exist or is
+set to an empty string, the next method will be tried.
 \item auto: Use multiple sources of entropy from the system to generate an
 ironseed. This method always constructs an ironseed.
 \item null: Generate a "default" ironseed using no input. This method always
@@ -136,6 +137,12 @@ ironseed::ironseed("Experiment", 20251031, 1)
 
 # Generate an ironseed automatically and force initialize
 ironseed::ironseed(set_seed = TRUE)
+
+# Generate a deterministic ironseed when user data is missing
+ironseed::ironseed(NULL)
+
+# Generate a random ironseed when user data is missing
+ironseed::ironseed(character()) # list(), integer(), etc. also work.
 
 # Return last used ironseed.
 ironseed::get_ironseed()
