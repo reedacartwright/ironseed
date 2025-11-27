@@ -11,7 +11,7 @@
   salt. Package and tools authors can specify a salt constant to generate
   unique seed sequences even if users reuse ironseeds across applications.
   A `salt` parameter was also added to several functions that call
-  `create_seedseed()`.
+  `create_seedseq()`.
 
 # ironseed 0.3.0
 
