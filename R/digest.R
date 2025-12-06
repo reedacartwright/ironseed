@@ -48,7 +48,7 @@ digest <- function(
 ) {
   if (isTRUE(serialize)) {
     object <- serialize(object,
-      connection = NULL, version = 2L, ascii = ascii,
+      connection = NULL, version = 3L, ascii = ascii,
       xdr = xdr
     )
   }
