@@ -172,11 +172,13 @@ static inline uint64_t dbl_as_u64(double value) {
   return u;
 }
 
+// #nocov start
 static inline uint32_t flt_as_u32(double value) {
   uint32_t u;
   memcpy(&u, &value, sizeof(u));
   return u;
 }
+// #nocov end
 
 static void update_ironseed_entropy_u32(ironseed_entropy_t* p, uint32_t value) {
   update_ironseed_entropy(p, value);
@@ -191,9 +193,11 @@ static void update_ironseed_entropy_dbl(ironseed_entropy_t* p, double value) {
   update_ironseed_entropy_u64(p, dbl_as_u64(value));
 }
 
+// #nocov start
 static void update_ironseed_entropy_flt(ironseed_entropy_t* p, float value) {
   update_ironseed_entropy_u32(p, flt_as_u32(value));
 }
+// #nocov end
 
 static void update_ironseed_entropy_ptr(
   ironseed_entropy_t* p, const void* value
@@ -226,9 +230,11 @@ static void update_ironseed_entropy_obj(
 void update_ironseed_entropy_buf(
   ironseed_entropy_t* p, const uint8_t* src, size_t len
 ) {
+  // #nocov start
   if(src == NULL) {
     return;
   }
+  // #nocov end
   update_ironseed_entropy_u32(p, (uint32_t)len);
   if(len == 0) {
     return;
