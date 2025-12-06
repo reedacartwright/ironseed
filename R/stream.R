@@ -72,7 +72,7 @@ ironseed_stream <- function(
   salt = 0L
 ) {
   fe <- ironseed(..., set_seed = FALSE, quiet = TRUE, methods = methods)
-  k <- NULL
+  m <- NULL
   force(salt)
 
   function(n) {
@@ -80,8 +80,8 @@ ironseed_stream <- function(
       return(fe)
     }
     n <- as.integer(n)
-    z <- create_seedseq0(fe, n, salt, k)
-    k <<- attr(z, "k", exact = TRUE)
+    z <- create_seedseq0(fe, n, salt, m)
+    m <<- attr(z, "m", exact = TRUE)
     c(z) # strip attributes
   }
 }
@@ -92,10 +92,10 @@ create_seedseq <- function(fe, n, salt = 0L) {
   c(create_seedseq0(fe, n, salt, NULL)) # strip attributes
 }
 
-create_seedseq0 <- function(fe, n, salt = 0L, k = NULL) {
+create_seedseq0 <- function(fe, n, salt = 0L, m = NULL) {
   fe <- as_ironseed(fe)
   n <- as.integer(n)
   salt <- as.integer(salt)
   stopifnot(length(unclass(fe)) == 8L)
-  .Call(R_create_seedseq, fe, n, salt, k)
+  .Call(R_create_seedseq, fe, n, salt, m)
 }

@@ -111,27 +111,25 @@ static inline uint32_t finalmix(uint64_t u) {
   return m;
 }
 
-static inline void digest_entropy(
-  uint32_t* dest, const uint64_t* src, size_t n, uint64_t m, uint64_t c
+static inline uint64_t digest_entropy(
+  uint32_t* dest, const uint64_t* src, size_t n, uint64_t u, uint64_t m,
+  uint64_t c
 ) {
   assert(dest != NULL);
   assert(src != NULL);
 
-  // If the last valued hashed was 0, then it did not affect the hash
-  // value. It did affect the coefficients. Append one extra value to
-  // the end before we finalize the hash.
+  // If the last valued hashed was 0, then it did not affect the hash value. It
+  // did affect the coefficients. Append one extra value to the end before we
+  // finalize the hash. This extra value is usually 0, 1, or a salt.
+  // finalmix() is used here to increase the avalanche behavior of the result;
+  // however it breaks the strongly universal property of the digest. If this
+  // property is desired, removing this mix and mix pairs of values in dest with
+  // the variant 13 mixer.
   for(size_t i = 0; i < n; ++i) {
-    dest[i] = finalmix(src[i] + m);
+    dest[i] = finalmix(src[i] + u * m);
     m += c;
   }
-}
-
-static inline uint64_t init_hash4o_coef(void) { return IRONSEED_B0; }
-
-static inline uint64_t hash4o_coef(uint64_t* m) {
-  uint64_t r = *m;
-  *m += IRONSEED_B1;
-  return r;
+  return m;
 }
 
 // Initialize an ironseed_entropy object. Stores the intermediate values of
@@ -236,13 +234,15 @@ static void create_ironseed(ironseed_t* dest, const ironseed_entropy_t* src) {
   assert(dest != NULL);
   assert(src != NULL);
 
-  constexpr size_t n = sizeof(dest->seed) / sizeof(uint32_t);
+  const size_t n = sizeof(dest->seed) / sizeof(uint32_t);
   static_assert(
-    n * sizeof(uint64_t) == sizeof(src->accumulator),
+    sizeof(src->accumulator) == 2 * sizeof(dest->seed),
     "src and dest must have the same number of elements"
   );
 
-  digest_entropy(dest->seed, src->accumulator, n, src->multiplier, IRONSEED_A1);
+  digest_entropy(
+    dest->seed, src->accumulator, n, 1, src->multiplier, IRONSEED_A1
+  );
 }
 
 // defined in compat.c
@@ -257,7 +257,6 @@ void hostname_entropy(char* name, size_t size);
 // - https://www.pcg-random.org/posts/simple-portable-cpp-seed-entropy.html
 // - https://gist.github.com/imneme/540829265469e673d045
 //
-// TODO: extract entropy from cluster environmental variables like JOB_ID
 static void update_ironseed_entropy_sys(ironseed_entropy_t* p) {
   assert(p != NULL);
 
@@ -325,21 +324,25 @@ static void update_ironseed_entropy_sys(ironseed_entropy_t* p) {
   }
 }
 
-static void create_seedseq(
-  const ironseed_t* p, uint32_t salt, uint64_t* m, unsigned int* u, size_t len
+static uint64_t create_seedseq(
+  unsigned int* dest, const ironseed_t* src, size_t n, uint64_t m, uint64_t c,
+  uint32_t salt
 ) {
-  assert(p != NULL);
-  assert(u != NULL);
-  assert(m != NULL);
+  assert(dest != NULL);
+  assert(src != NULL);
 
-  for(size_t i = 0; i < len; ++i) {
-    uint64_t v = hash4o_coef(m);
-    for(int j = 0; j < 8; ++j) {
-      v += hash4o_coef(m) * p->seed[j];
+  // This code is more complicated than it needs to be. However, I am
+  // intentionally using the accumulate entropy function here, which will be
+  // optimized way.
+  for(size_t i = 0; i < n; ++i) {
+    uint64_t v = 0;
+    m = accumulate_entropy(&v, 1, 1, m, c);
+    for(int j = 0; j < sizeof(src->seed) / sizeof(uint32_t); ++j) {
+      m = accumulate_entropy(&v, 1, src->seed[j], m, c);
     }
-    v += hash4o_coef(m) * salt;
-    u[i] = finalmix(v);
+    m = digest_entropy(&dest[i], &v, 1, salt, m, c);
   }
+  return m;
 }
 
 SEXP R_create_ironseed(SEXP x) {
@@ -424,16 +427,16 @@ SEXP R_auto_ironseed(void) {
   return ret;
 }
 
-SEXP R_create_seedseq(SEXP x, SEXP n, SEXP salt, SEXP k) {
+SEXP R_create_seedseq(SEXP x, SEXP n, SEXP salt, SEXP m) {
   union {
     uint64_t u;
     double d;
-  } u = {init_hash4o_coef()};
+  } mm = {IRONSEED_B0};
 
   int len = Rf_asInteger(n);
 
-  if(!Rf_isNull(k)) {
-    u.d = Rf_asReal(k);
+  if(!Rf_isNull(m)) {
+    mm.d = Rf_asReal(m);
   }
 
   ironseed_t seed;
@@ -443,12 +446,12 @@ SEXP R_create_seedseq(SEXP x, SEXP n, SEXP salt, SEXP k) {
 
   SEXP ret = PROTECT(Rf_allocVector(INTSXP, len));
 
-  create_seedseq(
-    &seed, (uint32_t)Rf_asInteger(salt), &u.u, (unsigned int*)INTEGER(ret),
-    XLENGTH(ret)
+  mm.u = create_seedseq(
+    (unsigned int*)INTEGER(ret), &seed, XLENGTH(ret), mm.u, IRONSEED_B1,
+    (uint32_t)Rf_asInteger(salt)
   );
 
-  Rf_setAttrib(ret, Rf_install("k"), Rf_ScalarReal(u.d));
+  Rf_setAttrib(ret, Rf_install("m"), Rf_ScalarReal(mm.d));
 
   UNPROTECT(1);
   return ret;
