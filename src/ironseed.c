@@ -101,7 +101,7 @@ static inline uint32_t finalmix(uint64_t u) {
 // u = 32-bit input values that are being hashed
 
 [[nodiscard]] static inline uint64_t accumulate_entropy(
-  uint64_t* dest, size_t n, uint64_t u, uint64_t m, uint64_t c
+  uint64_t* dest, size_t n, uint32_t u, uint64_t m, uint64_t c
 ) {
   assert(dest != NULL);
   for(size_t i = 0; i < n; ++i) {
@@ -112,7 +112,7 @@ static inline uint32_t finalmix(uint64_t u) {
 }
 
 static inline uint64_t digest_entropy(
-  uint32_t* dest, const uint64_t* src, size_t n, uint64_t u, uint64_t m,
+  uint32_t* dest, const uint64_t* src, size_t n, uint32_t u, uint64_t m,
   uint64_t c
 ) {
   assert(dest != NULL);
