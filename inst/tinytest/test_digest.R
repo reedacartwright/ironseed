@@ -22,6 +22,9 @@ expect_equal(digest(zero, 10, serialize = FALSE), msg_zero10)
 expect_equal(digest(hund, 100, serialize = FALSE)[100], msg_hund100_100)
 expect_equal(digest(hundbe, 100, serialize = FALSE)[100], msg_hundbe100_100)
 
+expect_equal(digest("test", serialize = FALSE), 1762891713L)
+expect_equal(digest(charToRaw("test"), serialize = FALSE), 1762891713L)
+
 hund_obj <- serialize(100L,
   connection = NULL, version = 3L, ascii = FALSE,
   xdr = FALSE
