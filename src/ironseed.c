@@ -102,7 +102,8 @@ static inline uint32_t finalmix(uint64_t u) {
 // m = buffer of 64-bit unsigned random values
 // u = 32-bit input values that are being hashed
 
-[[nodiscard]] static inline uint64_t accumulate_entropy(
+/* [[nodiscard]] */
+static inline uint64_t accumulate_entropy(
   uint64_t* dest, size_t n, uint32_t u, uint64_t m, uint64_t c
 ) {
   assert(dest != NULL);
