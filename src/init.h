@@ -13,4 +13,6 @@ SEXP R_base58_decode64(SEXP x);
 
 SEXP R_ironseed_config(void);
 
+SEXP R_create_digests(SEXP x, SEXP n, SEXP salt);
+
 #endif

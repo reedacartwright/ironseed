@@ -75,7 +75,7 @@ typedef struct ironseed {
  *     IntegerString[NextPrime[RandomInteger[{0, 2^64-1}]], 16]
  *
  * A0 is a generated prime and A1 is a generated primes multiplied by
- * two. Constants B0 and B1 were similarly constructed.
+ * two. Constants B0, B1, C0, and C1 were similarly constructed.
  *
  * These constants are used to setup two Weyl sequences that are always odd and
  * importantly never zero.
@@ -84,6 +84,8 @@ static const uint64_t IRONSEED_A0 = 0xc9f736a1a00d1f5f;
 static const uint64_t IRONSEED_A1 = 0x1044d9bc1bd04d7e;
 static const uint64_t IRONSEED_B0 = 0x278abb429678dd43;
 static const uint64_t IRONSEED_B1 = 0xf55176215fdee4b6;
+static const uint64_t IRONSEED_C0 = 0x8ff2ee4eda836d2b;
+static const uint64_t IRONSEED_C1 = 0xd6ac4395f26528ca;
 
 // Adapted from mix32 of Java's SplittableRandom algorithm
 // This is variant 4 of Stafford's mixing algorithms.
@@ -120,7 +122,9 @@ static inline uint64_t digest_entropy(
 
   // If the last valued hashed was 0, then it did not affect the hash value. It
   // did affect the coefficients. Append one extra value to the end before we
-  // finalize the hash. This extra value is usually 0, 1, or a salt.
+  // finalize the hash. This extra value is usually 0 (constant input lengths),
+  // 1 (variable input lengths), or a salt.
+  //
   // finalmix() is used here to increase the avalanche behavior of the result;
   // however it breaks the strongly universal property of the digest. If this
   // property is desired, removing this mix and mix pairs of values in dest with
@@ -161,6 +165,18 @@ static void update_ironseed_entropy(ironseed_entropy_t* p, uint32_t value) {
 #define htol32(x) byteswap32(x)
 #endif
 
+static inline uint64_t dbl_as_u64(double value) {
+  uint64_t u;
+  memcpy(&u, &value, sizeof(u));
+  return u;
+}
+
+static inline uint32_t flt_as_u32(double value) {
+  uint32_t u;
+  memcpy(&u, &value, sizeof(u));
+  return u;
+}
+
 static void update_ironseed_entropy_u32(ironseed_entropy_t* p, uint32_t value) {
   update_ironseed_entropy(p, value);
 }
@@ -171,15 +187,11 @@ static void update_ironseed_entropy_u64(ironseed_entropy_t* p, uint64_t value) {
 }
 
 static void update_ironseed_entropy_dbl(ironseed_entropy_t* p, double value) {
-  uint64_t u;
-  memcpy(&u, &value, sizeof(u));
-  update_ironseed_entropy_u64(p, u);
+  update_ironseed_entropy_u64(p, dbl_as_u64(value));
 }
 
 static void update_ironseed_entropy_flt(ironseed_entropy_t* p, float value) {
-  uint32_t u;
-  memcpy(&u, &value, sizeof(u));
-  update_ironseed_entropy_u32(p, u);
+  update_ironseed_entropy_u32(p, flt_as_u32(value));
 }
 
 static void update_ironseed_entropy_ptr(
@@ -454,5 +466,54 @@ SEXP R_create_seedseq(SEXP x, SEXP n, SEXP salt, SEXP m) {
   Rf_setAttrib(ret, Rf_install("m"), Rf_ScalarReal(mm.d));
 
   UNPROTECT(1);
+  return ret;
+}
+
+SEXP R_create_digests(SEXP x, SEXP n, SEXP salt) {
+  int ret_len = Rf_asInteger(n);
+  int nsalt = Rf_asInteger(salt);
+
+  size_t dat_len;
+  const uint8_t* dat;
+
+  // x is raw or a string or can be converted to a string
+  if(TYPEOF(x) == RAWSXP) {
+    dat = (const uint8_t*)RAW_RO(x);
+    dat_len = Rf_xlength(x);
+  } else {
+    const char* s = Rf_translateCharUTF8(Rf_asChar(x));
+    dat = (const uint8_t*)s;
+    dat_len = strlen(s);
+  }
+
+  // Allocate and initialize entropy accumulator
+  SEXP work = PROTECT(Rf_allocVector(REALSXP, ret_len));
+  uint64_t* pwork = (uint64_t*)REAL(work);
+  memset(pwork, 0, sizeof(uint64_t) * ret_len);
+  uint64_t m = accumulate_entropy(pwork, ret_len, 1, IRONSEED_C0, IRONSEED_C1);
+
+  // Include the length of the input in the accumulator
+  m = accumulate_entropy(pwork, ret_len, (uint32_t)dat_len, m, IRONSEED_C1);
+
+  // Hash input as 32-bit blocks
+  size_t i = 0;
+  for(; i + 4 < dat_len; i += 4) {
+    uint32_t u;
+    memcpy(&u, dat, sizeof(u));
+    m = accumulate_entropy(pwork, ret_len, htol32(u), m, IRONSEED_C1);
+    dat += 4;
+  }
+  // Hash remainder.
+  uint32_t u = 0;
+  memcpy(&u, dat, dat_len - i);
+  m = accumulate_entropy(pwork, ret_len, htol32(u), m, IRONSEED_C1);
+
+  // Create digests.
+  SEXP ret = PROTECT(Rf_allocVector(INTSXP, ret_len));
+  digest_entropy(
+    (uint32_t*)INTEGER(ret), pwork, ret_len, nsalt, m, IRONSEED_C1
+  );
+
+  UNPROTECT(2);
   return ret;
 }
