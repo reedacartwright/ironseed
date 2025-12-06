@@ -42,9 +42,15 @@
 #' [create_seedseq].
 #'
 #' @export
-digest <- function(object, n = 1L, salt = 1L, serialize = TRUE, ascii = FALSE, xdr = FALSE) {
+digest <- function(
+  object, n = 1L, salt = 1L, serialize = TRUE, ascii = FALSE,
+  xdr = FALSE
+) {
   if (isTRUE(serialize)) {
-    object <- serialize(object, connection = NULL, ascii = ascii, xdr = xdr)
+    object <- serialize(object,
+      connection = NULL, version = 2L, ascii = ascii,
+      xdr = xdr
+    )
   }
 
   n <- as.integer(n)
