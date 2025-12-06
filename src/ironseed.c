@@ -202,12 +202,12 @@ static void update_ironseed_entropy_obj(
   for(; i + 4 < len; i += 4) {
     uint32_t u;
     memcpy(&u, buf, sizeof(u));
-    update_ironseed_entropy_u32(p, u);
+    update_ironseed_entropy_u32(p, htol32(u));
     buf += 4;
   }
   uint32_t u = 0;
   memcpy(&u, buf, len - i);
-  update_ironseed_entropy_u32(p, u);
+  update_ironseed_entropy_u32(p, htol32(u));
 }
 
 void update_ironseed_entropy_buf(
