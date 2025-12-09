@@ -30,11 +30,11 @@
 #include <stdint.h>
 #include <string.h>
 
-const char *base58_alphabet =
+const char* base58_alphabet =
   "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
 // buffer must be at least 12 bytes long, including the null terminator
-static void base58_encode64(uint64_t u, char *buffer) {
+static void base58_encode64(uint64_t u, char* buffer) {
   memset(buffer, base58_alphabet[0], 11);
   buffer[11] = '\0';
   for(int i = 0; i < 11 && u != 0; ++i) {
@@ -65,7 +65,7 @@ inline static int base58_decode_char(char c) {
   return base58_array[(unsigned char)(c)];
 }
 
-static uint64_t base58_decode64(const char *buffer) {
+static uint64_t base58_decode64(const char* buffer) {
   uint64_t u = 0;
   for(size_t n = strlen(buffer); n > 0; --n) {
     u = u * 58 + base58_decode_char(buffer[n - 1]);
@@ -92,7 +92,7 @@ SEXP R_base58_decode64(SEXP x) {
   SEXP ret = PROTECT(Rf_allocVector(REALSXP, XLENGTH(x)));
 
   for(R_xlen_t i = 0; i < XLENGTH(x); ++i) {
-    const char *s = Rf_translateCharUTF8(STRING_ELT(x, i));
+    const char* s = Rf_translateCharUTF8(STRING_ELT(x, i));
     uint64_t u = base58_decode64(s);
     memcpy(&REAL(ret)[i], &u, sizeof(double));
   }

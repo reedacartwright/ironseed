@@ -59,7 +59,7 @@
 
 #include "config.h"
 
-static uint64_t timespec_to_u64(const struct timespec *ts) {
+static uint64_t timespec_to_u64(const struct timespec* ts) {
   uint64_t u = ts->tv_sec;
   u *= 1000000000;
   u += ts->tv_nsec;
@@ -109,8 +109,8 @@ static uint64_t system_entropy_once(void) {
     uint32_t h[2];
   } ret = {0};
 #if defined(_WIN32)
-  rand_s((unsigned int *)&ret.h[0]);
-  rand_s((unsigned int *)&ret.h[1]);
+  rand_s((unsigned int*)&ret.h[0]);
+  rand_s((unsigned int*)&ret.h[1]);
 #elif defined(HAS_ARC4RANDOM)
   ret.h[0] = arc4random();
   ret.h[1] = arc4random();
@@ -157,7 +157,7 @@ uint64_t readcycle_entropy(void) {
 #endif
 }
 
-void hostname_entropy(char *name, size_t size) {
+void hostname_entropy(char* name, size_t size) {
   // #nocov start
   if(name == NULL || size == 0) {
     return;
