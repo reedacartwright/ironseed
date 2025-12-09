@@ -38,7 +38,8 @@ expect_equal(
       sample(1000, 4L)
     },
     quiet = TRUE
-  ), c(691, 505, 533, 950)
+  ),
+  c(691, 505, 533, 950)
 )
 
 expect_equal(
@@ -49,7 +50,8 @@ expect_equal(
     },
     quiet = TRUE,
     salt = 1L
-  ), c(757, 402, 159, 733)
+  ),
+  c(757, 402, 159, 733)
 )
 
 rng_kind <- RNGkind("Knuth-TAOCP-2002")
@@ -145,7 +147,8 @@ expect_equal(.Random.seed, oldseed)
 local({
   local_ironseed(
     "MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3",
-    quiet = TRUE, salt = 1L
+    quiet = TRUE,
+    salt = 1L
   )
   expect_equal(sample(1000, 4L), c(757, 402, 159, 733))
 })

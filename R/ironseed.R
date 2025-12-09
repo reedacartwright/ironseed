@@ -180,7 +180,8 @@ ironseed <- function(
 
   fe <- NULL
   for (method in methods) {
-    fe <- switch(method,
+    fe <- switch(
+      method,
       dots = create_ironseed(x),
       args = args_ironseed(),
       env = env_ironseed(),
@@ -207,8 +208,12 @@ ironseed <- function(
 #' @export
 #' @rdname ironseed
 set_ironseed <- function(x, ..., quiet = FALSE, salt = 0L) {
-  ironseed(x, ...,
-    quiet = quiet, set_seed = TRUE, methods = "dots",
+  ironseed(
+    x,
+    ...,
+    quiet = quiet,
+    set_seed = TRUE,
+    methods = "dots",
     salt = salt
   )
 }

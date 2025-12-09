@@ -43,12 +43,19 @@
 #'
 #' @export
 digest <- function(
-  object, n = 1L, salt = 1L, serialize = TRUE, ascii = FALSE,
+  object,
+  n = 1L,
+  salt = 1L,
+  serialize = TRUE,
+  ascii = FALSE,
   xdr = FALSE
 ) {
   if (isTRUE(serialize)) {
-    object <- serialize(object,
-      connection = NULL, version = 3L, ascii = ascii,
+    object <- serialize(
+      object,
+      connection = NULL,
+      version = 3L,
+      ascii = ascii,
       xdr = xdr
     )
   }

@@ -9,8 +9,16 @@ msg_hund100_100 <- -1221982725
 msg_hundbe100_100 <- -1125694476
 
 msg_zero10 <- c(
-  -2027064858L, -1489326973L, 1142046877L, -406317157L, -1521925087L,
-  -213636100L, -1491661455L, 637854673L, -1153662057L, -576691921L
+  -2027064858L,
+  -1489326973L,
+  1142046877L,
+  -406317157L,
+  -1521925087L,
+  -213636100L,
+  -1491661455L,
+  637854673L,
+  -1153662057L,
+  -576691921L
 )
 
 expect_equal(digest(zero, 0, serialize = FALSE), integer(0L))
@@ -25,8 +33,11 @@ expect_equal(digest(hundbe, 100, serialize = FALSE)[100], msg_hundbe100_100)
 expect_equal(digest("test", serialize = FALSE), 1762891713L)
 expect_equal(digest(charToRaw("test"), serialize = FALSE), 1762891713L)
 
-hund_obj <- serialize(100L,
-  connection = NULL, version = 3L, ascii = FALSE,
+hund_obj <- serialize(
+  100L,
+  connection = NULL,
+  version = 3L,
+  ascii = FALSE,
   xdr = FALSE
 )
 
