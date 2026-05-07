@@ -66,10 +66,10 @@ to reproduce the run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed("Experiment", 20251031, 1)
-#> ** Ironseed v0.3.0: SetSeed L1S8a59jKMV-MXX2GrS1hrQ-nYwzqL14Rb2-yiBwupsfZUf
+#> ** Ironseed v0.3.0.9000: SetSeed yfTKf9T7KFN-VLKTv4yau2T-GuVxnozmdzS-xQuuK7u3rzG
 runif(10)
-#>  [1] 0.20771860 0.05685812 0.46064640 0.03253283 0.21827857 0.23708437
-#>  [7] 0.09678753 0.93051076 0.68834723 0.70048683
+#>  [1] 0.2260858 0.3481706 0.5172803 0.3832012 0.1827760 0.8723424 0.6730044
+#>  [8] 0.3852536 0.4705795 0.9423817
 ```
 
 If your script is intended to be called multiple times as part of a
@@ -79,10 +79,10 @@ large study, you can also seed based on the command line arguments.
 #!/usr/bin/env -S Rscript --vanilla
 args <- commandArgs(trailingOnly = TRUE)
 ironseed::ironseed("A Simulation Script 1", args)
-#> ** Ironseed v0.3.0: SetSeed aGTMGJZrmQb-MmRAwvmajQ1-pEAyRkyfSWR-XvjHyVajxJW
+#> ** Ironseed v0.3.0.9000: SetSeed se9fSTm1mSj-ezcAxkSKY4V-5X2ev6J1VKD-g6pqoyWeyLA
 runif(10)
-#>  [1] 0.1990489 0.7884689 0.2698110 0.4761755 0.4127876 0.2025955 0.6249008
-#>  [8] 0.9778754 0.8534247 0.3009149
+#>  [1] 0.4991457 0.1834726 0.1777406 0.8805143 0.0385879 0.2986159 0.7935945
+#>  [8] 0.9421019 0.8711483 0.6693841
 ```
 
 Specific command line arguments can also be used. For large, nested
@@ -93,10 +93,10 @@ seeds. Ironseed makes this easy to accomplish.
 #!/usr/bin/env -S Rscript --vanilla
 args <- commandArgs(trailingOnly = TRUE)
 ironseed::ironseed("A Simulation Script 2", args[grepl("--seed=", args)])
-#> ** Ironseed v0.3.0: SetSeed KnabwooccdH-Fr7UKEkKauC-MGJNQ4AjqDN-SnKkDqUT8Ch
+#> ** Ironseed v0.3.0.9000: SetSeed eYuDcADGbbJ-eA5GJ5zwQyR-rGsw8ddnJnL-Mg2WZhg2d6a
 runif(10)
-#>  [1] 0.03714270 0.58069848 0.86104299 0.01920254 0.71453447 0.95131078
-#>  [7] 0.42456432 0.68626742 0.58047906 0.87471196
+#>  [1] 0.7958163 0.4926650 0.9251130 0.5141941 0.3154608 0.2950173 0.6033356
+#>  [8] 0.6048982 0.7448672 0.2704294
 ```
 
 ### Automatic Seeding
@@ -108,15 +108,15 @@ occurs if no data is passed to `ironseed()`.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed()
-#> ** Ironseed v0.3.0: SetSeed MMP7kaVgit3-fdj8mH2Yuvb-XP4HvV9Z11e-tMES5isR5we
+#> ** Ironseed v0.3.0.9000: SetSeed fg79wLi2JWf-rnfWcXpM4b8-ReVLupcewpA-h1YGhTfv5WP
 runif(10)
-#>  [1] 0.1709656 0.9549136 0.9939423 0.7165402 0.9792717 0.5409108 0.4919766
-#>  [8] 0.9735896 0.2513371 0.2296586
+#>  [1] 0.01171726 0.67949220 0.40656326 0.11096005 0.88994860 0.63374079
+#>  [7] 0.53135218 0.38782031 0.11618916 0.36079770
 
 # Access the ironseed that was used for RNG seeding.
 fe <- ironseed::get_ironseed()
 fe
-#> Ironseed: MMP7kaVgit3-fdj8mH2Yuvb-XP4HvV9Z11e-tMES5isR5we
+#> Ironseed: fg79wLi2JWf-rnfWcXpM4b8-ReVLupcewpA-h1YGhTfv5WP
 ```
 
 Or achieving the same thing with one call. Note that the automatically
@@ -125,12 +125,12 @@ generated seed is different from the previous run.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 fe <- ironseed::ironseed()
-#> ** Ironseed v0.3.0: SetSeed XHtfF9L8fZ5-363rX2NV41B-Gu2D9ba1eNX-aqmBpurYLje
+#> ** Ironseed v0.3.0.9000: SetSeed PbfwvvnYfcb-aeBe9WsroiC-Fx5Pd7btWdP-DeFk4mTFVNg
 runif(10)
-#>  [1] 0.48126361 0.86350382 0.62432849 0.58320541 0.02967282 0.21307074
-#>  [7] 0.03946363 0.57550078 0.85126966 0.99778787
+#>  [1] 0.76992907 0.06944827 0.80863304 0.43426548 0.39184419 0.24245084
+#>  [7] 0.85808327 0.81476562 0.17417317 0.80105155
 fe
-#> Ironseed: XHtfF9L8fZ5-363rX2NV41B-Gu2D9ba1eNX-aqmBpurYLje
+#> Ironseed: PbfwvvnYfcb-aeBe9WsroiC-Fx5Pd7btWdP-DeFk4mTFVNg
 ```
 
 ### Reproducible Code
@@ -142,10 +142,10 @@ used, and the previously generated seed has been logged.
 ``` r
 #!/usr/bin/env -S Rscript --vanilla
 ironseed::ironseed("RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4")
-#> ** Ironseed v0.3.0: SetSeed RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4
+#> ** Ironseed v0.3.0.9000: SetSeed RW7vjwjeiHF-QG7RYPvrntR-6tGPoi65sVc-N1n5SQi5RH4
 runif(10)
-#>  [1] 0.89365116 0.02137079 0.95990727 0.17105063 0.59927593 0.98808313
-#>  [7] 0.97298012 0.62492468 0.28697049 0.14086705
+#>  [1] 0.94599170 0.35915110 0.75821589 0.91682672 0.62340399 0.19037716
+#>  [7] 0.44812890 0.09635376 0.19137057 0.24622360
 ```
 
 ## Analysis
@@ -184,13 +184,13 @@ dat <- sapply(z, \(a) sum(intToBits(a$x) != intToBits(a$y)))
 
 ``` r
 mean(dat) # expectation: 128
-#> [1] 127.9878
+#> [1] 128.0009
 sd(dat) # expectation: 8
-#> [1] 8.025923
+#> [1] 8.01368
 hist(dat, breaks = 86:170, main = NULL)
 ```
 
-<img src="man/figures/README-analysis_32-1.png" width="100%" />
+<img src="man/figures/README-analysis_32-1.png" alt="" width="100%" />
 
 We will repeat the same analysis for 256-bit inputs.
 
@@ -199,12 +199,12 @@ set.seed(20251221)
 z <- replicate(100000, rand_fe_pair(256), simplify = FALSE)
 dat <- sapply(z, \(a) sum(intToBits(a$x) != intToBits(a$y)))
 mean(dat) # expectation: 128
-#> [1] 127.955
+#> [1] 128.0145
 sd(dat) # expectation: 8
-#> [1] 7.980782
+#> [1] 8.005008
 hist(dat, breaks = 86:170, main = NULL)
 ```
 
-<img src="man/figures/README-analysis_256-1.png" width="100%" />
+<img src="man/figures/README-analysis_256-1.png" alt="" width="100%" />
 
 As one can see, the avalanche behavior of the input hash is excellent.
