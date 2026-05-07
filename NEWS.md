@@ -2,6 +2,10 @@
 
 ## Breaking Changes
 
+* The underlying hash algorithms have been updated to use magic constants
+  derived from the fractional parts of sqrt(2), sqrt(3), and sqrt(5). This
+  follows the convention of other hash algorithms. The Weyl sequences are now
+  initialized with the magic constant. This ensures that a coefficient of 0 is not encountered until the 2^64-th iteration.
 * `ironseed(list())`, `ironseed(integer())`, etc. are now equivalent to
   `ironseed()`. `ironseed(NULL)` still creates the default/null ironseed. This change was made to support package and tools authors who can now easily
   control whether their code defaults to a random or a deterministic ironseed if

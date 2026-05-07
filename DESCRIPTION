@@ -17,9 +17,9 @@ License: MIT + file LICENSE
 Language: en-US
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Biarch: TRUE
 NeedsCompilation: yes
 URL: https://github.com/reedacartwright/ironseed
 BugReports: https://github.com/reedacartwright/ironseed/issues
 Suggests: tinytest
+Config/roxygen2/version: 8.0.0

@@ -69,23 +69,21 @@ typedef struct ironseed {
   uint32_t seed[8];
 } ironseed_t;
 
-/* The following constants were selected by generating four random primes in
- * Mathematica:
+/* The following constants contain the first 64 bits of the fractional parts of
+ * the first 3 prime numbers, rounded to the nearest odd number. This can be
+ * calculated in Mathematica using:
  *
- *     IntegerString[NextPrime[RandomInteger[{0, 2^64-1}]], 16]
+ * x = {2,3,5}
+ * FractionalPart[Sqrt[x]] 2^64
+ * Floor[%] + Boole[EvenQ[Floor[%]]]
+ * IntegerString[%, 16]
  *
- * A0 is a generated prime and A1 is a generated primes multiplied by
- * two. Constants B0, B1, C0, and C1 were similarly constructed.
- *
- * These constants are used to setup two Weyl sequences that are always odd and
- * importantly never zero.
+ * Also see: The magic constants used in the BLAKE2b hash.
  */
-static const uint64_t IRONSEED_A0 = 0xc9f736a1a00d1f5f;
-static const uint64_t IRONSEED_A1 = 0x1044d9bc1bd04d7e;
-static const uint64_t IRONSEED_B0 = 0x278abb429678dd43;
-static const uint64_t IRONSEED_B1 = 0xf55176215fdee4b6;
-static const uint64_t IRONSEED_C0 = 0x8ff2ee4eda836d2b;
-static const uint64_t IRONSEED_C1 = 0xd6ac4395f26528ca;
+
+static const uint64_t IRONSEED_MAGICA = 0x6a09e667f3bcc909;
+static const uint64_t IRONSEED_MAGICB = 0xbb67ae8584caa73b;
+static const uint64_t IRONSEED_MAGICC = 0x3c6ef372fe94f82b;
 
 // Adapted from mix32 of Java's SplittableRandom algorithm
 // This is variant 4 of Stafford's mixing algorithms.
@@ -146,7 +144,7 @@ static void init_ironseed_entropy(ironseed_entropy_t* p) {
   const size_t n = sizeof(p->accumulator) / sizeof(uint64_t);
 
   p->multiplier =
-    accumulate_entropy(p->accumulator, n, 1, IRONSEED_A0, IRONSEED_A1);
+    accumulate_entropy(p->accumulator, n, 1, IRONSEED_MAGICA, IRONSEED_MAGICA);
 }
 
 // Update the intermediate state of each sub-digest.
@@ -154,8 +152,9 @@ static void update_ironseed_entropy(ironseed_entropy_t* p, uint32_t value) {
   assert(p != NULL);
 
   const size_t n = sizeof(p->accumulator) / sizeof(uint64_t);
-  p->multiplier =
-    accumulate_entropy(p->accumulator, n, value, p->multiplier, IRONSEED_A1);
+  p->multiplier = accumulate_entropy(
+    p->accumulator, n, value, p->multiplier, IRONSEED_MAGICA
+  );
 }
 
 // support for big-endian systems
@@ -170,6 +169,12 @@ static inline uint64_t dbl_as_u64(double value) {
   uint64_t u;
   memcpy(&u, &value, sizeof(u));
   return u;
+}
+
+static inline double u64_as_dbl(uint64_t value) {
+  double d;
+  memcpy(&d, &value, sizeof(d));
+  return d;
 }
 
 // #nocov start
@@ -260,7 +265,7 @@ static void create_ironseed(ironseed_t* dest, const ironseed_entropy_t* src) {
   );
 
   digest_entropy(
-    dest->seed, src->accumulator, n, 1, src->multiplier, IRONSEED_A1
+    dest->seed, src->accumulator, n, 1, src->multiplier, IRONSEED_MAGICA
   );
 }
 
@@ -352,7 +357,7 @@ static uint64_t create_seedseq(
 
   // This code is more complicated than it needs to be. However, I am
   // intentionally using the accumulate entropy function here, which will be
-  // optimized way.
+  // optimized away.
   for(size_t i = 0; i < n; ++i) {
     uint64_t v = 0;
     m = accumulate_entropy(&v, 1, 1, m, c);
@@ -447,15 +452,12 @@ SEXP R_auto_ironseed(void) {
 }
 
 SEXP R_create_seedseq(SEXP x, SEXP n, SEXP salt, SEXP m) {
-  union {
-    uint64_t u;
-    double d;
-  } mm = {IRONSEED_B0};
+  uint64_t mm = IRONSEED_MAGICB;
 
   int len = Rf_asInteger(n);
 
   if(!Rf_isNull(m)) {
-    mm.d = Rf_asReal(m);
+    mm = dbl_as_u64(Rf_asReal(m));
   }
 
   ironseed_t seed;
@@ -465,12 +467,12 @@ SEXP R_create_seedseq(SEXP x, SEXP n, SEXP salt, SEXP m) {
 
   SEXP ret = PROTECT(Rf_allocVector(INTSXP, len));
 
-  mm.u = create_seedseq(
-    (unsigned int*)INTEGER(ret), &seed, XLENGTH(ret), mm.u, IRONSEED_B1,
+  mm = create_seedseq(
+    (unsigned int*)INTEGER(ret), &seed, XLENGTH(ret), mm, IRONSEED_MAGICB,
     (uint32_t)Rf_asInteger(salt)
   );
 
-  Rf_setAttrib(ret, Rf_install("m"), Rf_ScalarReal(mm.d));
+  Rf_setAttrib(ret, Rf_install("m"), Rf_ScalarReal(u64_as_dbl(mm)));
 
   UNPROTECT(1);
   return ret;
@@ -497,28 +499,29 @@ SEXP R_create_digests(SEXP x, SEXP n, SEXP salt) {
   SEXP work = PROTECT(Rf_allocVector(REALSXP, ret_len));
   uint64_t* pwork = (uint64_t*)REAL(work);
   memset(pwork, 0, sizeof(uint64_t) * ret_len);
-  uint64_t m = accumulate_entropy(pwork, ret_len, 1, IRONSEED_C0, IRONSEED_C1);
+  uint64_t m =
+    accumulate_entropy(pwork, ret_len, 1, IRONSEED_MAGICC, IRONSEED_MAGICC);
 
   // Include the length of the input in the accumulator
-  m = accumulate_entropy(pwork, ret_len, (uint32_t)dat_len, m, IRONSEED_C1);
+  m = accumulate_entropy(pwork, ret_len, (uint32_t)dat_len, m, IRONSEED_MAGICC);
 
   // Hash input as 32-bit blocks
   size_t i = 0;
   for(; i + 4 < dat_len; i += 4) {
     uint32_t u;
     memcpy(&u, dat, sizeof(u));
-    m = accumulate_entropy(pwork, ret_len, htol32(u), m, IRONSEED_C1);
+    m = accumulate_entropy(pwork, ret_len, htol32(u), m, IRONSEED_MAGICC);
     dat += 4;
   }
   // Hash remainder.
   uint32_t u = 0;
   memcpy(&u, dat, dat_len - i);
-  m = accumulate_entropy(pwork, ret_len, htol32(u), m, IRONSEED_C1);
+  m = accumulate_entropy(pwork, ret_len, htol32(u), m, IRONSEED_MAGICC);
 
   // Create digests.
   SEXP ret = PROTECT(Rf_allocVector(INTSXP, ret_len));
   digest_entropy(
-    (uint32_t*)INTEGER(ret), pwork, ret_len, nsalt, m, IRONSEED_C1
+    (uint32_t*)INTEGER(ret), pwork, ret_len, nsalt, m, IRONSEED_MAGICC
   );
 
   UNPROTECT(2);

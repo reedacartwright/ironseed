@@ -9,33 +9,16 @@ expect_null(create_ironseed(integer(0L)))
 
 expect_error(create_ironseed(list(quote(c(x)))))
 
-null_fe <- structure(
-  c(
-    -309390410L,
-    656251397L,
-    1158962031L,
-    1610828431L,
-    1094635650L,
-    819367212L,
-    1923963095L,
-    1954053394L
-  ),
-  class = "ironseed_ironseed"
-)
+null_fe <- structure(c(
+  -403410543L, -1475612951L, -528418999L, 168574931L,
+  -1769759682L, -1191861008L, -17209729L, -1809830631L
+), class = "ironseed_ironseed")
 
-one_fe <- structure(
-  c(
-    -864784934L,
-    1887334312L,
-    -519088785L,
-    2126522241L,
-    1366013041L,
-    -462028912L,
-    617882387L,
-    282044577L
-  ),
-  class = "ironseed_ironseed"
-)
+
+one_fe <- structure(c(
+  1662407425L, -1085609956L, 1216467990L, -80188245L,
+  -1883945801L, 1090219277L, -1244544655L, -2100254172L
+), class = "ironseed_ironseed")
 
 # An ironseed with no data has a default value.
 expect_equal(create_ironseed(list(NULL)), null_fe)
@@ -50,29 +33,29 @@ expect_null(create_ironseed(list(character())))
 
 # A ironseed string is parsed directly.
 expect_equal(
-  create_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"),
+  create_ironseed("rja6yUo7nzY-HiipyxWr92j-WiTLWpofQsB-zwNpz6V55tN"),
   one_fe
 )
 expect_equal(
-  create_ironseed(list("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3")),
+  create_ironseed(list("rja6yUo7nzY-HiipyxWr92j-WiTLWpofQsB-zwNpz6V55tN")),
   one_fe
 )
 
 # as_ironseed parses an ironseed string.
 expect_equal(
-  as_ironseed("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"),
+  as_ironseed("rja6yUo7nzY-HiipyxWr92j-WiTLWpofQsB-zwNpz6V55tN"),
   one_fe
 )
 
 # as.character() and format() convert an ironseed to a specific format.
 expect_equal(
   as.character(null_fe),
-  "14KyPGBJUY7-ieCzQZuoS4H-oRUW4QornA9-eCkczSZruUL"
+  "rmw7oZbEG7V-8UkiL1heUg2-9tda2cRgLwX-t7qDUxtG1nR"
 )
 
 expect_equal(
   format(one_fe),
-  "MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3"
+  "rja6yUo7nzY-HiipyxWr92j-WiTLWpofQsB-zwNpz6V55tN"
 )
 
 # 32-bit input
@@ -82,7 +65,7 @@ expect_equal(create_ironseed(list(1L)), one_fe)
 expect_equal(create_ironseed(list(list(TRUE))), one_fe)
 expect_equal(
   create_ironseed(0L),
-  as_ironseed("oRUW4QornA9-eCkczSZruUL-xkxzcDrgvea-ZzzjQzsq1v1")
+  as_ironseed("9tda2cRgLwX-t7qDUxtG1nR-8Eco4Zzg78L-XxXfoZMQZf7")
 )
 
 # fe as an input
@@ -92,118 +75,118 @@ expect_equal(create_ironseed(one_fe), one_fe)
 # 8-bit input
 expect_equal(
   create_ironseed("\01"),
-  as_ironseed("xzRdPe8BLVR-DSxsx1mg2q2-tbhi7KUEgGE-SKmqcW6MeQ7")
+  as_ironseed("bm7d7B9N64f-4vkG8GjQ6SR-89Ltq1Tuaq6-HNytHnbJASB")
 )
 expect_equal(
   create_ironseed(as.raw(1L)),
-  as_ironseed("xzRdPe8BLVR-DSxsx1mg2q2-tbhi7KUEgGE-SKmqcW6MeQ7")
+  as_ironseed("bm7d7B9N64f-4vkG8GjQ6SR-89Ltq1Tuaq6-HNytHnbJASB")
 )
 expect_equal(
   create_ironseed(list(1L, 1L)),
-  as_ironseed("xzRdPe8BLVR-DSxsx1mg2q2-tbhi7KUEgGE-SKmqcW6MeQ7")
+  as_ironseed("bm7d7B9N64f-4vkG8GjQ6SR-89Ltq1Tuaq6-HNytHnbJASB")
 )
 
 expect_equal(
   create_ironseed("1"),
-  as_ironseed("9ZnnLNUsr2K-5Z9NGurhRx4-kcHU2PVtFL5-aZfzpMvaEZQ")
+  as_ironseed("qmF85L1KZbJ-8p2Hx8VAWk1-YYiDhzw6RT3-jsA3Jh4q1aR")
 )
 expect_equal(
   create_ironseed(as.raw(49L)),
-  as_ironseed("9ZnnLNUsr2K-5Z9NGurhRx4-kcHU2PVtFL5-aZfzpMvaEZQ")
+  as_ironseed("qmF85L1KZbJ-8p2Hx8VAWk1-YYiDhzw6RT3-jsA3Jh4q1aR")
 )
 expect_equal(
   create_ironseed(list(1L, 49L)),
-  as_ironseed("9ZnnLNUsr2K-5Z9NGurhRx4-kcHU2PVtFL5-aZfzpMvaEZQ")
+  as_ironseed("qmF85L1KZbJ-8p2Hx8VAWk1-YYiDhzw6RT3-jsA3Jh4q1aR")
 )
 
 # 64-bit input
 expect_equal(
   create_ironseed(1.0),
-  as_ironseed("6g84uipcXnR-6m4HdTnPxKi-8DDSAu6jSXS-rUmREq8x6e2")
+  as_ironseed("c3ZM2aSdpmN-AeTNiJFoUPf-UDxDSXwvSfM-v7ty7Uq2u4N")
 )
 expect_equal(
   create_ironseed(list(0L, 1072693248L)),
-  as_ironseed("6g84uipcXnR-6m4HdTnPxKi-8DDSAu6jSXS-rUmREq8x6e2")
+  as_ironseed("c3ZM2aSdpmN-AeTNiJFoUPf-UDxDSXwvSfM-v7ty7Uq2u4N")
 )
 
 # 128-bit input
 expect_equal(
   create_ironseed(1 + 0i),
-  as_ironseed("5kihT3aBu6h-NVHkGTcPeHg-LgMX9weGRhj-quuja3RezrB")
+  as_ironseed("DknUU154XsX-4d7boZdZuSG-TBjgnRNQgwA-HTxj1suhV8N")
 )
 expect_equal(
   create_ironseed(c(1, 0)),
-  as_ironseed("5kihT3aBu6h-NVHkGTcPeHg-LgMX9weGRhj-quuja3RezrB")
+  as_ironseed("DknUU154XsX-4d7boZdZuSG-TBjgnRNQgwA-HTxj1suhV8N")
 )
 expect_equal(
   create_ironseed(list(c(1, 0))),
-  as_ironseed("5kihT3aBu6h-NVHkGTcPeHg-LgMX9weGRhj-quuja3RezrB")
+  as_ironseed("DknUU154XsX-4d7boZdZuSG-TBjgnRNQgwA-HTxj1suhV8N")
 )
 expect_equal(
   create_ironseed(list(1, 0)),
-  as_ironseed("5kihT3aBu6h-NVHkGTcPeHg-LgMX9weGRhj-quuja3RezrB")
+  as_ironseed("DknUU154XsX-4d7boZdZuSG-TBjgnRNQgwA-HTxj1suhV8N")
 )
 expect_equal(
   create_ironseed(list(0L, 1072693248L, 0)),
-  as_ironseed("5kihT3aBu6h-NVHkGTcPeHg-LgMX9weGRhj-quuja3RezrB")
+  as_ironseed("DknUU154XsX-4d7boZdZuSG-TBjgnRNQgwA-HTxj1suhV8N")
 )
 expect_equal(
   create_ironseed(list(c(0L, 1072693248L), 0)),
-  as_ironseed("5kihT3aBu6h-NVHkGTcPeHg-LgMX9weGRhj-quuja3RezrB")
+  as_ironseed("DknUU154XsX-4d7boZdZuSG-TBjgnRNQgwA-HTxj1suhV8N")
 )
 expect_equal(
   create_ironseed(list(c(0L, 1072693248L), c(0L, 0L))),
-  as_ironseed("5kihT3aBu6h-NVHkGTcPeHg-LgMX9weGRhj-quuja3RezrB")
+  as_ironseed("DknUU154XsX-4d7boZdZuSG-TBjgnRNQgwA-HTxj1suhV8N")
 )
 
 # Empty strings
 expect_equal(
   create_ironseed(""),
-  as_ironseed("oRUW4QornA9-eCkczSZruUL-xkxzcDrgvea-ZzzjQzsq1v1")
+  as_ironseed("9tda2cRgLwX-t7qDUxtG1nR-8Eco4Zzg78L-XxXfoZMQZf7")
 )
 
 # Multiple values produce different ironseeds
 expect_equal(
   create_ironseed(1:10),
-  as_ironseed("xk4riXitj4c-HNyrsypomQ1-tPWwkXaEYG8-cWTamfeommP")
+  as_ironseed("bd5rT4Fzx2c-GY5kB71kqqC-JUruz1H951Z-bFm32ttCiec")
 )
 expect_equal(
   create_ironseed(list(1:10, 1.0)),
-  as_ironseed("24KvYGURhWg-KbHYdzHJxeb-3Hc7C7RJbvb-o8R9BtSWPad")
+  as_ironseed("G2x3wKPMtWj-ScvfkfdVzL7-Abpn7Lmy2EM-y88csw51MdM")
 )
 expect_equal(
   create_ironseed(list(1:10, 1.0, LETTERS)),
-  as_ironseed("atjceBUZ817-2ErnNFGqVSX-PmoiMYRaHEf-5rVzBrfeBGg")
+  as_ironseed("2tpy9QWxSY2-4SUvbWT1GiC-NzNF8BNcioC-jkg8wqPry7J")
 )
 expect_equal(
   create_ironseed(list(1:10, 1.0, LETTERS, FALSE)),
-  as_ironseed("w6kTGJ2kPuB-rUk4JLftZAF-GeQCe8SU4c7-EkWz4neREZ3")
+  as_ironseed("sJSvGBeg5iL-dnhfcAYG4jA-ua3wcRZn2rB-XYJaS8f4A2i")
 )
 expect_equal(
   create_ironseed(list(list(1:5, 6:10), 1.0, LETTERS, FALSE)),
-  as_ironseed("w6kTGJ2kPuB-rUk4JLftZAF-GeQCe8SU4c7-EkWz4neREZ3")
+  as_ironseed("sJSvGBeg5iL-dnhfcAYG4jA-ua3wcRZn2rB-XYJaS8f4A2i")
 )
 
 # Final zero produces a different ironseed
 expect_equal(
   create_ironseed(list(1:10, 1.0, LETTERS, FALSE, 0L)),
-  as_ironseed("VwdTCbhWVhR-PfWnL4mF97H-odTq1VN8nUA-kJNu8scTHPX")
+  as_ironseed("rtYqhb4nkv8-Fw98tMeUckf-vBnmEEoabRP-wu6xfCJeBH6")
 )
 
 # An ironseed string is parsed as a string if it is not alone.
 expect_equal(
-  create_ironseed(c("MaCM14iELpK-kHC2xsg6eCN-pCz7W9fiMDf-AcW65VfB6p3", "2")),
-  as_ironseed("zLwjiqSWGDK-NznEdu5z7qA-LFwq2mKXPWb-TF33Ti2K5J9")
+  create_ironseed(c("rja6yUo7nzY-HiipyxWr92j-WiTLWpofQsB-zwNpz6V55tN", "2")),
+  as_ironseed("Mrk5vwmxoAW-hLDGWvmpHdT-WHTD5cWEkx3-1gLiyBRSAVV")
 )
 
 # Different orders produce different ironseeds
 expect_equal(
   create_ironseed(c(FALSE, TRUE, NA)),
-  as_ironseed("K9BYAKuMxQ6-2U1E2dK46h4-zypLAysf6KX-7arhDR7KKLX")
+  as_ironseed("Bc5yda6DS35-Uf9RePBX9i9-JiDAi5BKLJc-GoPNqEsYoGg")
 )
 expect_equal(
   create_ironseed(c(TRUE, NA, FALSE)),
-  as_ironseed("vnsJbeVQSzD-tcWNeJqxwzV-trgDi5cBRzf-Xpb78bJxAB6")
+  as_ironseed("76uUegpjeeK-LvEiLhp1fn1-GxXkZBh4vSc-mkHhJh6FAYR")
 )
 
 # A single list argument is unwrapped
