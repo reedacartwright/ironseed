@@ -53,6 +53,9 @@ fill_random_seed <- function(fe, quiet = FALSE, salt = 0L) {
   if (is_ironseed(fe)) {
     seed[-1] <- create_seedseq(fe, length(seed) - 1, salt = salt)
   } else {
+    if (!missing(salt) && isFALSE(quiet)) {
+      warning("ignoring `salt` when using a stream to generate random seeds")
+    }
     seed[-1] <- fe(length(seed) - 1)
   }
 

@@ -48,7 +48,11 @@ expect_equal(sample(1000L, 4L), c(246, 138, 446, 335))
 
 ## fill_random_seed() ignores `salt` in steam mode
 one_fe_stream <- ironseed_stream(one_fe)
-expect_silent(fill_random_seed(one_fe_stream, quiet = FALSE, salt = 1L))
+expect_warning(fill_random_seed(one_fe_stream, quiet = FALSE, salt = 1L))
+expect_equal(sample(1000L, 4L), c(895, 787, 223, 492))
+
+one_fe_stream <- ironseed_stream(one_fe)
+expect_silent(fill_random_seed(one_fe_stream, quiet = TRUE, salt = 1L))
 expect_equal(sample(1000L, 4L), c(895, 787, 223, 492))
 
 ## for streams, the salt needs to be specified on creation.
