@@ -21,5 +21,5 @@ Biarch: TRUE
 NeedsCompilation: yes
 URL: https://github.com/reedacartwright/ironseed
 BugReports: https://github.com/reedacartwright/ironseed/issues
-Suggests: tinytest
+Suggests: tinytest, gmp, Rmpfr
 Config/roxygen2/version: 8.0.0
