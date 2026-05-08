@@ -143,14 +143,33 @@ expect_equal(create_seedseq(one_fe, 4, salt = 1L), c(v1, v2, v3, v4))
 # Uses the ironseed algorithm to converts a string/raw into a variable length
 # digest. Uses the MAGICC constant, and includes the length of the string into
 # the hash.
+#
+# This digest processes input as little-endian 32-bit unsigned numbers, padding
+# the end with zeros as needed.
 
 salt <- 1L
 u <- as.numeric(charToRaw("test"))
+len <- length(u)
 u <- sum(u * 256^(0:3))
-u <- c(as.bigz(1L), 4 * length(u), u, salt)
+u <- c(as.bigz(1L), len, u, salt)
 m <- MAGICC * (1:40)
 r <- rep(u, each = 10) * m
 r <- setNames(split(r, 1:10), NULL)
 expected_digest <- sapply(lapply(r, sum), finalmix)
 
 expect_equal(digest("test", 10, serialize = FALSE, salt = 1L), expected_digest)
+
+salt <- 2L
+u <- as.numeric(charToRaw("testy"))
+len <- length(u)
+u <- c(u, rep(0, 3 - ((len - 1) %% 4)))
+u <- u * 256^(0:3)
+u <- split(u, (seq_along(u) - 1) %/% 4)
+u <- sapply(u, sum)
+u <- c(as.bigz(1L), len, u, salt)
+m <- MAGICC * (1:(length(u) * 10))
+r <- rep(u, each = 10) * m
+r <- setNames(split(r, 1:10), NULL)
+expected_digest <- sapply(lapply(r, sum), finalmix)
+
+expect_equal(digest("testy", 10, serialize = FALSE, salt = 2L), expected_digest)
