@@ -159,10 +159,10 @@ random pair of ironseeds that differ by a single input bit.
 
 ``` r
 rand_fe_pair <- function(w) {
-  x <- sample(0:1, w, replace=TRUE)
+  x <- sample(0:1, w, replace = TRUE)
   n <- sample(seq_along(x), 1)
   y <- x
-  y[n] <- if(y[n] == 1) 0L else 1L
+  y[n] <- if (y[n] == 1) 0L else 1L
   x <- packBits(x, "integer")
   y <- packBits(y, "integer")
   x <- ironseed::ironseed(x, set_seed = FALSE)

@@ -12,9 +12,9 @@ magic_x <- magic_x + (magic_x %% 2L == 0L)
 
 magic_z <- as.bigz(formatMpfr(magic_x, digits = 0, drop0trailing = TRUE), 2^64)
 
-MAGICA <- magic_z[1]
-MAGICB <- magic_z[2]
-MAGICC <- magic_z[3]
+MAGICA <- magic_z[1] # nolint(object_name_linter)
+MAGICB <- magic_z[2] # nolint(object_name_linter)
+MAGICC <- magic_z[3] # nolint(object_name_linter)
 
 null_fe <- ironseed:::create_ironseed0(NULL)
 one_fe <- ironseed:::create_ironseed0(1L)
@@ -27,8 +27,8 @@ two_fe <- ironseed:::create_ironseed0(c(1L, 2L))
 #
 
 finalmix <- function(x) {
-  M1 <- as.bigz("0x62a9d9ed799705f5")
-  M2 <- as.bigz("0xcb24d0a5c88c35b3")
+  M1 <- as.bigz("0x62a9d9ed799705f5") # nolint(object_name_linter)
+  M2 <- as.bigz("0xcb24d0a5c88c35b3") # nolint(object_name_linter)
 
   shr <- function(x, n) {
     x %/% 2^n
@@ -54,6 +54,8 @@ finalmix <- function(x) {
   if (x < 2^31) x else x - 2^32
 }
 
+# nolint start
+
 # Ironseed Input Hash
 #
 # ## Input
@@ -69,6 +71,8 @@ finalmix <- function(x) {
 #
 # m_00 = MAGICA
 # m_i0 = m_{(i-1),0} + MAGICA
+
+# nolint end
 
 salt <- 1L
 row0 <- MAGICA * (1:8)

@@ -65,7 +65,9 @@ fill_random_seed <- function(fe, quiet = FALSE, salt = 0L) {
     seed[2] <- 624L
   }
   # update .Random.seed with our own state
+  # nolint start(object_name_linter)
   assign(".Random.seed", seed, globalenv(), inherits = FALSE)
+  # nolint end
   # draw one value to trigger seed fixup
   stats::runif(1)
   # return old seed
@@ -98,7 +100,9 @@ get_random_seed <- function() {
 set_random_seed <- function(seed) {
   oldseed <- get_random_seed()
   if (!is.null(seed)) {
+    # nolint start(object_name_linter)
     assign(".Random.seed", seed, globalenv(), inherits = FALSE)
+    # nolint end
   } else if (!is.null(oldseed)) {
     rm_random_seed()
   }

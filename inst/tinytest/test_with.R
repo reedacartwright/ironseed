@@ -83,7 +83,8 @@ expect_equal(.Random.seed, oldseed)
 
 RNGkind(rng_kind[1])
 
-#### local_ironseed() ##########################################################
+#### local_ironseed ############################################################
+
 set_random_seed(reallyoldseed)
 set.seed(1)
 oldseed <- get_random_seed()
@@ -155,7 +156,7 @@ local({
 
 expect_equal(.Random.seed, oldseed)
 
-#### with_ironseed_stream() ####################################################
+#### with_ironseed_stream ######################################################
 
 one_fe <- create_ironseed("rja6yUo7nzY-HiipyxWr92j-WiTLWpofQsB-zwNpz6V55tN")
 one_fe_stream <- ironseed_stream(one_fe)
@@ -176,7 +177,7 @@ expect_equal(
   c(246, 138, 446, 335)
 )
 
-#### local_ironseed_stream() ###################################################
+#### local_ironseed_stream #####################################################
 
 one_fe <- create_ironseed("rja6yUo7nzY-HiipyxWr92j-WiTLWpofQsB-zwNpz6V55tN")
 one_fe_stream <- ironseed_stream(one_fe)

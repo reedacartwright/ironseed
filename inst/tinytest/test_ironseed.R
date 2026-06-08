@@ -56,7 +56,7 @@ expect_false(all(
     ironseed(NULL, methods = "auto", quiet = TRUE)
 ))
 
-# set_ironseed()
+# set_ironseed
 
 expect_error(set_ironseed())
 expect_equal(set_ironseed(NULL, quiet = TRUE), create_ironseed(list(NULL)))

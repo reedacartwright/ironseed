@@ -180,8 +180,7 @@ ironseed <- function(
 
   fe <- NULL
   for (method in methods) {
-    fe <- switch(
-      method,
+    fe <- switch(method,
       dots = create_ironseed(x),
       args = args_ironseed(),
       env = env_ironseed(),

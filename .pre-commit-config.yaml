@@ -41,10 +41,16 @@ repos:
           data/.*|
           )$
     -   id: lintr
+        args: [--load_package]
+        additional_dependencies:
+        -    tinytest
+        -    gmp
+        -    Rmpfr
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: no-print-statement
+        exclude: 'inst/tinytest/test_ironseed.R'
     -   id: no-debug-statement
     -   id: deps-in-desc
     -   id: pkgdown
