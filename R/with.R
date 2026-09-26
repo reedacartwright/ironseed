@@ -34,8 +34,13 @@
 #' @param code Code to execute in the temporary environment.
 #' @param .local_envir The environment to use for scoping.
 #'
+#'
 #' @returns `with_ironseed()` returns the results of the evaluation of the code
 #' argument. `local_ironseed()` returns the constructed ironseed.
+#'
+#' @details
+#'
+#' If `seeds` is `list()`, then the ironseed will be constructed automatically.
 #'
 #' @seealso [ironseed] [ironseed_stream]
 #'
@@ -48,7 +53,7 @@ with_ironseed <- function(
 ) {
   old_ironseed <- the$ironseed
   seeds <- simplify_list(list(seeds))
-  fe <- create_ironseed(seeds)
+  fe <- create_ironseed(seeds) %||% auto_ironseed()
   old_seed <- fill_random_seed(fe, quiet = quiet, salt = salt)
   the$ironseed <- fe
   on.exit({
@@ -70,7 +75,7 @@ local_ironseed <- function(
   old_ironseed <- the$ironseed
   seeds <- simplify_list(list(seeds))
   seeds <- c(seeds, list(...))
-  fe <- create_ironseed(seeds)
+  fe <- create_ironseed(seeds) %||% auto_ironseed()
   old_seed <- fill_random_seed(fe, quiet = quiet, salt = salt)
   the$ironseed <- fe
   defer(envir = .local_envir, {
