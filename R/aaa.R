@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2025 Reed A. Cartwright <racartwright@gmail.com>
+# Copyright (c) 2025-2026 Reed A. Cartwright <racartwright@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,3 +21,10 @@
 # SOFTWARE.
 
 the <- new.env(parent = emptyenv())
+
+# support versions of R < 4.4.0
+if (!exists("%||%", envir = baseenv())) {
+  `%||%` <- function(x, y) {
+    if (is.null(x)) y else x
+  }
+}
