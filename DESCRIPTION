@@ -22,4 +22,4 @@ NeedsCompilation: yes
 URL: https://github.com/reedacartwright/ironseed
 BugReports: https://github.com/reedacartwright/ironseed/issues
 Suggests: tinytest, gmp, Rmpfr
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

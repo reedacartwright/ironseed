@@ -28,3 +28,11 @@ if (!exists("%||%", envir = baseenv())) {
     if (is.null(x)) y else x
   }
 }
+
+simplify_list <- function(x) {
+  if (length(x) == 1L && is.null(names(x)) && is.list(x[[1L]])) {
+    x[[1L]]
+  } else {
+    x
+  }
+}

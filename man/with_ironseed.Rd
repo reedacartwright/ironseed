@@ -46,6 +46,9 @@ argument. \code{local_ironseed()} returns the constructed ironseed.
 state afterwards. \code{local_ironseed()} restores global state when the current
 evaluation state ends.
 }
+\details{
+If \code{seeds} is \code{list()}, then the ironseed will be constructed automatically.
+}
 \seealso{
 \link{ironseed} \link{ironseed_stream}
 }
