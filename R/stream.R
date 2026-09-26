@@ -81,7 +81,7 @@ ironseed_stream <- function(
     }
     n <- as.integer(n)
     z <- create_seedseq0(fe, n, salt, m)
-    m <<- attr(z, "m", exact = TRUE)
+    m <<- attr(z, "m", exact = TRUE) # nolint: assignment_linter
     c(z) # strip attributes
   }
 }
