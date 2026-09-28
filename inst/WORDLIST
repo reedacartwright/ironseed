@@ -1,6 +1,7 @@
 addr
 ae
 allocVector
+args
 arxiv
 asChar
 asInteger
@@ -25,13 +26,16 @@ cpp
 cre
 dat
 dest
+devtools
 DL
 doi
 ef
 ELT
 endif
+env
 EvenQ
 fe
+Fedorov
 finalizer
 finalmix
 fnd
@@ -60,6 +64,7 @@ JOBNAME
 len
 LGLSXP
 LSB
+MacOS
 MAGICA
 MAGICB
 MAGICC
@@ -80,6 +85,7 @@ nodiscard
 NONINFRINGEMENT
 nowarn
 nsalt
+Oldrel
 ORCID
 os
 pcg
@@ -95,6 +101,7 @@ readcyclecounter
 REALSXP
 reedacartwright
 ret
+rhub
 Rinternals
 Rmpfr
 RO
@@ -103,6 +110,7 @@ Roxygen
 ScalarReal
 ScalarString
 seedseq
+Sergey
 setAttrib
 SEXP
 SGE
@@ -119,6 +127,7 @@ STRSXP
 struct
 sublicense
 sys
+th
 tid
 tinytest
 translateCharUTF
@@ -126,6 +135,7 @@ typedef
 TYPEOF
 uint
 uintptr
+unnammed
 UNPROTECT
 Weyl
 www

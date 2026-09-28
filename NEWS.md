@@ -19,6 +19,11 @@
   A `salt` parameter was also added to several functions that call
   `create_seedseq()`.
 
+## New Features
+
+* The function `digest()` has been added to to calculate variable length
+  ironseed digests for arbitrary R objects.
+
 ## Miscellaneous Fixes and Features
 
 * `with_ironseed()` and `local_ironseed()` will automatically construct an
