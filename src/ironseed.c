@@ -472,9 +472,12 @@ SEXP R_create_seedseq(SEXP x, SEXP n, SEXP salt, SEXP m) {
     (uint32_t)Rf_asInteger(salt)
   );
 
-  Rf_setAttrib(ret, Rf_install("m"), Rf_ScalarReal(u64_as_dbl(mm)));
+  SEXP mval = PROTECT(Rf_ScalarReal(u64_as_dbl(mm)));
+  SEXP mnam = PROTECT(Rf_install("m"));
 
-  UNPROTECT(1);
+  Rf_setAttrib(ret, mnam, mval);
+
+  UNPROTECT(3);
   return ret;
 }
 
