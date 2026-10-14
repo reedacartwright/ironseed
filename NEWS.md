@@ -1,5 +1,10 @@
 # ironseed (development version)
 
+## Miscellaneous Fixes and Features
+
+* Fix building on Windows ARM64 using the mingw clang toolchain (thanks,
+  @jeroen, #7).
+
 # ironseed 0.4.0
 
 ## Breaking Changes

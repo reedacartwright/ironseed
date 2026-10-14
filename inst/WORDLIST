@@ -73,6 +73,7 @@ Mathematica
 memcpy
 memset
 MERCHANTABILITY
+mingw
 mkCharCE
 mnam
 multilinear
@@ -130,6 +131,7 @@ sys
 th
 tid
 tinytest
+toolchain
 translateCharUTF
 typedef
 TYPEOF
