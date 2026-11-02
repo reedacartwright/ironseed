@@ -35,4 +35,3 @@ jobs:
           upload-snapshots: true
           upload-results: true
           artifact-name: ${{ format('{0}-{1}-r{2}-{3}-results', 'netbsd', runner.arch, matrix.config.r, matrix.config.id || strategy.job-index ) }}
-
