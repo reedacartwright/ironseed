@@ -196,8 +196,7 @@ configure_platform <- function(type) {
     # configure all discovered sources
     for (source in sources) {
       target <- file.path(dir, basename(source))
-      switch(
-        type,
+      switch(type,
         configure = configure_file(source, target),
         cleanup = remove_file(target)
       )
